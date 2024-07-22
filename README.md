@@ -25,11 +25,12 @@ The attack surface for this motivating example consists of two primary component
 
 - testcases/: Directory containing the Juliet test suite.
 
-- example.c: Contains the main function to demonstrate the vulnerability chaining process. It calls various components to exploit the vulnerabilities.
+- example.c: Contains the main function to demonstrate an example of the vulnerability chaining process. 
 
 # Compiling and Running
 
 `cd attack-synthesis-suite-c`
+
 `clang -o exploit example.c common.c privileged.c user_accessible.c`
 `./exploit`
 
