@@ -15,19 +15,20 @@ Template File: sources-sinks-01.tmpl.c
  *
  * */
 
-#include "std_testcase.h"
+#include "../../../testcasesupport/std_testcase.h"
+#include "../../../common.h"
 
 #include <wchar.h>
 
 #ifndef OMITBAD
 
-void CWE457_Use_of_Uninitialized_Variable__char_pointer_01_bad()
-{
-    char * data;
+// Uninitialized Variable Component
+char* CWE457_Use_of_Uninitialized_Variable__char_pointer_01_bad(char *data) {
     /* POTENTIAL FLAW: Don't initialize data */
     ; /* empty statement needed for some flow variants */
     /* POTENTIAL FLAW: Use data without initializing it */
     printLine(data);
+    return data;
 }
 
 #endif /* OMITBAD */

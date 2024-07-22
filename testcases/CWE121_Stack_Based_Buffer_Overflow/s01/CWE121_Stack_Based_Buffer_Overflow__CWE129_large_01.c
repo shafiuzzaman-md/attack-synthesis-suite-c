@@ -15,35 +15,28 @@ Template File: sources-sinks-01.tmpl.c
  *
  * */
 
-#include "std_testcase.h"
+#include "../../../testcasesupport/std_testcase.h"
+#include "../../../common.h"
 
 #ifndef OMITBAD
 
-void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad()
-{
-    int data;
-    /* Initialize data */
-    data = -1;
-    /* POTENTIAL FLAW: Use an invalid index */
-    data = 10;
+void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int data) {
+    int i;
+   // int buffer[10] = { 0 };
+    /* POTENTIAL FLAW: Attempt to write to an index of the array that is above the upper bound
+    * This code does check to see if the array index is negative */
+    if (data >= 0)
     {
-        int i;
-        int buffer[10] = { 0 };
-        /* POTENTIAL FLAW: Attempt to write to an index of the array that is above the upper bound
-        * This code does check to see if the array index is negative */
-        if (data >= 0)
+        buffer[data] = 1;
+        /* Print the array values */
+        for(i = 0; i < 10; i++)
         {
-            buffer[data] = 1;
-            /* Print the array values */
-            for(i = 0; i < 10; i++)
-            {
-                printIntLine(buffer[i]);
-            }
+            printIntLine(buffer[i]);
         }
-        else
-        {
-            printLine("ERROR: Array index is negative.");
-        }
+    }
+    else
+    {
+        printLine("ERROR: Array index is negative.");
     }
 }
 
