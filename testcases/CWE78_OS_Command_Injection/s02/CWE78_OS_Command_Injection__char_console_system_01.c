@@ -36,13 +36,10 @@ Template File: sources-sink-01.tmpl.c
 #ifndef OMITBAD
 
 void CWE78_OS_Command_Injection__char_console_system_01_bad() {
-    char command[CMD_BUFFER_SIZE] = "cmd /c ";
-    if (strlen(command_buffer) < (CMD_BUFFER_SIZE - strlen(command))) {
-        strcat(command, command_buffer);
-        printf("Executing command: %s\n", command);
+    char command[100];
+    if (strlen(command_buffer) < 100) {
+        strcpy(command, command_buffer);
         system(command);
-    } else {
-        printf("ERROR: Command buffer overflow.\n");
     }
 }
 

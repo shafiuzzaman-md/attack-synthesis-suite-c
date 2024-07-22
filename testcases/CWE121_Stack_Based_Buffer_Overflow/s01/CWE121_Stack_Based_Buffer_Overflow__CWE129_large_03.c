@@ -19,16 +19,16 @@ Template File: sources-sinks-03.tmpl.c
 
 #ifndef OMITBAD
 
-void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_03_bad()
+void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_03_bad(int data)
 {
-    int data;
-    /* Initialize data */
-    data = -1;
-    if(5==5)
-    {
-        /* POTENTIAL FLAW: Use an invalid index */
-        data = 10;
-    }
+    // int data;
+    // /* Initialize data */
+    // data = -1;
+    // if(5==5)
+    // {
+    //     /* POTENTIAL FLAW: Use an invalid index */
+    //     data = 10;
+    // }
     if(5==5)
     {
         {

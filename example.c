@@ -11,7 +11,7 @@ void chain_vulnerabilities(int user_data) {
     printf("Starting vulnerability chaining...\n");
 
     // Step 1: Exploit the buffer overflow
-    component_input_CWE121_bad(user_data);
+    CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data);
 
     // Step 2: Use uninitialized variable
     uninitialized_var = component_input_CWE78_bad((char*)buffer);
