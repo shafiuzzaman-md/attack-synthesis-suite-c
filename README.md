@@ -5,11 +5,8 @@ This project demonstrates the chaining of multiple vulnerabilities from the Juli
 Consider a software system that offers both regular user tasks and administrative operations. The system is designed with clear boundaries: regular users have limited access and cannot perform critical operations, while administrative tasks are protected and require higher privileges.
 ## attack surface
 The attack surface for this motivating example consists of two primary components:
-### User-Accessible Functions
-Functions that handle user inputs and run in user mode with limited permissions. Examples include buffer management functions that process user inputs.
-
-## Privileged Functions
-Functions that run with elevated permissions and perform critical system operations. Examples include command execution functions that impact the system’s overall security.
+-User-Accessible Functions: Functions that handle user inputs and run in user mode with limited permissions. Examples include buffer management functions that process user inputs.
+- Privileged Functions: Functions that run with elevated permissions and perform critical system operations. Examples include command execution functions that impact the system’s overall security.
 
 ## threat model
 - The attacker can interact with user mode functions but cannot directly access privileged mode functions.
@@ -17,20 +14,10 @@ Functions that run with elevated permissions and perform critical system operati
 - The system contains multiple vulnerabilities that can be chained together to escalate privileges.
 
 # Project Structure
-project/
-│
-├── common.h
-├── common.c
-├── chaining.c
-├── privileged.c
-├── user_accessible.c
-└── testcases/
 
-# File Descriptions
 - common.h: Header file declaring global variables and utility functions used across the project.
 
 - common.c: Defines the global variables and utility function.
-
 
 - privileged.c: Defines the privileged functions.
 
