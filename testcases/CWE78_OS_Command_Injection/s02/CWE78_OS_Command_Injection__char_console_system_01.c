@@ -34,16 +34,37 @@ Template File: sources-sink-01.tmpl.c
 #endif
 
 #ifndef OMITBAD
-
+#define COMMAND_BUFFER_SIZE 128  // Define the command buffer size as 128 bytes
 void CWE78_OS_Command_Injection__char_console_system_01_bad() {
-    char command[CMD_BUFFER_SIZE] = "cmd /c ";
-    if (strlen(command_buffer) < (CMD_BUFFER_SIZE - strlen(command))) {
+    // Allocate memory for the command to be executed
+    char command[COMMAND_BUFFER_SIZE] = "cmd /c ";
+
+    // Allocate the command_buffer as a protected memory segment
+    char *command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, PROTECTED_SEGMENT, 1, 0, 0); // Readable, Non-Writable, Non-Executable
+
+    if (command_buffer == NULL) {
+        printf("ERROR: Memory allocation for command buffer failed.\n");
+        return;
+    }
+
+    // Simulate populating the command buffer with data (for demonstration purposes only)
+    strncpy(command_buffer, "echo Hello, World!", COMMAND_BUFFER_SIZE - 1);
+    command_buffer[COMMAND_BUFFER_SIZE - 1] = '\0';  // Ensure null termination
+
+    // Check if the command buffer content is within bounds and can be appended to the command
+    if (strlen(command_buffer) < (COMMAND_BUFFER_SIZE - strlen(command))) {
+        // Attempt to append the protected command buffer to the command string
         strcat(command, command_buffer);
         printf("Executing command: %s\n", command);
+
+        // Execute the command
         system(command);
     } else {
         printf("ERROR: Command buffer overflow.\n");
     }
+
+    // Free the allocated protected memory segment
+    freeMemorySegment(command_buffer);
 }
 
 #endif /* OMITBAD */

@@ -15,7 +15,7 @@ The attack surface for this motivating example consists of two primary component
 
 # Project Structure
 
-- common.h: Header file declaring global variables and utility functions used across the project.
+- common.h: Defines the foundational structures and functions for a memory model that differentiates between various types of memory segments. 
 
 - common.c: Defines the global variables and utility function.
 
@@ -27,11 +27,19 @@ The attack surface for this motivating example consists of two primary component
 
 - example.c: Contains the main function to demonstrate an example of the vulnerability chaining process. 
 
+# Memory Segment Types (MemoryType)
+- Code Segment (CODE_SEGMENT):
+    - Purpose: Stores the executable instructions of the program.
+    - Access Control:
+        - User Mode: Readable and executable, but not writable. This ensures that user programs can execute code but cannot alter the executable instructions.
+        - Privileged Mode: Readable, executable, and in some cases writable (e.g., for just-in-time compilation or certain debugging operations). Privileged code might need to modify executable code under specific, controlled circumstances.
+
 # Compiling and Running
 
 `cd attack-synthesis-suite-c`
 
 `clang -o exploit example.c common.c privileged.c user_accessible.c`
+
 `./exploit`
 
 

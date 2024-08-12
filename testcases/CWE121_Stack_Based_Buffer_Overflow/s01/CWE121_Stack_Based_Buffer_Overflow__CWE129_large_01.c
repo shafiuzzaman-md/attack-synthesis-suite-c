@@ -22,22 +22,36 @@ Template File: sources-sinks-01.tmpl.c
 
 void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int data) {
     int i;
-   // int buffer[10] = { 0 };
+
+    // Allocate memory for the buffer dynamically
+    int *buffer = (int*) allocateMemorySegment(10 * sizeof(int), DATA_SEGMENT, 1, 1, 0); // Readable, Writable
+
+    if (buffer == NULL) {
+        printLine("ERROR: Memory allocation failed.");
+        return;
+    }
+
+    // Initialize the buffer to 0
+    for (i = 0; i < 10; i++) {
+        buffer[i] = 0;
+    }
+
     /* POTENTIAL FLAW: Attempt to write to an index of the array that is above the upper bound
     * This code does check to see if the array index is negative */
-    if (data >= 0)
-    {
-        buffer[data] = 1;
+    if (data >= 0 && data < 10) {
+        buffer[data] = 1;  // Corrected to prevent buffer overflow
         /* Print the array values */
-        for(i = 0; i < 10; i++)
-        {
+        for (i = 0; i < 10; i++) {
             printIntLine(buffer[i]);
         }
-    }
-    else
-    {
+    } else if (data >= 10) {
+        printLine("ERROR: Array index is out of bounds.");
+    } else {
         printLine("ERROR: Array index is negative.");
     }
+
+    // Free the allocated buffer
+    freeMemorySegment(buffer);
 }
 
 #endif /* OMITBAD */

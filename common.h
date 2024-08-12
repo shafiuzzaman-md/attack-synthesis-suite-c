@@ -2,15 +2,28 @@
 #define COMMON_H
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
 
-#define BUFFER_SIZE 10
-#define CMD_BUFFER_SIZE 100
+// Define generalized memory segment types
+typedef enum {
+    CODE_SEGMENT,
+    DATA_SEGMENT,
+    RESERVED_SEGMENT,
+    PROTECTED_SEGMENT
+} MemoryType;
 
-extern int buffer[BUFFER_SIZE];
-extern char command_buffer[CMD_BUFFER_SIZE];
+// Memory management functions
+void* allocateMemorySegment(size_t size, MemoryType type, uint8_t read, uint8_t write, uint8_t execute);
+void freeMemorySegment(void* baseAddress);
 
+// Function prototypes for the components
+void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int user_data);
+char* component_input_CWE78_bad(char *user_data);
+void component_privileged_CWE78_bad();
+
+// Additional functions for system initialization
 void initialize_system();
 
 #endif // COMMON_H
