@@ -4,8 +4,7 @@ This project demonstrates the chaining of multiple vulnerabilities from the Juli
 ## System Context
 Consider a software system that supports both regular user tasks and administrative operations. The system is architected with distinct memory segments to enforce security boundaries:
 
-Regular users are confined to User Mode, where they can perform standard operations with access restricted to non-critical memory areas, specifically the Data Segment and Code Segment.
-Administrative tasks are executed in Privileged Mode, where they have full access to Protected Segments and Reserved Segments, allowing them to perform critical system operations that require elevated permissions.
+Regular users are confined to User Mode, where they can perform standard operations with access restricted to non-critical memory areas. Administrative tasks are executed in Privileged Mode, where they perform critical system operations that require elevated permissions.
 
 ## Memory Model
 
@@ -21,11 +20,10 @@ Administrative tasks are executed in Privileged Mode, where they have full acces
 The attack surface for this system is divided into two main components:
 
 ### User-Accessible Functions:
-
 These functions operate in User Mode with access limited to the Data Segment for reading and writing and the Code Segment for executing instructions. They handle user inputs and perform regular tasks such as buffer management.
 Examples: Buffer management functions that process and store user inputs in the Data Segment and executable code that resides in the Code Segment.
-Privileged Functions:
 
+### Privileged Functions:
 These functions run in Privileged Mode with full access to all memory segments, including Protected Segments and Reserved Segments. They are responsible for executing critical system operations that affect overall system security.
 Examples: Functions that manage security keys stored in the Protected Segment, execute system-level commands, or interact with hardware via Reserved Segments.
 
