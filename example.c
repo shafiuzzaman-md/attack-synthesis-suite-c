@@ -15,7 +15,7 @@ void chain_vulnerabilities(int user_data) {
     printf("Starting vulnerability chaining...\n");
 
     // Step 1: Simulate buffer overflow in user space
-    CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data);
+    component_input_CWE121_bad(user_data, user_buffer);
 
     // Step 2: Simulate uninitialized variable leading to command injection
     uninitialized_var = component_input_CWE78_bad(user_buffer);
@@ -35,7 +35,7 @@ int main() {
 
     // Allocate memory for user and command buffers using the memory model
     user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
-    command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, PROTECTED_SEGMENT, 1, 0, 0); // Readable, Non-Writable, Non-Executable
+    command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, CODE_SEGMENT, 1, 0, 1); // Readable, Non-Writable, Executable
 
     if (user_buffer == NULL || command_buffer == NULL) {
         printf("Error: Memory allocation failed.\n");

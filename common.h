@@ -19,7 +19,7 @@ void* allocateMemorySegment(size_t size, MemoryType type, uint8_t read, uint8_t 
 void freeMemorySegment(void* baseAddress);
 
 // Function prototypes for the components
-void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int user_data);
+void component_input_CWE121_bad(int user_data, char *user_buffer);
 char* component_input_CWE78_bad(char *user_data);
 void component_privileged_CWE78_bad();
 

@@ -6,8 +6,8 @@
 #include "testcases/CWE457_Use_of_Uninitialized_Variable/s01/CWE457_Use_of_Uninitialized_Variable__char_pointer_01.c"
 
 
-void component_input_CWE121_bad(int user_data) {
-    CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data);
+void component_input_CWE121_bad(int user_data, char *user_buffer) {
+    CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data, user_buffer);
 }
 
 // Uninitialized Variable Component

@@ -34,37 +34,39 @@ Template File: sources-sink-01.tmpl.c
 #endif
 
 #ifndef OMITBAD
-#define COMMAND_BUFFER_SIZE 128  // Define the command buffer size as 128 bytes
+#define BUFFER_SIZE 128  
+
 void CWE78_OS_Command_Injection__char_console_system_01_bad() {
-    // Allocate memory for the command to be executed
-    char command[COMMAND_BUFFER_SIZE] = "cmd /c ";
+    // Allocate the protected_buffer as a protected memory segment
+    // with both read and write permissions
+    char *protected_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, PROTECTED_SEGMENT, 1, 1, 0); // Readable, Writable, Non-Executable
 
-    // Allocate the command_buffer as a protected memory segment
-    char *command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, PROTECTED_SEGMENT, 1, 0, 0); // Readable, Non-Writable, Non-Executable
-
-    if (command_buffer == NULL) {
-        printf("ERROR: Memory allocation for command buffer failed.\n");
+    if (protected_buffer == NULL) {
+        printf("ERROR: Memory allocation for protected buffer failed.\n");
         return;
     }
 
-    // Simulate populating the command buffer with data (for demonstration purposes only)
-    strncpy(command_buffer, "echo Hello, World!", COMMAND_BUFFER_SIZE - 1);
-    command_buffer[COMMAND_BUFFER_SIZE - 1] = '\0';  // Ensure null termination
+    // Simulate populating the protected buffer with data (for demonstration purposes)
+    strncpy(protected_buffer, "echo Hello, World!", BUFFER_SIZE - 1);
+    protected_buffer[BUFFER_SIZE - 1] = '\0';  // Ensure null termination
 
-    // Check if the command buffer content is within bounds and can be appended to the command
-    if (strlen(command_buffer) < (COMMAND_BUFFER_SIZE - strlen(command))) {
-        // Attempt to append the protected command buffer to the command string
-        strcat(command, command_buffer);
+    // Allocate memory for the command to be executed
+    char command[BUFFER_SIZE] = "cmd /c ";
+
+    // Check if the protected buffer content is within bounds and can be appended to the command
+    if (strlen(protected_buffer) < (BUFFER_SIZE - strlen(command))) {
+        // Append the protected, writable buffer to the command string
+        strcat(command, protected_buffer);
         printf("Executing command: %s\n", command);
 
         // Execute the command
         system(command);
     } else {
-        printf("ERROR: Command buffer overflow.\n");
+        printf("ERROR: Protected buffer overflow.\n");
     }
 
     // Free the allocated protected memory segment
-    freeMemorySegment(command_buffer);
+    freeMemorySegment(protected_buffer);
 }
 
 #endif /* OMITBAD */
