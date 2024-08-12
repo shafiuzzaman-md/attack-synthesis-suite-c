@@ -52,6 +52,25 @@ The attack surface for this motivating example consists of two primary component
     - Access Control:
         - User Mode: No access. 
         - Privileged Mode: Restricted and controlled access.
+            - Read: Restricted; only specific low-level operations can read this segment
+            - Write: Restricted; only specific system functions or hardware interactions may write to this segment.
+            - Execute: Typically not allowed; reserved segments generally do not contain executable code. In very specialized cases, certain low-level operations might execute here.
+         
+
+## Memory Segment Access Control Summary
+
+| **Segment Type**        | **User Mode Read** | **User Mode Write** | **User Mode Execute** | **Privileged Mode Read** | **Privileged Mode Write** | **Privileged Mode Execute** |
+|-------------------------|--------------------|---------------------|-----------------------|--------------------------|---------------------------|-----------------------------|
+| **Reserved Segment**     | No                 | No                  | No                    | Restricted                | Restricted                 | Typically No                |
+| **Protected Segment**    | No                 | No                  | No                    | Yes                       | Yes (controlled)           | No                          |
+| **Code Segment**         | Yes                | No                  | Yes                   | Yes                       | Yes (specific conditions)  | Yes                         |
+| **Data Segment**         | Yes                | Yes                 | No                    | Yes                       | Yes                        | No                          |
+
+### Key Points:
+- **Reserved Segment**: Highly restricted, used for critical system functions with very limited access, even in privileged mode.
+- **Protected Segment**: No access in user mode; controlled read and write access in privileged mode, typically for sensitive data.
+- **Code Segment**: Readable and executable in both modes, but writable only in privileged mode under specific conditions to maintain the integrity of executable code.
+- **Data Segment**: Fully accessible for reading and writing in both modes, but not executable to prevent running arbitrary data as code.
 
 # Compiling and Running
 
