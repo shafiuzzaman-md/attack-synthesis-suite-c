@@ -17,10 +17,17 @@ Administrative tasks are executed in Privileged Mode, where they have full acces
 | **Data Segment**        | Program data (variables, buffers)   | Read and write               | Full access (read/write)       | Global variables, heap, stack memory                 |
 
 
-## attack surface
-The attack surface for this motivating example consists of two primary components:
--User-Accessible Functions: Functions that handle user inputs and run in user mode with limited permissions. Examples include buffer management functions that process user inputs.
-- Privileged Functions: Functions that run with elevated permissions and perform critical system operations. Examples include command execution functions that impact the system’s overall security.
+## Attack Surface
+The attack surface for this system is divided into two main components:
+
+### User-Accessible Functions:
+
+These functions operate in User Mode with access limited to the Data Segment for reading and writing and the Code Segment for executing instructions. They handle user inputs and perform regular tasks such as buffer management.
+Examples: Buffer management functions that process and store user inputs in the Data Segment and executable code that resides in the Code Segment.
+Privileged Functions:
+
+These functions run in Privileged Mode with full access to all memory segments, including Protected Segments and Reserved Segments. They are responsible for executing critical system operations that affect overall system security.
+Examples: Functions that manage security keys stored in the Protected Segment, execute system-level commands, or interact with hardware via Reserved Segments.
 
 ## threat model
 - The attacker can interact with user mode functions but cannot directly access privileged mode functions.
