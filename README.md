@@ -27,7 +27,12 @@ Examples: Buffer management functions that process and store user inputs in the 
 These functions run in Privileged Mode with full access to all memory segments, including Protected Segments and Reserved Segments. They are responsible for executing critical system operations that affect overall system security.
 Examples: Functions that manage security keys stored in the Protected Segment, execute system-level commands, or interact with hardware via Reserved Segments.
 
-## threat model
+## Threat Model
+
+### Attacker Capabilities:
+- The attacker can interact with user-accessible functions in User Mode, providing inputs that are processed within the constraints of the Data Segment and executed within the Code Segment.
+- The attacker cannot directly access privileged functions or memory segments designated for Privileged Mode, such as Protected Segments or Reserved Segments.
+- 
 - The attacker can interact with user mode functions but cannot directly access privileged mode functions.
 - The attacker can provide inputs to user-accessible functions and exploit vulnerabilities within these functions.
 - The system contains multiple vulnerabilities that can be chained together to escalate privileges.
