@@ -32,10 +32,10 @@ Examples: Functions that manage security keys stored in the Protected Segment, e
 ### Attacker Capabilities:
 - The attacker can interact with user-accessible functions in User Mode, providing inputs that are processed within the constraints of the Data Segment and executed within the Code Segment.
 - The attacker cannot directly access privileged functions or memory segments designated for Privileged Mode, such as Protected Segments or Reserved Segments.
-- 
-- The attacker can interact with user mode functions but cannot directly access privileged mode functions.
-- The attacker can provide inputs to user-accessible functions and exploit vulnerabilities within these functions.
-- The system contains multiple vulnerabilities that can be chained together to escalate privileges.
+
+### Attack Vector:
+- The attacker provides malicious inputs to user-accessible functions, exploiting vulnerabilities such as buffer overflows in the Data Segment or improper input validation in the Code Segment.
+- By chaining multiple vulnerabilities, the attacker aims to escalate privileges, potentially triggering a sequence of events where user-mode vulnerabilities lead to unauthorized access or manipulation of Privileged Mode operations.
 
 # Project Structure
 
