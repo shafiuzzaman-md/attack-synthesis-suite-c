@@ -1,8 +1,57 @@
-# attack-synthesis-suite-c
-This project demonstrates the chaining of multiple vulnerabilities from the Juliet test suite.
+# Attack Synthesis Suite C
+This project demonstrates the chaining of multiple vulnerabilities from the Juliet test suite, focusing on how user-accessible vulnerabilities can be exploited and combined to escalate privileges within a software system. The system is modeled to reflect real-world scenarios, motivated by the architecture and security concerns of kernel development, UEFI firmware, and Android device drivers, where memory segments are strictly controlled to maintain security.
 
-## system context
+## System Context
 Consider a software system that offers both regular user tasks and administrative operations. The system is designed with clear boundaries: regular users have limited access and cannot perform critical operations, while administrative tasks are protected and require higher privileges.
+
+## Memory Model
+
+| **Segment Type**        | **Purpose**                         | **User Mode**                | **Privileged Mode**            | **Example (UEFI/Kernel/Android)**                    |
+|-------------------------|-------------------------------------|------------------------------|--------------------------------|------------------------------------------------------|
+| **Reserved Segment**    | System-critical functions           | No access                    | Read-only or no access         | Interrupt vector table, MMIO regions, BIOS settings  |
+| **Protected Segment**   | Sensitive data and configurations   | No access                    | Full access (read/write)       | UEFI variables, kernel security keys, Android keystore |
+| **Code Segment**        | Executable program instructions     | Read and execute             | Full access (read/write/execute) | UEFI boot code, kernel code, Android system libraries |
+| **Data Segment**        | Program data (variables, buffers)   | Read and write               | Full access (read/write)       | Global variables, heap, stack memory                 |
+
+### Detailed Overview:
+
+- **Reserved Segment**:
+  - **Purpose**: Used for system-critical functions, such as hardware interactions and low-level operations that are essential for the stable operation of the system.
+  - **User Mode**: No access, ensuring that user applications cannot interfere with these critical areas.
+  - **Privileged Mode**: Typically read-only, with no access in some cases to prevent accidental or malicious changes that could destabilize the system.
+  - **Examples**:
+    - **UEFI**: Interrupt vector table, used for handling hardware interrupts.
+    - **Kernel**: Memory-mapped I/O (MMIO) regions for hardware device communication.
+    - **Android**: BIOS settings or secure boot parameters.
+
+- **Protected Segment**:
+  - **Purpose**: Stores sensitive data, such as security keys, configuration settings, or other critical information that needs to be protected from unauthorized access.
+  - **User Mode**: No access, safeguarding sensitive information from being exposed or modified by user applications.
+  - **Privileged Mode**: Full access, allowing the system to read and write sensitive information as needed for secure operations.
+  - **Examples**:
+    - **UEFI**: UEFI variables, which contain firmware settings and configuration data.
+    - **Kernel**: Kernel security keys used for encryption and secure communications.
+    - **Android**: Keystore, which securely stores cryptographic keys.
+
+- **Code Segment**:
+  - **Purpose**: Contains executable instructions of the program, such as the operating system kernel, device drivers, or user applications.
+  - **User Mode**: Can read and execute the code but cannot modify it, ensuring the integrity of the executable code.
+  - **Privileged Mode**: Full access, including the ability to modify code, which may be necessary for system updates, patches, or debugging.
+  - **Examples**:
+    - **UEFI**: UEFI boot code that initializes the system hardware before handing off control to the OS.
+    - **Kernel**: Operating system kernel code, including device drivers and core system functions.
+    - **Android**: System libraries and executable code that runs within the Android OS environment.
+
+- **Data Segment**:
+  - **Purpose**: Stores program data, such as global variables, buffers, and dynamically allocated memory that the program needs to manipulate.
+  - **User Mode**: Can read and write data, but execution is not permitted to prevent running potentially harmful code.
+  - **Privileged Mode**: Full access, allowing the system to manage all data as needed for both user and system processes.
+  - **Examples**:
+    - **UEFI**: Global variables used during the boot process.
+    - **Kernel**: Heap and stack memory for running processes and managing data structures.
+    - **Android**: Application data, temporary buffers, and process-specific memory.
+
+
 ## attack surface
 The attack surface for this motivating example consists of two primary components:
 -User-Accessible Functions: Functions that handle user inputs and run in user mode with limited permissions. Examples include buffer management functions that process user inputs.
