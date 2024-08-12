@@ -28,11 +28,30 @@ The attack surface for this motivating example consists of two primary component
 - example.c: Contains the main function to demonstrate an example of the vulnerability chaining process. 
 
 # Memory Segment Types (MemoryType)
+
+- Data Segment (DATA_SEGMENT):
+    - Purpose: Stores global variables, heap data, and other mutable data that a program might need to read from or write to.
+    - Access Control:
+        - User Mode: Readable and writable, but not executable. 
+        - Privileged Mode: Readable, writable, and may have additional privileges for certain operations (e.g., direct memory access).
+
 - Code Segment (CODE_SEGMENT):
     - Purpose: Stores the executable instructions of the program.
     - Access Control:
-        - User Mode: Readable and executable, but not writable. This ensures that user programs can execute code but cannot alter the executable instructions.
+        - User Mode: Readable and executable, but not writable. 
         - Privileged Mode: Readable, executable, and in some cases writable (e.g., for just-in-time compilation or certain debugging operations). Privileged code might need to modify executable code under specific, controlled circumstances.
+
+- Protected Segment (PROTECTED_SEGMENT):
+    - Purpose: Contains sensitive data or commands. 
+    - Access Control:
+        - User Mode: No access. 
+        - Privileged Mode: Readable, and in some cases writable, depending on the specific use case. Only privileged code can access this segment, typically for executing sensitive operations or modifying protected settings.
+
+- Reserved Segment (RESERVED_SEGMENT):
+    - Purpose: Reserved for critical system functions or hardware interactions.
+    - Access Control:
+        - User Mode: No access. 
+        - Privileged Mode: Restricted and controlled access.
 
 # Compiling and Running
 
