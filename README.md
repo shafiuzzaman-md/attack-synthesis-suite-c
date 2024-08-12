@@ -2,7 +2,10 @@
 This project demonstrates the chaining of multiple vulnerabilities from the Juliet test suite, focusing on how user-accessible vulnerabilities can be exploited and combined to escalate privileges within a software system. The system is modeled to reflect real-world scenarios, motivated by the architecture and security concerns of kernel development, UEFI firmware, and Android device drivers, where memory segments are strictly controlled to maintain security.
 
 ## System Context
-Consider a software system that offers both regular user tasks and administrative operations. The system is designed with clear boundaries: regular users have limited access and cannot perform critical operations, while administrative tasks are protected and require higher privileges.
+Consider a software system that supports both regular user tasks and administrative operations. The system is architected with distinct memory segments to enforce security boundaries:
+
+Regular users are confined to User Mode, where they can perform standard operations with access restricted to non-critical memory areas, specifically the Data Segment and Code Segment.
+Administrative tasks are executed in Privileged Mode, where they have full access to Protected Segments and Reserved Segments, allowing them to perform critical system operations that require elevated permissions.
 
 ## Memory Model
 
