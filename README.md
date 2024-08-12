@@ -8,7 +8,7 @@ Consider a software system that offers both regular user tasks and administrativ
 
 | **Segment Type**        | **Purpose**                         | **User Mode**                | **Privileged Mode**            | **Example (UEFI/Kernel/Android)**                    |
 |-------------------------|-------------------------------------|------------------------------|--------------------------------|------------------------------------------------------|
-| **Reserved Segment**    | System-critical functions           | No access                    | Read-only or no access         | Interrupt vector table, MMIO regions, BIOS settings  |
+| **Reserved Segment**    | System-critical functions           | No access                    | Read-only                      | Interrupt vector table, MMIO regions, BIOS settings  |
 | **Protected Segment**   | Sensitive data and configurations   | No access                    | Full access (read/write)       | UEFI variables, kernel security keys, Android keystore |
 | **Code Segment**        | Executable program instructions     | Read and execute             | Full access (read/write/execute) | UEFI boot code, kernel code, Android system libraries |
 | **Data Segment**        | Program data (variables, buffers)   | Read and write               | Full access (read/write)       | Global variables, heap, stack memory                 |
