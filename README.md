@@ -35,7 +35,7 @@ Examples: Functions that manage security keys stored in the Protected Segment, e
 
 ### Attack Vector:
 - The attacker provides malicious inputs to user-accessible functions, exploiting vulnerabilities such as buffer overflows in the Data Segment or improper input validation in the Code Segment.
-- By chaining multiple vulnerabilities, the attacker aims to escalate privileges, potentially triggering a sequence of events where user-mode vulnerabilities lead to unauthorized access or manipulation of Privileged Mode operations.
+- By chaining multiple vulnerabilities, the attacker aims to potentially trigger a sequence of events in which user-mode vulnerabilities lead to unauthorized access or manipulation of Privileged Mode operations.
 
 # Project Structure
 
