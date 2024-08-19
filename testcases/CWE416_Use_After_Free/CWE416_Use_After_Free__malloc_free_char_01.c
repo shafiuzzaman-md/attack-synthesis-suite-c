@@ -21,20 +21,23 @@ Template File: sources-sinks-01.tmpl.c
 
 #ifndef OMITBAD
 
-void CWE416_Use_After_Free__malloc_free_char_01_bad()
-{
-    char * data;
-    /* Initialize data */
+void CWE416_Use_After_Free__malloc_free_char_01_bad(char *data, char *user_buffer) {
+    // Initialize data with user_buffer
     data = NULL;
-    data = (char *)malloc(100*sizeof(char));
-    if (data == NULL) {exit(-1);}
-    memset(data, 'A', 100-1);
-    data[100-1] = '\0';
-    /* POTENTIAL FLAW: Free data in the source - the bad sink attempts to use data */
+    data = (char *)malloc(100 * sizeof(char));
+    if (data == NULL) {
+        exit(-1);
+    }
+
+    // Copy the contents of user_buffer into data
+    strncpy(data, user_buffer, 100 - 1);
+    data[100 - 1] = '\0';  // Ensure null termination
+
+    // Free the memory (introducing the use-after-free vulnerability)
     free(data);
-    /* POTENTIAL FLAW: Use of data that may have been freed */
+
+    // POTENTIAL FLAW: Use of data that may have been freed
     printLine(data);
-    /* POTENTIAL INCIDENTAL - Possible memory leak here if data was not freed */
 }
 
 #endif /* OMITBAD */

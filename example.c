@@ -1,53 +1,33 @@
 #include "common.h"
 
-// Buffer sizes
-#define BUFFER_SIZE 256
-#define COMMAND_BUFFER_SIZE 128
-
-// Global pointers to buffers
-char *user_buffer;
-char *command_buffer;
-
 // Function that chains multiple vulnerabilities from user to privileged context
 void chain_vulnerabilities(int user_data) {
-    char *uninitialized_var = NULL;
+    // Attack Goal: Write in Protected Segment
+    // Attacke scenerio: Exploit a buffer overflow in the Data Segment to inject malicious code
+    // into the Code Segment, then execute it to modify the Protected Segment.
 
     printf("Starting vulnerability chaining...\n");
 
-    // Step 1: Simulate buffer overflow in user space
-    component_input_CWE121_bad(user_data, user_buffer);
+    // Step 1: Buffer Overflow in Data Segment
+    // Overflow `user_buffer` to inject a command into the Code Segment.
+    u_CWE121_CWE129_large_01_bad(user_data, user_buffer);
 
-    // Step 2: Simulate uninitialized variable leading to command injection
-    uninitialized_var = component_input_CWE78_bad(user_buffer);
-
-    // Simulate overflow affecting uninitialized_var
-    if (user_data >= BUFFER_SIZE) {
-        uninitialized_var = command_buffer;
-        strcpy(command_buffer, "echo Malicious command executed");  // This should trigger a protection violation if the segment is truly protected.
-    }
-
-    // Step 3: Execute the command injection in privileged mode
-    component_privileged_CWE78_bad();
+    // Step 2: Execute the injected command in the Code Segment
+    // The injected command in `command_buffer` is executed, which modifies the Protected Segment.
+    execute_command(command_buffer);
 }
 
 int main() {
+    // Initialize system and allocate buffers
     initialize_system();
+    allocate_all_buffers();
 
-    // Allocate memory for user and command buffers using the memory model
-    user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
-    command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, CODE_SEGMENT, 1, 0, 1); // Readable, Non-Writable, Executable
-
-    if (user_buffer == NULL || command_buffer == NULL) {
-        printf("Error: Memory allocation failed.\n");
-        return 1;
-    }
-
-    int malicious_input = 15;  // Simulated user input that triggers the overflow
+    // Simulate input that triggers the buffer overflow
+    int malicious_input = BUFFER_SIZE + COMMAND_BUFFER_SIZE;  // Causes overflow to reach `command_buffer`
     chain_vulnerabilities(malicious_input);
 
-    // Free the allocated memory
-    freeMemorySegment(user_buffer);
-    freeMemorySegment(command_buffer);
+    // Free allocated memory
+    free_all_buffers();
 
     return 0;
 }

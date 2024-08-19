@@ -10,6 +10,12 @@ typedef struct {
     uint8_t execute;
 } MemorySegment;
 
+// Global pointers to buffers
+char *user_buffer;
+char *command_buffer;
+char *reserved_buffer;
+char *protected_buffer;  // Added for protected segment
+
 // Define memory map structure
 #define MAX_MEMORY_SEGMENTS 10
 MemorySegment memoryMap[MAX_MEMORY_SEGMENTS];
@@ -42,6 +48,19 @@ void* allocateMemorySegment(size_t size, MemoryType type, uint8_t read, uint8_t 
     return baseAddress;
 }
 
+// Allocate memory for user, command, reserved, and protected buffers
+void allocate_all_buffers() {
+    user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
+    command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, CODE_SEGMENT, 1, 0, 1); // Readable, Executable, Non-Writable in User Mode
+    reserved_buffer = (char*) allocateMemorySegment(RESERVED_BUFFER_SIZE, RESERVED_SEGMENT, 1, 0, 0); // Readable, Non-Writable
+    protected_buffer = (char*) allocateMemorySegment(PROTECTED_BUFFER_SIZE, PROTECTED_SEGMENT, 1, 1, 0); // Readable, Writable
+
+    if (user_buffer == NULL || command_buffer == NULL || reserved_buffer == NULL || protected_buffer == NULL) {
+        printf("Error: Memory allocation failed.\n");
+        exit(1);
+    }
+}
+
 // Function to free a memory segment
 void freeMemorySegment(void* baseAddress) {
     for (int i = 0; i < memorySegmentCount; i++) {
@@ -60,14 +79,12 @@ void freeMemorySegment(void* baseAddress) {
     printf("Error: Memory segment not found.\n");
 }
 
-// Function to simulate use of allocated memory
-void use_memory(void *ptr, size_t size, int value) {
-    if (ptr != NULL) {
-        memset(ptr, value, size);
-        printf("Memory at %p filled with value %d\n", ptr, value);
-    } else {
-        printf("Invalid memory pointer\n");
-    }
+// Free all allocated buffers
+void free_all_buffers() {
+    freeMemorySegment(user_buffer);
+    freeMemorySegment(command_buffer);
+    freeMemorySegment(reserved_buffer);
+    freeMemorySegment(protected_buffer);  // Free protected buffer
 }
 
 // Dummy system initialization function
