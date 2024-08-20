@@ -58,57 +58,52 @@ Steps:
 
 Example in Context:
 
-- Reserved Segment: Interrupt vector table remains secure and unaffected.
-- Protected Segment: UEFI variables are modified, potentially allowing unauthorized access to firmware settings.
-- Code Segment: The attacker injects the command into UEFI boot code or kernel code.
-- Data Segment: Buffer overflow occurs in the stack or heap, overwriting function pointers.
+  - Reserved Segment: Interrupt vector table remains secure and unaffected.
+  - Protected Segment: UEFI variables are modified, potentially allowing unauthorized access to firmware settings.
+  - Code Segment: The attacker injects the command into UEFI boot code or kernel code.
+  - Data Segment: Buffer overflow occurs in the stack or heap, overwriting function pointers.
 
 ### Chain 2: Arbitrary Write in Data Segment to Execute Code in Code Segment
 Steps:
 
 1. Initial Access (User Mode) - Exploit Arbitrary Write in Data Segment:
-- Vulnerability: An arbitrary write vulnerability allows the attacker to write data to any location in memory.
-- Exploit: The attacker uses this vulnerability to overwrite a function pointer or return address in the code segment.
+  - Vulnerability: An arbitrary write vulnerability allows the attacker to write data to any location in memory.
+  - Exploit: The attacker uses this vulnerability to overwrite a function pointer or return address in the code segment.
 
 2. Code Execution (User Mode) - Redirect Execution to Malicious Code:
-- Vulnerability: The overwritten pointer or return address redirects execution to a location controlled by the attacker.
-- Exploit: The attacker uses this to execute code that should not be accessible, potentially enabling the modification of the protected segment.
+  - Vulnerability: The overwritten pointer or return address redirects execution to a location controlled by the attacker.
+  - Exploit: The attacker uses this to execute code that should not be accessible, potentially enabling the modification of the protected segment.
   
 3. Privilege Escalation (Privileged Mode) - Execute Malicious Code with Elevated Privileges:
-- Vulnerability: The malicious code runs in privileged mode, giving the attacker full control over sensitive data and configurations.
-- Exploit: This leads to modification of critical configurations or direct control over the system.
+  - Vulnerability: The malicious code runs in privileged mode, giving the attacker full control over sensitive data and configurations.
+  - Exploit: This leads to modification of critical configurations or direct control over the system.
   
 Example in Context:
-- Reserved Segment: MMIO regions remain intact but might be accessed due to privilege escalation.
-- Protected Segment: The attacker gains control over Android keystore or kernel security keys.
-- Code Segment: The attack results in arbitrary code execution within kernel code or system libraries.
-- Data Segment: An arbitrary write allows modification of pointers that control the execution flow.
+  - Reserved Segment: MMIO regions remain intact but might be accessed due to privilege escalation.
+  - Protected Segment: The attacker gains control over Android keystore or kernel security keys.
+  - Code Segment: The attack results in arbitrary code execution within kernel code or system libraries.
+  - Data Segment: An arbitrary write allows modification of pointers that control the execution flow.
 
   ### Chain 3: Exploit Use-After-Free in Data Segment to Gain Write Access to Protected Segment
 Steps: 
 
 1. Initial Access (User Mode) - Use-After-Free in Data Segment:
-- Vulnerability: A use-after-free vulnerability allows access to previously freed memory in the data segment.
-- Exploit: The attacker reuses the freed memory to point to sensitive data in the protected segment.
+  - Vulnerability: A use-after-free vulnerability allows access to previously freed memory in the data segment.
+  - Exploit: The attacker reuses the freed memory to point to sensitive data in the protected segment.
 
 2. Privilege Escalation (User Mode) - Modify Data in Protected Segment:
-
-- Vulnerability: The reallocated memory is manipulated to point to the protected segment, where the attacker now has unintended write access.
-- Exploit: The attacker modifies sensitive data, such as UEFI variables or kernel configurations, that should have been protected.
+  - Vulnerability: The reallocated memory is manipulated to point to the protected segment, where the attacker now has unintended write access.
+  - Exploit: The attacker modifies sensitive data, such as UEFI variables or kernel configurations, that should have been protected.
 
 3. Privilege Escalation (Privileged Mode) - Persist Changes in Protected Segment:
-
-- Vulnerability: The modified data in the protected segment alters system behavior in privileged mode.
-- Exploit: The attacker achieves persistent changes, such as disabling security checks or bypassing authentication.
+  - Vulnerability: The modified data in the protected segment alters system behavior in privileged mode.
+  - Exploit: The attacker achieves persistent changes, such as disabling security checks or bypassing authentication.
+  
 Example in Context:
-
-- Reserved Segment: BIOS settings might be indirectly affected by changes in the protected segment.
-- Protected Segment: Kernel security keys or UEFI variables are altered through the exploited use-after-free vulnerability.
-- Code Segment: No direct impact, but the privilege escalation could lead to future code execution exploits.
-- Data Segment: Freed memory is reused to access protected data, escalating privileges.
-
-
-### Chain 3: Exploit Use-After-Free in Data Segment to Gain Write Access to Protected Segment
+  - Reserved Segment: BIOS settings might be indirectly affected by changes in the protected segment.
+  - Protected Segment: Kernel security keys or UEFI variables are altered through the exploited use-after-free vulnerability.
+  - Code Segment: No direct impact, but the privilege escalation could lead to future code execution exploits.
+  - Data Segment: Freed memory is reused to access protected data, escalating privileges.
 
 ## Code Structure
 
