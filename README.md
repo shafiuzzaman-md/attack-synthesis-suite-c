@@ -41,18 +41,20 @@ Examples: Functions that manage security keys stored in the Protected Segment, e
 ### Chain 1: Buffer Overflow in Data Segment to Modify Protected Segment
 Steps:
 
-Initial Access (User Mode) - Buffer Overflow in Data Segment:
+1. Initial Access (User Mode) - Buffer Overflow in Data Segment: 
 
-Vulnerability: A buffer overflow vulnerability exists in a user-accessible function that writes to a buffer in the data segment.
-Exploit: The attacker provides input that overflows the buffer, overwriting adjacent memory locations, including a pointer or function in the code segment.
-Code Execution (User Mode) - Inject Command into Code Segment:
+- Vulnerability: A buffer overflow vulnerability exists in a user-accessible function that writes to a buffer in the data segment.
+- Exploit: The attacker provides input that overflows the buffer, overwriting adjacent memory locations, including a pointer or function in the code segment.
 
-Vulnerability: The overflowed buffer spills over into the code segment, where the attacker injects a command to modify the protected segment.
-Exploit: The attacker carefully crafts the overflow to inject a command that modifies sensitive data in the protected segment.
-Privilege Escalation (Privileged Mode) - Modify Protected Segment:
+2. Code Execution (User Mode) - Inject Command into Code Segment:
 
-Vulnerability: The injected command, now stored in the code segment, is executed in privileged mode, allowing modification of the protected segment.
-Exploit: The command changes critical configurations (e.g., UEFI variables or kernel security keys), escalating privileges or enabling further exploitation.
+- Vulnerability: The overflowed buffer spills over into the code segment, where the attacker injects a command to modify the protected segment.
+- Exploit: The attacker carefully crafts the overflow to inject a command that modifies sensitive data in the protected segment.
+
+3. Privilege Escalation (Privileged Mode) - Modify Protected Segment:
+
+- Vulnerability: The injected command, now stored in the code segment, is executed in privileged mode, allowing modification of the protected segment.
+- Exploit: The command changes critical configurations (e.g., UEFI variables or kernel security keys), escalating privileges or enabling further exploitation.
 
 Example in Context:
 
