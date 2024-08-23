@@ -49,17 +49,17 @@ void* allocateMemorySegment(size_t size, MemoryType type, uint8_t read, uint8_t 
 }
 
 // Allocate memory for user, command, reserved, and protected buffers
-void allocate_all_buffers() {
-    user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
-    command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, CODE_SEGMENT, 1, 0, 1); // Readable, Executable, Non-Writable in User Mode
-    reserved_buffer = (char*) allocateMemorySegment(RESERVED_BUFFER_SIZE, RESERVED_SEGMENT, 1, 0, 0); // Readable, Non-Writable
-    protected_buffer = (char*) allocateMemorySegment(PROTECTED_BUFFER_SIZE, PROTECTED_SEGMENT, 1, 1, 0); // Readable, Writable
+// void allocate_all_buffers() {
+//     user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
+//     command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, CODE_SEGMENT, 1, 0, 1); // Readable, Executable, Non-Writable in User Mode
+//     reserved_buffer = (char*) allocateMemorySegment(RESERVED_BUFFER_SIZE, RESERVED_SEGMENT, 1, 0, 0); // Readable, Non-Writable
+//     protected_buffer = (char*) allocateMemorySegment(PROTECTED_BUFFER_SIZE, PROTECTED_SEGMENT, 1, 1, 0); // Readable, Writable
 
-    if (user_buffer == NULL || command_buffer == NULL || reserved_buffer == NULL || protected_buffer == NULL) {
-        printf("Error: Memory allocation failed.\n");
-        exit(1);
-    }
-}
+//     if (user_buffer == NULL || command_buffer == NULL || reserved_buffer == NULL || protected_buffer == NULL) {
+//         printf("Error: Memory allocation failed.\n");
+//         exit(1);
+//     }
+// }
 
 // Function to free a memory segment
 void freeMemorySegment(void* baseAddress) {
@@ -80,12 +80,12 @@ void freeMemorySegment(void* baseAddress) {
 }
 
 // Free all allocated buffers
-void free_all_buffers() {
-    freeMemorySegment(user_buffer);
-    freeMemorySegment(command_buffer);
-    freeMemorySegment(reserved_buffer);
-    freeMemorySegment(protected_buffer);  // Free protected buffer
-}
+// void free_all_buffers() {
+//     freeMemorySegment(user_buffer);
+//     freeMemorySegment(command_buffer);
+//     freeMemorySegment(reserved_buffer);
+//     freeMemorySegment(protected_buffer);  // Free protected buffer
+// }
 
 // Dummy system initialization function
 void initialize_system() {

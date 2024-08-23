@@ -2,9 +2,21 @@
 
 // Include the Juliet test suite file
 #define OMITGOOD
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 10
 
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c"
+
+
+// Simulate buffer overflow vulnerability with large index access
+void u_CWE121_CWE129_large_01_bad(int user_data) {
+    // Allocate a buffer in the data segment
+    char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
+    if (user_buffer == NULL) {
+        printf("Error: Memory allocation failed in the data segment.\n");
+        return;
+    }
+    CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data, user_buffer);
+}
 
 
 // Simulate command execution (accessible in user mode)
@@ -40,10 +52,7 @@ void execute_command(int command_number) {
 }
 
 
-// Simulate buffer overflow vulnerability with large index access
-void u_CWE121_CWE129_large_01_bad(int user_data, char *user_buffer) {
-    CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data, user_buffer);
-}
+
 
 // Simulate buffer overflow vulnerability with negative index access
 // void u_CWE121_CWE129_negative_01_bad(int user_data, char *user_buffer) {

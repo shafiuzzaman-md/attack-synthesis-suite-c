@@ -21,34 +21,16 @@ Template File: sources-sinks-01.tmpl.c
 #ifndef OMITBAD
 
 void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int data,  char *user_buffer) {
-    int i;
-
-    if (user_buffer == NULL) {
-        printLine("ERROR: Memory allocation failed.");
-        return;
-    }
-
-    // Initialize the buffer to 0
-    for (i = 0; i < 10; i++) {
-        user_buffer[i] = 0;
-    }
-
-    /* POTENTIAL FLAW: Attempt to write to an index of the array that is above the upper bound
-    * This code does check to see if the array index is negative */
-    if (data >= 0 && data < 10) {
-        user_buffer[data] = 1;  // Corrected to prevent buffer overflow
-        /* Print the array values */
-        for (i = 0; i < 10; i++) {
-            printIntLine(user_buffer[i]);
+     /* POTENTIAL FLAW: Attempt to write to an index of the array that is above the upper bound
+        * This code does check to see if the array index is negative */
+        if (data >= 0)
+        {
+            user_buffer[data] = 1;
         }
-    } else if (data >= 10) {
-        printLine("ERROR: Array index is out of bounds.");
-    } else {
-        printLine("ERROR: Array index is negative.");
-    }
-
-    // Free the allocated buffer
-    freeMemorySegment(user_buffer);
+        else
+        {
+            printLine("ERROR: Array index is negative.");
+        }
 }
 
 #endif /* OMITBAD */

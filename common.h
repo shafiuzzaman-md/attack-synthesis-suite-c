@@ -10,7 +10,7 @@
 #define BUFFER_SIZE 256
 #define COMMAND_BUFFER_SIZE 128
 #define RESERVED_BUFFER_SIZE 64
-#define PROTECTED_BUFFER_SIZE 64  // Added for protected segment
+#define PROTECTED_BUFFER_SIZE 64 t
 
 // Define generalized memory segment types
 typedef enum {
@@ -30,7 +30,7 @@ void free_all_buffers();
 extern char *user_buffer;
 extern char *command_buffer;
 extern char *reserved_buffer;
-extern char *protected_buffer;  // Added for protected segment
+extern char *protected_buffer;  
 
 // System initialization
 void initialize_system();
@@ -41,6 +41,6 @@ void printIntLine(int value);
 
 // Declare the functions used across multiple source files
 void execute_command(int command_number);
-void u_CWE121_CWE129_large_01_bad(int user_data, char *user_buffer);  // Declare the function here
+void u_CWE121_CWE129_large_01_bad(int user_data);  // Declare the function here
 
 #endif // COMMON_H
