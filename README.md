@@ -6,6 +6,20 @@ Consider a software system that supports both regular user tasks and administrat
 
 Regular users are confined to User Mode, where they can perform standard operations with access restricted to non-critical memory areas. Administrative tasks are executed in Privileged Mode, where they perform critical system operations that require elevated permissions.
 
+## Code Structure
+
+- common.h: Defines the foundational structures and functions for a memory model that differentiates between various types of memory segments. 
+
+- common.c: Defines the global variables and utility function.
+
+- privileged.c: Defines the privileged functions.
+
+- user_accessible.c: Contains user-accessible functions.
+
+- testcases/: Directory containing the Juliet test suite.
+
+- example.c: Contains the main function to demonstrate an example of the vulnerability chaining process. 
+
 ## Memory Model and Access Control
 
 | **Segment Type**        | **Purpose**                         | **User Mode**                | **Privileged Mode**            | **Example (UEFI/Kernel/Android)**                    |
@@ -104,20 +118,6 @@ Example in Context:
   - Protected Segment: Kernel security keys or UEFI variables are altered through the exploited use-after-free vulnerability.
   - Code Segment: No direct impact, but the privilege escalation could lead to future code execution exploits.
   - Data Segment: Freed memory is reused to access protected data, escalating privileges.
-
-## Code Structure
-
-- common.h: Defines the foundational structures and functions for a memory model that differentiates between various types of memory segments. 
-
-- common.c: Defines the global variables and utility function.
-
-- privileged.c: Defines the privileged functions.
-
-- user_accessible.c: Contains user-accessible functions.
-
-- testcases/: Directory containing the Juliet test suite.
-
-- example.c: Contains the main function to demonstrate an example of the vulnerability chaining process. 
 
 
 ### Compiling and Running
