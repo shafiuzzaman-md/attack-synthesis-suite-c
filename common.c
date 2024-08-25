@@ -48,18 +48,16 @@ void* allocateMemorySegment(size_t size, MemoryType type, uint8_t read, uint8_t 
     return baseAddress;
 }
 
-// Allocate memory for user, command, reserved, and protected buffers
-// void allocate_all_buffers() {
-//     user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
-//     command_buffer = (char*) allocateMemorySegment(COMMAND_BUFFER_SIZE, CODE_SEGMENT, 1, 0, 1); // Readable, Executable, Non-Writable in User Mode
-//     reserved_buffer = (char*) allocateMemorySegment(RESERVED_BUFFER_SIZE, RESERVED_SEGMENT, 1, 0, 0); // Readable, Non-Writable
-//     protected_buffer = (char*) allocateMemorySegment(PROTECTED_BUFFER_SIZE, PROTECTED_SEGMENT, 1, 1, 0); // Readable, Writable
-
-//     if (user_buffer == NULL || command_buffer == NULL || reserved_buffer == NULL || protected_buffer == NULL) {
-//         printf("Error: Memory allocation failed.\n");
-//         exit(1);
-//     }
-// }
+// Function to retrieve the base address of a memory segment by type
+void* getMemorySegmentBase(MemoryType type) {
+    for (int i = 0; i < memorySegmentCount; i++) {
+        if (memoryMap[i].type == type) {
+            return memoryMap[i].baseAddress;
+        }
+    }
+    printf("Error: Memory segment of type %d not found.\n", type);
+    return NULL;  // Return NULL if the segment type is not found
+}
 
 // Function to free a memory segment
 void freeMemorySegment(void* baseAddress) {
@@ -78,14 +76,6 @@ void freeMemorySegment(void* baseAddress) {
     }
     printf("Error: Memory segment not found.\n");
 }
-
-// Free all allocated buffers
-// void free_all_buffers() {
-//     freeMemorySegment(user_buffer);
-//     freeMemorySegment(command_buffer);
-//     freeMemorySegment(reserved_buffer);
-//     freeMemorySegment(protected_buffer);  // Free protected buffer
-// }
 
 // Dummy system initialization function
 void initialize_system() {

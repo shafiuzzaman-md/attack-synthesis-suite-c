@@ -19,7 +19,7 @@ Template File: sources-sink-01.tmpl.c
 #include "../../../testcasesupport/std_testcase.h"
 #include "../../../common.h"
 #include <wchar.h>
-
+#include "ECH.c"
 #ifdef _WIN32
 #define FULL_COMMAND "dir "
 #else

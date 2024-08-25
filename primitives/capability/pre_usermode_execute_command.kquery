@@ -1,0 +1,5 @@
+array command_buffer[8] : w32 -> w8 = symbolic
+(query [(Eq false
+             (Eq 0
+                 (ReadLSB w64 0 command_buffer)))]
+        false)

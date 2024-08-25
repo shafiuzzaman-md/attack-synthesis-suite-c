@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "std_testcase.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "cstdlib": "c"
     }
 }

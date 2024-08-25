@@ -25,6 +25,7 @@ void* allocateMemorySegment(size_t size, MemoryType type, uint8_t read, uint8_t 
 void freeMemorySegment(void* baseAddress);
 void allocate_all_buffers();
 void free_all_buffers();
+void* getMemorySegmentBase(MemoryType type);
 
 // Global buffers (declare them as extern so they are accessible across files)
 extern char *user_buffer;

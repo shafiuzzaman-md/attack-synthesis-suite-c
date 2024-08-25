@@ -3,7 +3,7 @@
 // Include the Juliet test suite file
 #define OMITGOOD
 #define BUFFER_SIZE 10
-
+int EXECUTE_COMMAND = 1;
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c"
 
 
@@ -19,36 +19,28 @@ void u_CWE121_CWE129_large_01_bad(int user_data) {
 }
 
 
-// Simulate command execution (accessible in user mode)
+// Execute a specific command stored in the code segment
 void execute_command(int command_number) {
-    char *command_start = command_buffer;
-    char *command_end;
-    int current_command = 0;
 
-    // Iterate through the commands in the buffer
-    while ((command_end = strchr(command_start, ';')) != NULL || *command_start != '\0') {
-        if (current_command == command_number) {
-            // Null-terminate the specific command
-            if (command_end != NULL) {
-                *command_end = '\0';
-            }
-
-            // Execute the specific command
-            printf("Executing command from code segment: %s\n", command_start);
-            system(command_start);
-            return;
-        }
-        current_command++;
-
-        if (command_end == NULL) {
-            break;
-        }
-
-        // Move to the next command
-        command_start = command_end + 1;
+    // Retrieve the base address of the command buffer in the code segment
+    char *command_buffer = (char*) getMemorySegmentBase(CODE_SEGMENT);
+    klee_make_symbolic(&command_buffer, sizeof(command_buffer), "command_buffer");
+    if (!command_buffer) {
+        printf("ERROR: Command buffer in the code segment is not initialized.\n");
+        return;
     }
-
-    printf("ERROR: Command number %d not found in command buffer.\n", command_number);
+    // Assuming each command is of fixed length and stored sequentially
+    int command_size = 256;  // Example fixed size for each command
+    char *command = command_buffer + command_number * command_size;
+    klee_assert(!EXECUTE_COMMAND);
+    // Null-terminate the selected command for execution
+    char command_copy[command_size];
+    strncpy(command_copy, command, command_size - 1);
+    command_copy[command_size - 1] = '\0';  // Ensure null termination
+    
+    // Execute the command
+    printf("Executing command from code segment: %s\n", command_copy);
+    system(command_copy);
 }
 
 
