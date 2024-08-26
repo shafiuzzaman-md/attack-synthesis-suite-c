@@ -53,16 +53,18 @@ Examples: Functions that manage security keys stored in the Protected Segment, e
 
 ## Pre- and Post- condition Grammer
 Array Declaration:
-
+```
 array <name>[<size>] : <index_type> -> <element_type> = symbolic
+```
 Query:
-
+```
 query [<constraints>] <boolean>
+```
 Expressions:
-
+```
 Eq <expression1> <expression2>: Equality expression.
 ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little Endian format.
-
+```
 ## Example Chains
 ### Chain 1: Buffer Overflow in Data Segment to Modify Protected Segment
 Steps:
