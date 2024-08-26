@@ -15,21 +15,22 @@ Template File: sources-sinks-01.tmpl.c
  *
  * */
 
-#include "std_testcase.h"
+#include "../../../testcasesupport/std_testcase.h"
+#include "../../../common.h"
 
 #ifndef OMITBAD
 
-void CWE190_Integer_Overflow__char_fscanf_add_01_bad()
+void CWE190_Integer_Overflow__char_fscanf_add_01_bad(char data, char *user_buffer,  char input_char)
 {
-    char data;
-    data = ' ';
-    /* POTENTIAL FLAW: Use a value input from the console */
-    fscanf (stdin, "%c", &data);
-    {
-        /* POTENTIAL FLAW: Adding 1 to data could cause an overflow */
-        char result = data + 1;
-        printHexCharLine(result);
-    }
+    /* POTENTIAL FLAW: Adding 1 to data could cause an overflow */
+    char result = data + 1;
+    // Convert the result to an index that will be used to access the user buffer
+    int buffer_index = (int)result;
+    // Use the result to manipulate the user buffer, similar to how buffer overflow is handled
+    // Write the input character to the user buffer at the calculated index
+    user_buffer[buffer_index] = input_char;
+
+    printLine("Data written to user buffer.");
 }
 
 #endif /* OMITBAD */

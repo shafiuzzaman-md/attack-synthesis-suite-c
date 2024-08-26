@@ -5,23 +5,7 @@
 #define BUFFER_SIZE 10
 int EXECUTE = 1;
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c"
-
-
-// Simulate buffer overflow vulnerability with large index access
-void u_CWE121_CWE129_large_01_bad(int user_data) {
-     if (current_mode != USER_MODE) {
-        printf("ERROR: Attempt to execute user command in non-user mode.\n");
-        return;
-    }
-    // Allocate a buffer in the data segment
-    char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
-    if (user_buffer == NULL) {
-        printf("Error: Memory allocation failed in the data segment.\n");
-        return;
-    }
-    CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data, user_buffer);
-}
-
+#include "testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_add_01.c"
 
 // Execute a specific command stored in the code segment
 void execute_command_user(int command_number) {
@@ -51,13 +35,39 @@ void execute_command_user(int command_number) {
     system(command_copy);
 }
 
+void u_CWE121_CWE129_large_01_bad(int user_data) {
+     if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return;
+    }
+    // Allocate a buffer in the data segment
+    char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
+    if (user_buffer == NULL) {
+        printf("Error: Memory allocation failed in the data segment.\n");
+        return;
+    }
+    CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data, user_buffer);
+}
+
+
+void u_CWE190_char_fscanf_add_01_bad(char user_data, char input_char) {
+     if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return;
+    }
+    // Allocate a buffer in the data segment
+    char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
+    if (user_buffer == NULL) {
+        printf("Error: Memory allocation failed in the data segment.\n");
+        return;
+    }
+    CWE190_Integer_Overflow__char_fscanf_add_01_bad(user_data, *user_buffer,  input_char);
+}
 
 
 
-// Simulate buffer overflow vulnerability with negative index access
-// void u_CWE121_CWE129_negative_01_bad(int user_data, char *user_buffer) {
-//     CWE121_Stack_Based_Buffer_Overflow__CWE129_negative_01_bad(user_data, user_buffer);
-// }
+
+
 
 // Simulate a use-after-free vulnerability with direct user input
 // char* u_CWE416_malloc_free_01_bad(int user_data, char *user_buffer) {
