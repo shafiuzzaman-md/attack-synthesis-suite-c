@@ -6,6 +6,18 @@
 int EXECUTE_COMMAND = 1;
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c"
 
+// Global variable to track the current execution mode, defined in user_accessible.c
+ExecutionMode current_mode = USER_MODE;
+
+// Function to set the execution mode
+void set_mode(ExecutionMode mode) {
+    current_mode = mode;
+}
+
+// Function to get the current execution mode
+ExecutionMode get_mode() {
+    return current_mode;
+}
 
 // Simulate buffer overflow vulnerability with large index access
 void u_CWE121_CWE129_large_01_bad(int user_data) {
@@ -20,7 +32,12 @@ void u_CWE121_CWE129_large_01_bad(int user_data) {
 
 
 // Execute a specific command stored in the code segment
-void execute_command(int command_number) {
+void execute_command_user(int command_number) {
+     klee_make_symbolic(&current_mode, sizeof(current_mode), "current_mode");
+     if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return;
+    }
 
     // Retrieve the base address of the command buffer in the code segment
     char *command_buffer = (char*) getMemorySegmentBase(CODE_SEGMENT);

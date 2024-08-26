@@ -12,6 +12,16 @@
 #define RESERVED_BUFFER_SIZE 64
 #define PROTECTED_BUFFER_SIZE 64 t
 
+// Define the execution mode type
+typedef enum {
+    PRIVILEGED_MODE,
+    USER_MODE
+} ExecutionMode;
+
+// Function prototypes for mode management
+void set_mode(ExecutionMode mode);
+ExecutionMode get_mode();
+
 // Define generalized memory segment types
 typedef enum {
     CODE_SEGMENT,

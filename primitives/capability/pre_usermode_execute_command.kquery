@@ -1,5 +1,8 @@
 array command_buffer[8] : w32 -> w8 = symbolic
-(query [(Eq false
+array current_mode[4] : w32 -> w8 = symbolic
+(query [(Eq 1
+             (ReadLSB w32 0 current_mode))
+         (Eq false
              (Eq 0
                  (ReadLSB w64 0 command_buffer)))]
         false)
