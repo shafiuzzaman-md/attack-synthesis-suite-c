@@ -19,18 +19,13 @@ Template File: sources-sinks-01.tmpl.c
 #include "../../../common.h"
 
 #ifndef OMITBAD
-#define MAX_SIZE 256  // Define the maximum buffer size
+extern int symbolic_BUFFER_SIZE;  // Extern declaration for STASE
 void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int data,  char *user_buffer) {
-    int buffer_size;
-    klee_make_symbolic(&buffer_size, sizeof(buffer_size), "buffer_size");
-
-    // Assumption: buffer size is between 1 and a defined MAX_SIZE
-    klee_assume(buffer_size > 0 && buffer_size <= MAX_SIZE);
      /* POTENTIAL FLAW: Attempt to write to an index of the array that is above the upper bound
         * This code does check to see if the array index is negative */
         if (data >= 0)
         {
-            klee_assert(no_buffer_overflow_occurred(data, buffer_size));  // Use the postcondition-oriented predicate
+            klee_assert(no_buffer_overflow_occurred(data, symbolic_BUFFER_SIZE));  // Use the postcondition-oriented predicate
             user_buffer[data] = 1;
         }
         else
