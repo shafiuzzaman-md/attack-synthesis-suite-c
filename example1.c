@@ -12,7 +12,7 @@ void chain_vulnerabilities(int user_data) {
     // Overflow `user_buffer` to inject a command into the Code Segment.
     u_CWE121_CWE129_large_01_bad(user_data);
 
-    // Step 2: Execute the injected command in the Code Segment
+    // Step 2: Execute command in the Code Segment
     // The injected command in `command_buffer` is executed, which modifies the Protected Segment.
     execute_command(command_buffer);
 }
