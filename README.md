@@ -52,6 +52,8 @@ Examples: Functions that manage security keys stored in the Protected Segment, e
 - By chaining multiple vulnerabilities, the attacker aims to potentially trigger a sequence of events in which user-mode vulnerabilities lead to unauthorized access or manipulation of Privileged Mode operations.
 
 ## Pre- and Post- condition Grammer
+Details: [The reference manual for the KQuery language]( https://klee-se.org/docs/kquery/)
+
 Array Declaration:
 ```
 array <name>[<size>] : <index_type> -> <element_type> = symbolic
