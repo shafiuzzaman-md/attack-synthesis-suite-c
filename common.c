@@ -21,6 +21,16 @@ char *protected_buffer;  // Added for protected segment
 MemorySegment memoryMap[MAX_MEMORY_SEGMENTS];
 int memorySegmentCount = 0;
 
+// Function to set the execution mode
+void set_mode(ExecutionMode mode) {
+    current_mode = mode;
+}
+
+// Function to get the current execution mode
+ExecutionMode get_mode() {
+    return current_mode;
+}
+
 // Function to allocate a memory segment
 void* allocateMemorySegment(size_t size, MemoryType type, uint8_t read, uint8_t write, uint8_t execute) {
     if (memorySegmentCount >= MAX_MEMORY_SEGMENTS) {

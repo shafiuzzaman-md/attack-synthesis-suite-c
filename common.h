@@ -17,7 +17,8 @@ typedef enum {
     PRIVILEGED_MODE,
     USER_MODE
 } ExecutionMode;
-
+// Global variable to track the current execution mode, defined in user_accessible.c
+ExecutionMode current_mode;
 // Function prototypes for mode management
 void set_mode(ExecutionMode mode);
 ExecutionMode get_mode();
