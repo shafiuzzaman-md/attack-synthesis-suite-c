@@ -2,18 +2,6 @@
 #define OMITGOOD
 #include "testcases/CWE78_OS_Command_Injection/s02/CWE78_OS_Command_Injection__char_console_system_01.c"
 
-// Global variable to track the current execution mode, defined in user_accessible.c
-ExecutionMode current_mode = PRIVILEGED_MODE;
-
-// Function to set the execution mode
-void set_mode(ExecutionMode mode) {
-    current_mode = mode;
-}
-
-// Function to get the current execution mode
-ExecutionMode get_mode() {
-    return current_mode;
-}
 
 // Execute a specific command stored in the code segment
 void execute_command_privileged(int command_number) {
