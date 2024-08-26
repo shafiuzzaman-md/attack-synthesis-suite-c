@@ -13,5 +13,5 @@ int main()
    user_data = klee_int("user_data");
    klee_make_symbolic(&current_mode, sizeof(current_mode), "current_mode");
    u_CWE121_CWE129_large_01_bad(user_data);
-  // execute_command_user(user_data);
+   execute_command_user(user_data);
 }

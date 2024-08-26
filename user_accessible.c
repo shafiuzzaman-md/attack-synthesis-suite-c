@@ -25,7 +25,6 @@ void u_CWE121_CWE129_large_01_bad(int user_data) {
 
 // Execute a specific command stored in the code segment
 void execute_command_user(int command_number) {
-     klee_make_symbolic(&current_mode, sizeof(current_mode), "current_mode");
      if (current_mode != USER_MODE) {
         printf("ERROR: Attempt to execute user command in non-user mode.\n");
         return;
