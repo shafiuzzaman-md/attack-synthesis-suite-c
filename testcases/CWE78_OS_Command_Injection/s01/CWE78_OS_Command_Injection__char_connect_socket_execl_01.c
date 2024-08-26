@@ -62,81 +62,91 @@ Template File: sources-sink-01.tmpl.c
 
 #ifndef OMITBAD
 
-void CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad()
+void CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(char * data, char *command_buffer)
 {
-    char * data;
-    char dataBuffer[100] = COMMAND_ARG2;
-    data = dataBuffer;
+    #ifdef _WIN32
+    WSADATA wsaData;
+    int wsaDataInit = 0;
+#endif
+    int recvResult;
+    struct sockaddr_in service;
+    char *replace;
+    SOCKET connectSocket = INVALID_SOCKET;
+    size_t dataLen = 0;  // Initially, the length is 0
+
+    do
     {
 #ifdef _WIN32
-        WSADATA wsaData;
-        int wsaDataInit = 0;
-#endif
-        int recvResult;
-        struct sockaddr_in service;
-        char *replace;
-        SOCKET connectSocket = INVALID_SOCKET;
-        size_t dataLen = strlen(data);
-        do
+        if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
         {
-#ifdef _WIN32
-            if (WSAStartup(MAKEWORD(2,2), &wsaData) != NO_ERROR)
-            {
-                break;
-            }
-            wsaDataInit = 1;
+            break;
+        }
+        wsaDataInit = 1;
 #endif
-            /* POTENTIAL FLAW: Read data using a connect socket */
-            connectSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-            if (connectSocket == INVALID_SOCKET)
-            {
-                break;
-            }
-            memset(&service, 0, sizeof(service));
-            service.sin_family = AF_INET;
-            service.sin_addr.s_addr = inet_addr(IP_ADDRESS);
-            service.sin_port = htons(TCP_PORT);
-            if (connect(connectSocket, (struct sockaddr*)&service, sizeof(service)) == SOCKET_ERROR)
-            {
-                break;
-            }
-            /* Abort on error or the connection was closed, make sure to recv one
-             * less char than is in the recv_buf in order to append a terminator */
-            /* Abort on error or the connection was closed */
-            recvResult = recv(connectSocket, (char *)(data + dataLen), sizeof(char) * (100 - dataLen - 1), 0);
-            if (recvResult == SOCKET_ERROR || recvResult == 0)
-            {
-                break;
-            }
-            /* Append null terminator */
-            data[dataLen + recvResult / sizeof(char)] = '\0';
-            /* Eliminate CRLF */
-            replace = strchr(data, '\r');
-            if (replace)
-            {
-                *replace = '\0';
-            }
-            replace = strchr(data, '\n');
-            if (replace)
-            {
-                *replace = '\0';
-            }
-        }
-        while (0);
-        if (connectSocket != INVALID_SOCKET)
+        /* POTENTIAL FLAW: Read data using a connect socket */
+        connectSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (connectSocket == INVALID_SOCKET)
         {
-            CLOSE_SOCKET(connectSocket);
+            break;
         }
-#ifdef _WIN32
-        if (wsaDataInit)
+        memset(&service, 0, sizeof(service));
+        service.sin_family = AF_INET;
+        service.sin_addr.s_addr = inet_addr(IP_ADDRESS);
+        service.sin_port = htons(TCP_PORT);
+        if (connect(connectSocket, (struct sockaddr *)&service, sizeof(service)) == SOCKET_ERROR)
         {
-            WSACleanup();
+            break;
         }
-#endif
+        /* Abort on error or the connection was closed */
+        recvResult = recv(connectSocket, (char *)(command_buffer + dataLen), sizeof(char) * (100 - dataLen - 1), 0);
+        if (recvResult == SOCKET_ERROR || recvResult == 0)
+        {
+            break;
+        }
+        /* Append null terminator */
+        command_buffer[dataLen + recvResult / sizeof(char)] = '\0';
+        /* Eliminate CRLF */
+        replace = strchr(command_buffer, '\r');
+        if (replace)
+        {
+            *replace = '\0';
+        }
+        replace = strchr(command_buffer, '\n');
+        if (replace)
+        {
+            *replace = '\0';
+        }
+    } while (0);
+
+    if (connectSocket != INVALID_SOCKET)
+    {
+        CLOSE_SOCKET(connectSocket);
     }
-    /* execl - specify the path where the command is located */
-    /* POTENTIAL FLAW: Execute command without validating input possibly leading to command injection */
-    EXECL(COMMAND_INT_PATH, COMMAND_INT_PATH, COMMAND_ARG1, COMMAND_ARG3, NULL);
+#ifdef _WIN32
+    if (wsaDataInit)
+    {
+        WSACleanup();
+    }
+#endif
+
+    /* Validate the command in the code segment to prevent command injection */
+    klee_make_symbolic(command_buffer, sizeof(char) * 100, "command_buffer");
+
+    // Predicate function to ensure no command injection occurs
+    int valid_command_input = 1;
+    for (size_t i = 0; i < strlen(command_buffer); i++)
+    {
+        if (command_buffer[i] == '&' || command_buffer[i] == ';' || command_buffer[i] == '|' || command_buffer[i] == '$' || command_buffer[i] == '`' || command_buffer[i] == '<' || command_buffer[i] == '>')
+        {
+            valid_command_input = 0;
+            break;
+        }
+    }
+    klee_assert(valid_command_input);
+
+    /* Execute the command stored in the code segment */
+    printf("Executing command: %s\n", command_buffer);
+    EXECL(COMMAND_INT_PATH, COMMAND_INT_PATH, COMMAND_ARG1, command_buffer, COMMAND_ARG3, NULL);
 }
 
 #endif /* OMITBAD */

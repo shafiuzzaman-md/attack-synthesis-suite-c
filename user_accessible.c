@@ -6,6 +6,7 @@
 int EXECUTE = 1;
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c"
 #include "testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_add_01.c"
+#include "testcases/CWE78_OS_Command_Injection/s01/CWE78_OS_Command_Injection__char_connect_socket_execl_01.c"
 
 // Execute a specific command stored in the code segment
 void execute_command_user(int command_number) {
@@ -64,7 +65,21 @@ void u_CWE190_char_fscanf_add_01_bad(char user_data, char input_char) {
     CWE190_Integer_Overflow__char_fscanf_add_01_bad(user_data, *user_buffer,  input_char);
 }
 
+void u_CWE78_OS_char_connect_socket_execl_01_bad(char user_data, char input_char) {
+     if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return;
+    }
 
+    // Allocate a buffer in the code segment for storing the command
+    char *command_buffer = (char*) allocateMemorySegment(100, CODE_SEGMENT, 1, 0, 1);
+
+    if (command_buffer == NULL) {
+        printf("Error: Memory allocation failed in the data segment.\n");
+        return;
+    }
+    CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(user_data, *command_buffer);
+}
 
 
 
