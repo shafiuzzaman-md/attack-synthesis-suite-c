@@ -3,7 +3,7 @@
 // Include the Juliet test suite file
 #define OMITGOOD
 #define BUFFER_SIZE 10
-int EXECUTE_COMMAND = 1;
+int EXECUTE = 1;
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c"
 
 // Global variable to track the current execution mode, defined in user_accessible.c
@@ -21,6 +21,11 @@ ExecutionMode get_mode() {
 
 // Simulate buffer overflow vulnerability with large index access
 void u_CWE121_CWE129_large_01_bad(int user_data) {
+     klee_make_symbolic(&current_mode, sizeof(current_mode), "current_mode");
+     if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return;
+    }
     // Allocate a buffer in the data segment
     char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
     if (user_buffer == NULL) {
@@ -49,7 +54,7 @@ void execute_command_user(int command_number) {
     // Assuming each command is of fixed length and stored sequentially
     int command_size = 256;  // Example fixed size for each command
     char *command = command_buffer + command_number * command_size;
-    klee_assert(!EXECUTE_COMMAND);
+    klee_assert(!EXECUTE);
     // Null-terminate the selected command for execution
     char command_copy[command_size];
     strncpy(command_copy, command, command_size - 1);

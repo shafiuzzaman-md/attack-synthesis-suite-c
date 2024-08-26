@@ -1,11 +1,11 @@
-Error: ASSERTION FAIL: !EXECUTE_COMMAND
+Error: ASSERTION FAIL: !EXECUTE
 File: ./../user_accessible.c
-Line: 52
-assembly.ll line: 9261
+Line: 57
+assembly.ll line: 9271
 State: 2
 Stack: 
-	#000009261 in execute_command_user(symbolic) at ./../user_accessible.c:52
-	#100009304 in __klee_posix_wrapped_main() at stase_driver.c:11
-	#200007156 in __user_main(1, 132229518852096, 132229518852112) at klee/runtime/POSIX/klee_init_env.c:245
-	#300000569 in __uClibc_main(132213672771584, 1, 132229518852096, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
-	#400000734 in main(1, 132229518852096)
+	#000009271 in execute_command_user(symbolic) at ./../user_accessible.c:57
+	#100009314 in __klee_posix_wrapped_main() at stase_driver.c:11
+	#200007156 in __user_main(1, 128910849212416, 128910849212432) at klee/runtime/POSIX/klee_init_env.c:245
+	#300000569 in __uClibc_main(128895003131904, 1, 128910849212416, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#400000734 in main(1, 128910849212416)
