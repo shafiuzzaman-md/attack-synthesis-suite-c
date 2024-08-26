@@ -51,6 +51,18 @@ Examples: Functions that manage security keys stored in the Protected Segment, e
 - The attacker provides malicious inputs to user-accessible functions, exploiting vulnerabilities such as buffer overflows in the Data Segment or improper input validation in the Code Segment.
 - By chaining multiple vulnerabilities, the attacker aims to potentially trigger a sequence of events in which user-mode vulnerabilities lead to unauthorized access or manipulation of Privileged Mode operations.
 
+## Pre- and Post- condition Grammer
+Array Declaration:
+
+array <name>[<size>] : <index_type> -> <element_type> = symbolic
+Query:
+
+query [<constraints>] <boolean>
+Expressions:
+
+Eq <expression1> <expression2>: Equality expression.
+ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little Endian format.
+
 ## Example Chains
 ### Chain 1: Buffer Overflow in Data Segment to Modify Protected Segment
 Steps:
