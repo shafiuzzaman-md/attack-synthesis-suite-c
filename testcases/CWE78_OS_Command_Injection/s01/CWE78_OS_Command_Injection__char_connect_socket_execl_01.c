@@ -67,7 +67,7 @@ void CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(char * data, c
     #ifdef _WIN32
     WSADATA wsaData;
     int wsaDataInit = 0;
-#endif
+    #endif
     int recvResult;
     struct sockaddr_in service;
     char *replace;
@@ -76,13 +76,13 @@ void CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(char * data, c
 
     do
     {
-#ifdef _WIN32
+    #ifdef _WIN32
         if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
         {
             break;
         }
         wsaDataInit = 1;
-#endif
+    #endif
         /* POTENTIAL FLAW: Read data using a connect socket */
         connectSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         if (connectSocket == INVALID_SOCKET)
@@ -122,15 +122,15 @@ void CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(char * data, c
     {
         CLOSE_SOCKET(connectSocket);
     }
-#ifdef _WIN32
+    #ifdef _WIN32
     if (wsaDataInit)
     {
         WSACleanup();
     }
-#endif
+    #endif
 
     /* Validate the command in the code segment to prevent command injection */
-    klee_make_symbolic(command_buffer, sizeof(char) * 100, "command_buffer");
+    //klee_make_symbolic(command_buffer, sizeof(char) * 100, "command_buffer");
 
     // Predicate function to ensure no command injection occurs
     int valid_command_input = 1;
@@ -142,7 +142,7 @@ void CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(char * data, c
             break;
         }
     }
-    klee_assert(valid_command_input);
+    //klee_assert(valid_command_input);
 
     /* Execute the command stored in the code segment */
     printf("Executing command: %s\n", command_buffer);

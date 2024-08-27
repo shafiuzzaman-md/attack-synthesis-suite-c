@@ -14,7 +14,7 @@ void chain_vulnerabilities(int user_data) {
 
     // Step 2: Execute command in the Code Segment
     // The injected command in `command_buffer` is executed, which modifies the Protected Segment.
-    execute_command(command_buffer);
+    u_execute_command(command_buffer);
 }
 
 int main() {

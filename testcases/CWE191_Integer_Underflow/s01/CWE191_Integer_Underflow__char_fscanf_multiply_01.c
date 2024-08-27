@@ -19,17 +19,20 @@ Template File: sources-sinks-01.tmpl.c
 
 #ifndef OMITBAD
 
-void CWE191_Integer_Underflow__char_fscanf_multiply_01_bad()
+void CWE191_Integer_Underflow__char_fscanf_multiply_01_bad(char data, char *user_buffer, char input_char)
 {
-    char data;
-    data = ' ';
+    //char data;
+   // data = ' ';
     /* POTENTIAL FLAW: Use a value input from the console */
-    fscanf (stdin, "%c", &data);
+    //fscanf (stdin, "%c", &data);
     if(data < 0) /* ensure we won't have an overflow */
     {
         /* POTENTIAL FLAW: if (data * 2) < CHAR_MIN, this will underflow */
         char result = data * 2;
-        printHexCharLine(result);
+        // Convert the result to an index that will be used to access the user buffer
+        int buffer_index = (int)result;
+        user_buffer[buffer_index] = input_char;
+        printLine("Data written to user buffer.");
     }
 }
 

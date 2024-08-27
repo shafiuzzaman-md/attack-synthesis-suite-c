@@ -23,7 +23,7 @@ int main()
   //int user_data;
   //user_data = klee_int("user_data");
   // u_CWE121_CWE129_large_01_bad(user_data);
-  // execute_command_user(user_data);
+  // u_execute_command(user_data);
 
   char user_data_char;
   klee_make_symbolic(&user_data_char, sizeof(user_data_char), "user_data");

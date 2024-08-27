@@ -28,7 +28,6 @@ void CWE190_Integer_Overflow__char_fscanf_add_01_bad(char data, char *user_buffe
     int buffer_index = (int)result;
     // Assert that no overflow occurred and buffer_index is within bounds
     klee_assert(valid_index_after_overflow(buffer_index));
-    // Use the result to manipulate the user buffer, similar to how buffer overflow is handled
     // Write the input character to the user buffer at the calculated index
     user_buffer[buffer_index] = input_char;
 

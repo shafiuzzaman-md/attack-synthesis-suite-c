@@ -9,7 +9,7 @@ int EXECUTE = 1;
 #include "testcases/CWE78_OS_Command_Injection/s01/CWE78_OS_Command_Injection__char_connect_socket_execl_01.c"
 
 // Execute a specific command stored in the code segment
-void execute_command_user(int command_number) {
+void u_execute_command(int command_number) {
      if (current_mode != USER_MODE) {
         printf("ERROR: Attempt to execute user command in non-user mode.\n");
         return;
@@ -65,7 +65,7 @@ void u_CWE190_char_fscanf_add_01_bad(char user_data, char input_char) {
     CWE190_Integer_Overflow__char_fscanf_add_01_bad(user_data, *user_buffer,  input_char);
 }
 
-void u_CWE78_OS_char_connect_socket_execl_01_bad(char user_data, char input_char) {
+void u_CWE78_OS_char_connect_socket_execl_01_bad(char user_data) {
      if (current_mode != USER_MODE) {
         printf("ERROR: Attempt to execute user command in non-user mode.\n");
         return;
@@ -79,6 +79,21 @@ void u_CWE78_OS_char_connect_socket_execl_01_bad(char user_data, char input_char
         return;
     }
     CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(user_data, *command_buffer);
+}
+
+
+void u_CWE191_char_fscanf_multiply_01_bad(char user_data, char input_char) {
+     if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return;
+    }
+    // Allocate a buffer in the data segment
+    char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
+    if (user_buffer == NULL) {
+        printf("Error: Memory allocation failed in the data segment.\n");
+        return;
+    }
+    CWE191_Integer_Underflow__char_fscanf_multiply_01_bad(user_data, *user_buffer,  input_char);
 }
 
 
