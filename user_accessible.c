@@ -7,7 +7,7 @@ int EXECUTE = 1;
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c"
 #include "testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_add_01.c"
 #include "testcases/CWE78_OS_Command_Injection/s01/CWE78_OS_Command_Injection__char_connect_socket_execl_01.c"
-
+#include "testcases/CWE191_Integer_Underflow/s01/CWE191_Integer_Underflow__char_fscanf_multiply_01.c"
 // Execute a specific command stored in the code segment
 void u_execute_command(int command_number) {
      if (current_mode != USER_MODE) {
