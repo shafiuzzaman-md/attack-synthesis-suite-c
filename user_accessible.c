@@ -96,13 +96,20 @@ void u_CWE191_char_fscanf_multiply_01_bad(char user_data, char input_char) {
     CWE191_Integer_Underflow__char_fscanf_multiply_01_bad(user_data, *user_buffer,  input_char);
 }
 
+// Wrapper function that simulates user mode operation and calls the buffer overread function, returning the result
+char* u_CWE126_char_alloca_memcpy_01_bad(char *buffer_to_read, size_t length_to_read) {
+    if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return NULL;
+    }
+
+    // Call the buffer overread function and retrieve the returned buffer
+    char* result = CWE126_Buffer_Overread__char_alloca_memcpy_01_bad(buffer_to_read, length_to_read);
+
+    // Return the result to the caller
+    return result;
+}
 
 
-
-// Simulate a use-after-free vulnerability with direct user input
-// char* u_CWE416_malloc_free_01_bad(int user_data, char *user_buffer) {
-//     CWE416_Use_After_Free__malloc_free_char_01_bad(user_data, user_buffer);
-//     return user_buffer;  // Return the potentially dangling pointer after use-after-free
-// }
 
 

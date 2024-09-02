@@ -20,27 +20,23 @@ Template File: sources-sink-01.tmpl.c
 
 #ifndef OMITBAD
 
-void CWE126_Buffer_Overread__char_alloca_memcpy_01_bad()
-{
-    char * data;
-    char * dataBadBuffer = (char *)ALLOCA(50*sizeof(char));
-    char * dataGoodBuffer = (char *)ALLOCA(100*sizeof(char));
-    memset(dataBadBuffer, 'A', 50-1); /* fill with 'A's */
-    dataBadBuffer[50-1] = '\0'; /* null terminate */
-    memset(dataGoodBuffer, 'A', 100-1); /* fill with 'A's */
-    dataGoodBuffer[100-1] = '\0'; /* null terminate */
-    /* FLAW: Set data pointer to a small buffer */
-    data = dataBadBuffer;
-    {
-        char dest[100];
-        memset(dest, 'C', 100-1);
-        dest[100-1] = '\0'; /* null terminate */
-        /* POTENTIAL FLAW: using memcpy with the length of the dest where data
-         * could be smaller than dest causing buffer overread */
-        memcpy(dest, data, strlen(dest)*sizeof(char));
-        dest[100-1] = '\0';
-        printLine(dest);
-    }
+// Function that simulates buffer overread using a supplied buffer and input size
+char* CWE126_Buffer_Overread__char_alloca_memcpy_01_bad(char *buffer_to_read, size_t size_to_read) {
+    char *data;
+
+    /* FLAW: Use the supplied buffer (which could be small or improperly sized) instead of allocating a new one */
+    data = buffer_to_read;
+
+    char dest[100];
+    memset(dest, 'C', 100 - 1);
+    dest[100 - 1] = '\0'; /* null terminate */
+
+    /* POTENTIAL FLAW: using memcpy with the size_to_read where buffer_to_read
+     * could be smaller than size_to_read causing buffer overread */
+    memcpy(dest, data, size_to_read);
+    dest[100 - 1] = '\0';
+    printLine(dest);
+    return dest;
 }
 
 #endif /* OMITBAD */
