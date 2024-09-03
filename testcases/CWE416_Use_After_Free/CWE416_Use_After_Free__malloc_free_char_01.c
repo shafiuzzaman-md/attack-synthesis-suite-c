@@ -21,12 +21,14 @@ Template File: sources-sinks-01.tmpl.c
 
 #ifndef OMITBAD
 
-void CWE416_Use_After_Free__malloc_free_char_01_bad(char *data, char *user_buffer) {
+// Function that simulates a use-after-free vulnerability and returns the data buffer
+char* CWE416_Use_After_Free__malloc_free_char_01_bad(char *data, char *user_buffer) {
     // Initialize data with user_buffer
     data = NULL;
     data = (char *)malloc(100 * sizeof(char));
     if (data == NULL) {
-        exit(-1);
+        printLine("ERROR: Memory allocation failed.");
+        return NULL;
     }
 
     // Copy the contents of user_buffer into data
@@ -38,6 +40,9 @@ void CWE416_Use_After_Free__malloc_free_char_01_bad(char *data, char *user_buffe
 
     // POTENTIAL FLAW: Use of data that may have been freed
     printLine(data);
+    
+    // Returning the data buffer that was freed (use-after-free scenario)
+    return data;
 }
 
 #endif /* OMITBAD */

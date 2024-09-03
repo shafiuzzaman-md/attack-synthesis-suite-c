@@ -10,6 +10,7 @@ int EXECUTE = 1;
 #include "testcases/CWE191_Integer_Underflow/s01/CWE191_Integer_Underflow__char_fscanf_multiply_01.c"
 #include "testcases/CWE126_Buffer_Overread/s01/CWE126_Buffer_Overread__char_alloca_memcpy_01.c"
 #include "testcases/CWE127_Buffer_Underread/s01/CWE127_Buffer_Underread__char_alloca_cpy_01.c"
+#include "testcases/CWE416_Use_After_Free/CWE416_Use_After_Free__malloc_free_char_01.c"
 // Execute a specific command stored in the code segment
 void u_execute_command(int command_number) {
      if (current_mode != USER_MODE) {
@@ -127,5 +128,17 @@ char* u_CWE127_Buffer_Underread__char_alloca_cpy_01_bad(char *buffer_to_read, si
 }
 
 
+// Wrapper function that simulates user mode operation and calls the use-after-free function, returning the result
+char* u_CWE416_Use_After_Free__malloc_free_char_01_bad(char *user_buffer) {
+    if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return NULL;
+    }
 
+    // Call the use-after-free function and retrieve the returned buffer
+    char* result = CWE416_Use_After_Free__malloc_free_char_01_bad(NULL, user_buffer);
+
+    // Return the result to the caller
+    return result;
+}
 
