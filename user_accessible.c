@@ -8,6 +8,8 @@ int EXECUTE = 1;
 #include "testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_add_01.c"
 #include "testcases/CWE78_OS_Command_Injection/s01/CWE78_OS_Command_Injection__char_connect_socket_execl_01.c"
 #include "testcases/CWE191_Integer_Underflow/s01/CWE191_Integer_Underflow__char_fscanf_multiply_01.c"
+#include "testcases/CWE126_Buffer_Overread/s01/CWE126_Buffer_Overread__char_alloca_memcpy_01.c"
+#include "testcases/CWE127_Buffer_Underread/s01/CWE127_Buffer_Underread__char_alloca_cpy_01.c"
 // Execute a specific command stored in the code segment
 void u_execute_command(int command_number) {
      if (current_mode != USER_MODE) {
@@ -105,6 +107,20 @@ char* u_CWE126_char_alloca_memcpy_01_bad(char *buffer_to_read, size_t length_to_
 
     // Call the buffer overread function and retrieve the returned buffer
     char* result = CWE126_Buffer_Overread__char_alloca_memcpy_01_bad(buffer_to_read, length_to_read);
+
+    // Return the result to the caller
+    return result;
+}
+
+// Wrapper function that simulates user mode operation and calls the buffer underread function, returning the result
+char* u_CWE127_Buffer_Underread__char_alloca_cpy_01_bad(char *buffer_to_read, size_t length_to_read) {
+    if (current_mode != USER_MODE) {
+        printf("ERROR: Attempt to execute user command in non-user mode.\n");
+        return NULL;
+    }
+
+    // Call the buffer underread function and retrieve the returned buffer
+    char* result = CWE127_Buffer_Underread__char_alloca_cpy_01_bad(buffer_to_read, length_to_read);
 
     // Return the result to the caller
     return result;

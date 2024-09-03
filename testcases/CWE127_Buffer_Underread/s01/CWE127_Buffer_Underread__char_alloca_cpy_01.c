@@ -20,22 +20,27 @@ Template File: sources-sink-01.tmpl.c
 
 #ifndef OMITBAD
 
-void CWE127_Buffer_Underread__char_alloca_cpy_01_bad()
-{
-    char * data;
-    char * dataBuffer = (char *)ALLOCA(100*sizeof(char));
-    memset(dataBuffer, 'A', 100-1);
-    dataBuffer[100-1] = '\0';
+// Function that simulates buffer underread using a supplied buffer and input size
+char* CWE127_Buffer_Underread__char_alloca_cpy_01_bad(char *buffer_to_read, size_t size_to_read) {
+    char *data;
+
     /* FLAW: Set data pointer to before the allocated memory buffer */
-    data = dataBuffer - 8;
-    {
-        char dest[100*2];
-        memset(dest, 'C', 100*2-1); /* fill with 'C's */
-        dest[100*2-1] = '\0'; /* null terminate */
-        /* POTENTIAL FLAW: Possibly copy from a memory location located before the source buffer */
-        strcpy(dest, data);
-        printLine(dest);
+    data = buffer_to_read - 8;
+
+    char *dest = (char*)malloc(100 * 2 * sizeof(char)); // Allocate memory dynamically
+    if (dest == NULL) {
+        printLine("ERROR: Memory allocation failed.");
+        return NULL;
     }
+
+    memset(dest, 'C', 100 * 2 - 1); /* fill with 'C's */
+    dest[100 * 2 - 1] = '\0'; /* null terminate */
+
+    /* POTENTIAL FLAW: Possibly copy from a memory location located before the source buffer */
+    strcpy(dest, data);
+    printLine(dest);
+    
+    return dest; // Return the dynamically allocated buffer
 }
 
 #endif /* OMITBAD */
