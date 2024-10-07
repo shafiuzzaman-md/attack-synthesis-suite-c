@@ -19,20 +19,22 @@ Template File: sources-sinks-01.tmpl.c
 
 #ifndef OMITBAD
 
-void CWE191_Integer_Underflow__char_fscanf_multiply_01_bad(char data, char *user_buffer, char input_char)
-{
-    //char data;
-   // data = ' ';
-    /* POTENTIAL FLAW: Use a value input from the console */
-    //fscanf (stdin, "%c", &data);
-    if(data < 0) /* ensure we won't have an overflow */
-    {
-        /* POTENTIAL FLAW: if (data * 2) < CHAR_MIN, this will underflow */
+void CWE191_Integer_Underflow__char_fscanf_multiply_01_bad(char data, char *user_buffer, char input_char) {
+    if(data < 0) { // Check for negative data to simulate underflow scenario
+        /* POTENTIAL FLAW: Multiplying data might cause an underflow */
         char result = data * 2;
+
         // Convert the result to an index that will be used to access the user buffer
         int buffer_index = (int)result;
+
+        // Assert to ensure no underflow has occurred and index is valid
+        klee_assert(is_valid_index(buffer_index)); // This will fail if there's an underflow causing invalid index
+
+        // Write the input character to the user buffer at the calculated index
         user_buffer[buffer_index] = input_char;
         printLine("Data written to user buffer.");
+    } else {
+        printLine("No underflow condition met, data not modified.");
     }
 }
 

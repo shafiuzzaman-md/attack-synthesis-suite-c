@@ -1,0 +1,24 @@
+; Emited by klee::Z3SolverImpl::getConstraintLog()
+(set-info :status unknown)
+(declare-fun user_data_0 () (Array (_ BitVec 32) (_ BitVec 8)))
+(assert
+ (let ((?x7 (select user_data_0 (_ bv0 32))))
+ (let ((?x8 ((_ sign_extend 24) ?x7)))
+ (bvslt ?x8 (_ bv0 32)))))
+(assert
+ (let ((?x7 (select user_data_0 (_ bv0 32))))
+ (let ((?x8 ((_ sign_extend 24) ?x7)))
+ (let ((?x11 (bvmul (_ bv2 32) ?x8)))
+ (let ((?x12 ((_ extract 7 0) ?x11)))
+ (let ((?x13 ((_ sign_extend 24) ?x12)))
+ (bvsle (_ bv0 32) ?x13)))))))
+(assert
+ (let ((?x7 (select user_data_0 (_ bv0 32))))
+ (let ((?x8 ((_ sign_extend 24) ?x7)))
+ (let ((?x11 (bvmul (_ bv2 32) ?x8)))
+ (let ((?x12 ((_ extract 7 0) ?x11)))
+ (let ((?x13 ((_ sign_extend 24) ?x12)))
+ (bvslt ?x13 (_ bv10 32))))))))
+(assert
+ (not false))
+(check-sat)

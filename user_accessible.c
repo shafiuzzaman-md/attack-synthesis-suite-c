@@ -73,10 +73,6 @@ void u_CWE78_OS_char_connect_socket_execl_01_bad(char user_data) {
 
 
 void u_CWE191_char_fscanf_multiply_01_bad(char user_data, char input_char) {
-     if (current_mode != USER_MODE) {
-        printf("ERROR: Attempt to execute user command in non-user mode.\n");
-        return;
-    }
     // Allocate a buffer in the data segment
     char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
     if (user_buffer == NULL) {
