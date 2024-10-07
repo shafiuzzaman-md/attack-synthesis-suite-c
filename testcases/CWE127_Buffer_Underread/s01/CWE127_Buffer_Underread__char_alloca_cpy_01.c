@@ -22,10 +22,8 @@ Template File: sources-sink-01.tmpl.c
 
 // Function that simulates buffer underread using a supplied buffer and input size
 char* CWE127_Buffer_Underread__char_alloca_cpy_01_bad(char *buffer_to_read, size_t size_to_read) {
-    char *data;
-
     /* FLAW: Set data pointer to before the allocated memory buffer */
-    data = buffer_to_read - 8;
+    char *data = buffer_to_read - 8;
 
     char *dest = (char*)malloc(100 * 2 * sizeof(char)); // Allocate memory dynamically
     if (dest == NULL) {
@@ -33,8 +31,11 @@ char* CWE127_Buffer_Underread__char_alloca_cpy_01_bad(char *buffer_to_read, size
         return NULL;
     }
 
-    memset(dest, 'C', 100 * 2 - 1); /* fill with 'C's */
-    dest[100 * 2 - 1] = '\0'; /* null terminate */
+    memset(dest, 'C', 100 * 2 - 1); // fill with 'C's
+    dest[100 * 2 - 1] = '\0'; // null terminate
+
+    // Assert to ensure that the data pointer does not point before the buffer
+    klee_assert(is_valid_memory_access(buffer_to_read, data)); // Verify using predicate
 
     /* POTENTIAL FLAW: Possibly copy from a memory location located before the source buffer */
     strcpy(dest, data);

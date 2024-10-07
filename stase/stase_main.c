@@ -38,6 +38,10 @@ int is_safe_read(size_t size_to_read, size_t actual_buffer_size) {
     return size_to_read <= actual_buffer_size;
 }
 
+// Predicate function to check if the data pointer is within a valid range
+int is_valid_memory_access(char *base, char *data) {
+    return data >= base;
+}
 
 int main() {
     // Make user_data a symbolic value for KLEE to explore different paths
@@ -75,19 +79,31 @@ int main() {
 
     // CWE191_Integer_Underflow__char_fscanf_multiply_01_bad(user_data, allocated_buffer, input_char);
     
-    char source[15];
-    size_t read_size = 20; // Intentionally larger than buffer size to simulate potential overread
-    size_t buffer_size = sizeof(source);
+    // char source[15];
+    // size_t read_size = 20; // Intentionally larger than buffer size to simulate potential overread
+    // size_t buffer_size = sizeof(source);
+
+    // klee_make_symbolic(source, sizeof(source), "source");
+    // klee_make_symbolic(&read_size, sizeof(read_size), "read_size");
+    // klee_make_symbolic(&buffer_size, sizeof(buffer_size), "buffer_size");
+
+    // char *result = u_CWE126_char_alloca_memcpy_01_bad(source, read_size, buffer_size);
+    // if (result != NULL) {
+    //     printLine(result);
+    //     free(result); // Free the dynamically allocated buffer
+    // }
+
+     // Define buffer and set symbolic values
+    char source[50]; // Allocate a buffer with known size
+    size_t read_size = 50; // Read the full buffer size as input
 
     klee_make_symbolic(source, sizeof(source), "source");
     klee_make_symbolic(&read_size, sizeof(read_size), "read_size");
-    klee_make_symbolic(&buffer_size, sizeof(buffer_size), "buffer_size");
 
-    char *result = u_CWE126_char_alloca_memcpy_01_bad(source, read_size, buffer_size);
+    char *result = CWE127_Buffer_Underread__char_alloca_cpy_01_bad(source, read_size);
     if (result != NULL) {
         printLine(result);
         free(result); // Free the dynamically allocated buffer
     }
-
     return 0;
 }

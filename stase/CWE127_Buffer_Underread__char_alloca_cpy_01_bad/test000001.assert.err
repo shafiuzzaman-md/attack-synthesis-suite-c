@@ -1,0 +1,11 @@
+Error: ASSERTION FAIL: is_valid_memory_access(buffer_to_read, data)
+File: ./../testcases/CWE127_Buffer_Underread/s01/CWE127_Buffer_Underread__char_alloca_cpy_01.c
+Line: 38
+assembly.ll line: 9544
+State: 1
+Stack: 
+	#000009544 in CWE127_Buffer_Underread__char_alloca_cpy_01_bad(135105867677696, symbolic) at ./../testcases/CWE127_Buffer_Underread/s01/CWE127_Buffer_Underread__char_alloca_cpy_01.c:38
+	#100009932 in __klee_posix_wrapped_main() at stase_main.c:103
+	#200007177 in __user_main(1, 136311142875136, 136311142875152) at klee/runtime/POSIX/klee_init_env.c:245
+	#300000590 in __uClibc_main(136295296794624, 1, 136311142875136, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#400000755 in main(1, 136311142875136)
