@@ -33,6 +33,10 @@ int is_valid_index(int index) {
     return (index >= 0 && index < BUFFER_SIZE);
 }
 
+// Predicate function to check if the read operation is within safe bounds
+int is_safe_read(size_t size_to_read, size_t actual_buffer_size) {
+    return size_to_read <= actual_buffer_size;
+}
 
 
 int main() {
@@ -55,20 +59,35 @@ int main() {
 
     // CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(data, command_buffer);
 
-    char user_data;
-    char input_char = 'a'; // Example input character
-    char user_buffer[BUFFER_SIZE];
+    // char user_data;
+    // char input_char = 'a'; // Example input character
+    // char user_buffer[BUFFER_SIZE];
 
-    // Make user_data symbolic to explore different potential underflows
-    klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
+    // // Make user_data symbolic to explore different potential underflows
+    // klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
     
-    // Initialize buffer
-    char *allocated_buffer = allocateMemorySegment(BUFFER_SIZE, 1, 1, 1, 0);
-    if (allocated_buffer == NULL) {
-        printLine("Error: Memory allocation failed.");
-        return -1;
+    // // Initialize buffer
+    // char *allocated_buffer = allocateMemorySegment(BUFFER_SIZE, 1, 1, 1, 0);
+    // if (allocated_buffer == NULL) {
+    //     printLine("Error: Memory allocation failed.");
+    //     return -1;
+    // }
+
+    // CWE191_Integer_Underflow__char_fscanf_multiply_01_bad(user_data, allocated_buffer, input_char);
+    
+    char source[15];
+    size_t read_size = 20; // Intentionally larger than buffer size to simulate potential overread
+    size_t buffer_size = sizeof(source);
+
+    klee_make_symbolic(source, sizeof(source), "source");
+    klee_make_symbolic(&read_size, sizeof(read_size), "read_size");
+    klee_make_symbolic(&buffer_size, sizeof(buffer_size), "buffer_size");
+
+    char *result = u_CWE126_char_alloca_memcpy_01_bad(source, read_size, buffer_size);
+    if (result != NULL) {
+        printLine(result);
+        free(result); // Free the dynamically allocated buffer
     }
 
-    CWE191_Integer_Underflow__char_fscanf_multiply_01_bad(user_data, allocated_buffer, input_char);
     return 0;
 }

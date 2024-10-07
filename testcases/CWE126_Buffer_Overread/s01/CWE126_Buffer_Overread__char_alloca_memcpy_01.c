@@ -21,22 +21,25 @@ Template File: sources-sink-01.tmpl.c
 #ifndef OMITBAD
 
 // Function that simulates buffer overread using a supplied buffer and input size
-char* CWE126_Buffer_Overread__char_alloca_memcpy_01_bad(char *buffer_to_read, size_t size_to_read) {
-    char *data;
+char* CWE126_Buffer_Overread__char_alloca_memcpy_01_bad(char *buffer_to_read, size_t size_to_read, size_t actual_buffer_size) {
+    // Assert to ensure we do not read beyond the buffer provided
+    klee_assert(is_safe_read(size_to_read, actual_buffer_size)); // Verify using predicate
 
-    /* FLAW: Use the supplied buffer (which could be small or improperly sized) instead of allocating a new one */
-    data = buffer_to_read;
+    char *dest = malloc(100); // Allocate memory dynamically
+    if (dest == NULL) {
+        printLine("Error: Memory allocation failed.");
+        return NULL;
+    }
 
-    char dest[100];
-    memset(dest, 'C', 100 - 1);
-    dest[100 - 1] = '\0'; /* null terminate */
+    memset(dest, 'C', 99);
+    dest[99] = '\0'; // Null terminate
 
-    /* POTENTIAL FLAW: using memcpy with the size_to_read where buffer_to_read
-     * could be smaller than size_to_read causing buffer overread */
-    memcpy(dest, data, size_to_read);
-    dest[100 - 1] = '\0';
+    // Safe copy
+    memcpy(dest, buffer_to_read, size_to_read);
+    dest[99] = '\0'; // Ensure null termination after copy
     printLine(dest);
-    return dest;
+
+    return dest; // Return dynamically allocated buffer to avoid stack issues
 }
 
 #endif /* OMITBAD */

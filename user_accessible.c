@@ -83,16 +83,9 @@ void u_CWE191_char_fscanf_multiply_01_bad(char user_data, char input_char) {
 }
 
 // Wrapper function that simulates user mode operation and calls the buffer overread function, returning the result
-char* u_CWE126_char_alloca_memcpy_01_bad(char *buffer_to_read, size_t length_to_read) {
-    if (current_mode != USER_MODE) {
-        printf("ERROR: Attempt to execute user command in non-user mode.\n");
-        return NULL;
-    }
-
+char* u_CWE126_char_alloca_memcpy_01_bad(char *buffer_to_read, size_t length_to_read, size_t actual_buffer_size) {
     // Call the buffer overread function and retrieve the returned buffer
-    char* result = CWE126_Buffer_Overread__char_alloca_memcpy_01_bad(buffer_to_read, length_to_read);
-
-    // Return the result to the caller
+    char* result = CWE126_Buffer_Overread__char_alloca_memcpy_01_bad(buffer_to_read, length_to_read, actual_buffer_size);
     return result;
 }
 
