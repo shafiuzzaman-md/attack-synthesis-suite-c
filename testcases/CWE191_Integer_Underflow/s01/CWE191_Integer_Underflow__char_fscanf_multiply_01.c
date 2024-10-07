@@ -15,7 +15,7 @@ Template File: sources-sinks-01.tmpl.c
  *
  * */
 
-#include "std_testcase.h"
+#include "../../../testcasesupport/std_testcase.h"
 
 #ifndef OMITBAD
 

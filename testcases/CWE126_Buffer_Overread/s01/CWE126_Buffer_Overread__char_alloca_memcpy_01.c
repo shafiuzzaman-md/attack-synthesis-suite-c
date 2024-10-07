@@ -14,7 +14,7 @@ Template File: sources-sink-01.tmpl.c
  *
  * */
 
-#include "std_testcase.h"
+#include "../../../testcasesupport/std_testcase.h"
 
 #include <wchar.h>
 

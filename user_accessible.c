@@ -40,10 +40,6 @@ void u_execute_command(int command_number) {
 }
 
 void u_CWE121_CWE129_large_01_bad(int user_data) {
-     if (current_mode != USER_MODE) {
-        printf("ERROR: Attempt to execute user command in non-user mode.\n");
-        return;
-    }
     // Allocate a buffer in the data segment
     char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
     if (user_buffer == NULL) {
@@ -55,10 +51,6 @@ void u_CWE121_CWE129_large_01_bad(int user_data) {
 
 
 void u_CWE190_char_fscanf_add_01_bad(char user_data, char input_char) {
-     if (current_mode != USER_MODE) {
-        printf("ERROR: Attempt to execute user command in non-user mode.\n");
-        return;
-    }
     // Allocate a buffer in the data segment
     char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
     if (user_buffer == NULL) {

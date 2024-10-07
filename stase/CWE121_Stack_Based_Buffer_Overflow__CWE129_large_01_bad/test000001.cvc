@@ -1,0 +1,15 @@
+; Emited by klee::Z3SolverImpl::getConstraintLog()
+(set-info :status unknown)
+(declare-fun user_data_0 () (Array (_ BitVec 32) (_ BitVec 8)))
+(assert
+ (let ((?x7 (select user_data_0 (_ bv0 32))))
+ (let ((?x9 (select user_data_0 (_ bv1 32))))
+ (let ((?x10 (concat ?x9 ?x7)))
+ (let ((?x12 (select user_data_0 (_ bv2 32))))
+ (let ((?x13 (concat ?x12 ?x10)))
+ (let ((?x15 (select user_data_0 (_ bv3 32))))
+ (let ((?x16 (concat ?x15 ?x13)))
+ (bvsle (_ bv0 32) ?x16)))))))))
+(assert
+ (not false))
+(check-sat)

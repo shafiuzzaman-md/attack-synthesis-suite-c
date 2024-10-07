@@ -1,0 +1,5 @@
+KLEE: WARNING: undefined reference to function: valid_index_after_overflow
+KLEE: WARNING ONCE: calling external: syscall(16, 0, 21505, 127015241908224) at klee/runtime/POSIX/fd.c:997 10
+KLEE: WARNING ONCE: Alignment of memory from call "malloc" is not modelled. Using alignment of 8.
+KLEE: WARNING ONCE: calling __klee_posix_wrapped_main with extra arguments.
+KLEE: WARNING ONCE: calling external: printf(128213101576192, 1, 10, 127330922004480) at ./../common.c:58 12
