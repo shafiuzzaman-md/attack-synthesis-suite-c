@@ -4,8 +4,6 @@
 
 //Symbolic buffer_size for buffer overflow detection
 int symbolic_BUFFER_SIZE; 
-// Prototype for is_safe_index function
-//int is_safe_index(char data);
 
 // Predicate function to check for buffer overflow
 int no_buffer_overflow_occurred(int index, int buffer_size) {
@@ -29,9 +27,6 @@ int validate_command_input(const char *command_buffer) {
     }
     return 1; // Safe input
 }
-
-// Prototype for is_safe_index function
-int is_safe_index(char data);
 
 // Function to validate buffer index
 int is_valid_index(int index) {
