@@ -1,0 +1,6 @@
+array user_data[1] : w32 -> w8 = symbolic
+(query [(Sle 0
+              N0:(SExt w32 (Extract w8 0 (Add w32 1
+                                                  (SExt w32 (Read w8 0 user_data))))))
+         (Slt N0 10)]
+        false)

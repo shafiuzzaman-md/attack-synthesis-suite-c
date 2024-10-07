@@ -10,12 +10,25 @@ int no_buffer_overflow_occurred(int index, int buffer_size) {
     return (index >= 0 && index < buffer_size);
 }
 
+// Predicate function to check for integer overflow and valid buffer indexing
+int valid_index_after_overflow(int index) {
+    // Checks if index is within the valid range of buffer indices
+    return (index >= 0 && index < BUFFER_SIZE);
+}
 
 int main() {
     // Make user_data a symbolic value for KLEE to explore different paths
-    int user_data;
+   // int user_data;
+   // klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
+   // u_CWE121_CWE129_large_01_bad(user_data);
+
+
+    // Make user_data and input_char symbolic values for KLEE to explore different paths
+    char user_data;
+    char input_char;
     klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
-    u_CWE121_CWE129_large_01_bad(user_data);
+    klee_make_symbolic(&input_char, sizeof(input_char), "input_char");
+    u_CWE190_char_fscanf_add_01_bad(user_data, input_char);
 
     return 0;
 }
