@@ -61,11 +61,6 @@ void u_CWE190_char_fscanf_add_01_bad(char user_data, char input_char) {
 }
 
 void u_CWE78_OS_char_connect_socket_execl_01_bad(char user_data) {
-     if (current_mode != USER_MODE) {
-        printf("ERROR: Attempt to execute user command in non-user mode.\n");
-        return;
-    }
-
     // Allocate a buffer in the code segment for storing the command
     char *command_buffer = (char*) allocateMemorySegment(100, CODE_SEGMENT, 1, 0, 1);
 

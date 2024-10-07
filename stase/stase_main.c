@@ -16,6 +16,18 @@ int valid_index_after_overflow(int index) {
     return (index >= 0 && index < BUFFER_SIZE);
 }
 
+// Predicate function to validate command input against injection attacks
+int validate_command_input(const char *command_buffer) {
+    // Checks each character for special characters commonly used in injection attacks
+    const char *special_chars = "&;|$`<>";
+    while (*command_buffer) {
+        if (strchr(special_chars, *command_buffer))
+            return 0; // Invalid input found
+        command_buffer++;
+    }
+    return 1; // Safe input
+}
+
 int main() {
     // Make user_data a symbolic value for KLEE to explore different paths
    // int user_data;
@@ -24,11 +36,16 @@ int main() {
 
 
     // Make user_data and input_char symbolic values for KLEE to explore different paths
-    char user_data;
-    char input_char;
-    klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
-    klee_make_symbolic(&input_char, sizeof(input_char), "input_char");
-    u_CWE190_char_fscanf_add_01_bad(user_data, input_char);
+    // char user_data;
+    // char input_char;
+    // klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
+    // klee_make_symbolic(&input_char, sizeof(input_char), "input_char");
+    // u_CWE190_char_fscanf_add_01_bad(user_data, input_char);
 
+    char command_buffer[100];
+    char data[] = "safe_command"; // Example data, make symbolic for real testing
+    klee_make_symbolic(data, sizeof(data), "data");
+
+    CWE78_OS_Command_Injection__char_connect_socket_execl_01_bad(data, command_buffer);
     return 0;
 }

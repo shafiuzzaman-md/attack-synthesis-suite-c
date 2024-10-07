@@ -1,0 +1,1104 @@
+array command_buffer[100] : w32 -> w8 = symbolic
+array data[13] : w32 -> w8 = symbolic
+(query [(Eq 0 (Read w8 0 data))
+         (Eq false
+             (Eq 0 N0:(Read w8 0 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N1:(Extract w8 0 (SExt w32 N0))))
+         (Eq false (Eq 59 N1))
+         (Eq false (Eq 124 N1))
+         (Eq false (Eq 36 N1))
+         (Eq false (Eq 96 N1))
+         (Eq false (Eq 60 N1))
+         (Eq false (Eq 62 N1))
+         (Eq false
+             (Eq 0 N2:(Read w8 1 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N3:(Extract w8 0 (SExt w32 N2))))
+         (Eq false (Eq 59 N3))
+         (Eq false (Eq 124 N3))
+         (Eq false (Eq 36 N3))
+         (Eq false (Eq 96 N3))
+         (Eq false (Eq 60 N3))
+         (Eq false (Eq 62 N3))
+         (Eq false
+             (Eq 0 N4:(Read w8 2 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N5:(Extract w8 0 (SExt w32 N4))))
+         (Eq false (Eq 59 N5))
+         (Eq false (Eq 124 N5))
+         (Eq false (Eq 36 N5))
+         (Eq false (Eq 96 N5))
+         (Eq false (Eq 60 N5))
+         (Eq false (Eq 62 N5))
+         (Eq false
+             (Eq 0 N6:(Read w8 3 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N7:(Extract w8 0 (SExt w32 N6))))
+         (Eq false (Eq 59 N7))
+         (Eq false (Eq 124 N7))
+         (Eq false (Eq 36 N7))
+         (Eq false (Eq 96 N7))
+         (Eq false (Eq 60 N7))
+         (Eq false (Eq 62 N7))
+         (Eq false
+             (Eq 0 N8:(Read w8 4 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N9:(Extract w8 0 (SExt w32 N8))))
+         (Eq false (Eq 59 N9))
+         (Eq false (Eq 124 N9))
+         (Eq false (Eq 36 N9))
+         (Eq false (Eq 96 N9))
+         (Eq false (Eq 60 N9))
+         (Eq false (Eq 62 N9))
+         (Eq false
+             (Eq 0 N10:(Read w8 5 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N11:(Extract w8 0 (SExt w32 N10))))
+         (Eq false (Eq 59 N11))
+         (Eq false (Eq 124 N11))
+         (Eq false (Eq 36 N11))
+         (Eq false (Eq 96 N11))
+         (Eq false (Eq 60 N11))
+         (Eq false (Eq 62 N11))
+         (Eq false
+             (Eq 0 N12:(Read w8 6 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N13:(Extract w8 0 (SExt w32 N12))))
+         (Eq false (Eq 59 N13))
+         (Eq false (Eq 124 N13))
+         (Eq false (Eq 36 N13))
+         (Eq false (Eq 96 N13))
+         (Eq false (Eq 60 N13))
+         (Eq false (Eq 62 N13))
+         (Eq false
+             (Eq 0 N14:(Read w8 7 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N15:(Extract w8 0 (SExt w32 N14))))
+         (Eq false (Eq 59 N15))
+         (Eq false (Eq 124 N15))
+         (Eq false (Eq 36 N15))
+         (Eq false (Eq 96 N15))
+         (Eq false (Eq 60 N15))
+         (Eq false (Eq 62 N15))
+         (Eq false
+             (Eq 0 N16:(Read w8 8 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N17:(Extract w8 0 (SExt w32 N16))))
+         (Eq false (Eq 59 N17))
+         (Eq false (Eq 124 N17))
+         (Eq false (Eq 36 N17))
+         (Eq false (Eq 96 N17))
+         (Eq false (Eq 60 N17))
+         (Eq false (Eq 62 N17))
+         (Eq false
+             (Eq 0 N18:(Read w8 9 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N19:(Extract w8 0 (SExt w32 N18))))
+         (Eq false (Eq 59 N19))
+         (Eq false (Eq 124 N19))
+         (Eq false (Eq 36 N19))
+         (Eq false (Eq 96 N19))
+         (Eq false (Eq 60 N19))
+         (Eq false (Eq 62 N19))
+         (Eq false
+             (Eq 0 N20:(Read w8 10 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N21:(Extract w8 0 (SExt w32 N20))))
+         (Eq false (Eq 59 N21))
+         (Eq false (Eq 124 N21))
+         (Eq false (Eq 36 N21))
+         (Eq false (Eq 96 N21))
+         (Eq false (Eq 60 N21))
+         (Eq false (Eq 62 N21))
+         (Eq false
+             (Eq 0 N22:(Read w8 11 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N23:(Extract w8 0 (SExt w32 N22))))
+         (Eq false (Eq 59 N23))
+         (Eq false (Eq 124 N23))
+         (Eq false (Eq 36 N23))
+         (Eq false (Eq 96 N23))
+         (Eq false (Eq 60 N23))
+         (Eq false (Eq 62 N23))
+         (Eq false
+             (Eq 0 N24:(Read w8 12 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N25:(Extract w8 0 (SExt w32 N24))))
+         (Eq false (Eq 59 N25))
+         (Eq false (Eq 124 N25))
+         (Eq false (Eq 36 N25))
+         (Eq false (Eq 96 N25))
+         (Eq false (Eq 60 N25))
+         (Eq false (Eq 62 N25))
+         (Eq false
+             (Eq 0 N26:(Read w8 13 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N27:(Extract w8 0 (SExt w32 N26))))
+         (Eq false (Eq 59 N27))
+         (Eq false (Eq 124 N27))
+         (Eq false (Eq 36 N27))
+         (Eq false (Eq 96 N27))
+         (Eq false (Eq 60 N27))
+         (Eq false (Eq 62 N27))
+         (Eq false
+             (Eq 0 N28:(Read w8 14 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N29:(Extract w8 0 (SExt w32 N28))))
+         (Eq false (Eq 59 N29))
+         (Eq false (Eq 124 N29))
+         (Eq false (Eq 36 N29))
+         (Eq false (Eq 96 N29))
+         (Eq false (Eq 60 N29))
+         (Eq false (Eq 62 N29))
+         (Eq false
+             (Eq 0 N30:(Read w8 15 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N31:(Extract w8 0 (SExt w32 N30))))
+         (Eq false (Eq 59 N31))
+         (Eq false (Eq 124 N31))
+         (Eq false (Eq 36 N31))
+         (Eq false (Eq 96 N31))
+         (Eq false (Eq 60 N31))
+         (Eq false (Eq 62 N31))
+         (Eq false
+             (Eq 0 N32:(Read w8 16 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N33:(Extract w8 0 (SExt w32 N32))))
+         (Eq false (Eq 59 N33))
+         (Eq false (Eq 124 N33))
+         (Eq false (Eq 36 N33))
+         (Eq false (Eq 96 N33))
+         (Eq false (Eq 60 N33))
+         (Eq false (Eq 62 N33))
+         (Eq false
+             (Eq 0 N34:(Read w8 17 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N35:(Extract w8 0 (SExt w32 N34))))
+         (Eq false (Eq 59 N35))
+         (Eq false (Eq 124 N35))
+         (Eq false (Eq 36 N35))
+         (Eq false (Eq 96 N35))
+         (Eq false (Eq 60 N35))
+         (Eq false (Eq 62 N35))
+         (Eq false
+             (Eq 0 N36:(Read w8 18 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N37:(Extract w8 0 (SExt w32 N36))))
+         (Eq false (Eq 59 N37))
+         (Eq false (Eq 124 N37))
+         (Eq false (Eq 36 N37))
+         (Eq false (Eq 96 N37))
+         (Eq false (Eq 60 N37))
+         (Eq false (Eq 62 N37))
+         (Eq false
+             (Eq 0 N38:(Read w8 19 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N39:(Extract w8 0 (SExt w32 N38))))
+         (Eq false (Eq 59 N39))
+         (Eq false (Eq 124 N39))
+         (Eq false (Eq 36 N39))
+         (Eq false (Eq 96 N39))
+         (Eq false (Eq 60 N39))
+         (Eq false (Eq 62 N39))
+         (Eq false
+             (Eq 0 N40:(Read w8 20 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N41:(Extract w8 0 (SExt w32 N40))))
+         (Eq false (Eq 59 N41))
+         (Eq false (Eq 124 N41))
+         (Eq false (Eq 36 N41))
+         (Eq false (Eq 96 N41))
+         (Eq false (Eq 60 N41))
+         (Eq false (Eq 62 N41))
+         (Eq false
+             (Eq 0 N42:(Read w8 21 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N43:(Extract w8 0 (SExt w32 N42))))
+         (Eq false (Eq 59 N43))
+         (Eq false (Eq 124 N43))
+         (Eq false (Eq 36 N43))
+         (Eq false (Eq 96 N43))
+         (Eq false (Eq 60 N43))
+         (Eq false (Eq 62 N43))
+         (Eq false
+             (Eq 0 N44:(Read w8 22 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N45:(Extract w8 0 (SExt w32 N44))))
+         (Eq false (Eq 59 N45))
+         (Eq false (Eq 124 N45))
+         (Eq false (Eq 36 N45))
+         (Eq false (Eq 96 N45))
+         (Eq false (Eq 60 N45))
+         (Eq false (Eq 62 N45))
+         (Eq false
+             (Eq 0 N46:(Read w8 23 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N47:(Extract w8 0 (SExt w32 N46))))
+         (Eq false (Eq 59 N47))
+         (Eq false (Eq 124 N47))
+         (Eq false (Eq 36 N47))
+         (Eq false (Eq 96 N47))
+         (Eq false (Eq 60 N47))
+         (Eq false (Eq 62 N47))
+         (Eq false
+             (Eq 0 N48:(Read w8 24 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N49:(Extract w8 0 (SExt w32 N48))))
+         (Eq false (Eq 59 N49))
+         (Eq false (Eq 124 N49))
+         (Eq false (Eq 36 N49))
+         (Eq false (Eq 96 N49))
+         (Eq false (Eq 60 N49))
+         (Eq false (Eq 62 N49))
+         (Eq false
+             (Eq 0 N50:(Read w8 25 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N51:(Extract w8 0 (SExt w32 N50))))
+         (Eq false (Eq 59 N51))
+         (Eq false (Eq 124 N51))
+         (Eq false (Eq 36 N51))
+         (Eq false (Eq 96 N51))
+         (Eq false (Eq 60 N51))
+         (Eq false (Eq 62 N51))
+         (Eq false
+             (Eq 0 N52:(Read w8 26 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N53:(Extract w8 0 (SExt w32 N52))))
+         (Eq false (Eq 59 N53))
+         (Eq false (Eq 124 N53))
+         (Eq false (Eq 36 N53))
+         (Eq false (Eq 96 N53))
+         (Eq false (Eq 60 N53))
+         (Eq false (Eq 62 N53))
+         (Eq false
+             (Eq 0 N54:(Read w8 27 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N55:(Extract w8 0 (SExt w32 N54))))
+         (Eq false (Eq 59 N55))
+         (Eq false (Eq 124 N55))
+         (Eq false (Eq 36 N55))
+         (Eq false (Eq 96 N55))
+         (Eq false (Eq 60 N55))
+         (Eq false (Eq 62 N55))
+         (Eq false
+             (Eq 0 N56:(Read w8 28 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N57:(Extract w8 0 (SExt w32 N56))))
+         (Eq false (Eq 59 N57))
+         (Eq false (Eq 124 N57))
+         (Eq false (Eq 36 N57))
+         (Eq false (Eq 96 N57))
+         (Eq false (Eq 60 N57))
+         (Eq false (Eq 62 N57))
+         (Eq false
+             (Eq 0 N58:(Read w8 29 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N59:(Extract w8 0 (SExt w32 N58))))
+         (Eq false (Eq 59 N59))
+         (Eq false (Eq 124 N59))
+         (Eq false (Eq 36 N59))
+         (Eq false (Eq 96 N59))
+         (Eq false (Eq 60 N59))
+         (Eq false (Eq 62 N59))
+         (Eq false
+             (Eq 0 N60:(Read w8 30 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N61:(Extract w8 0 (SExt w32 N60))))
+         (Eq false (Eq 59 N61))
+         (Eq false (Eq 124 N61))
+         (Eq false (Eq 36 N61))
+         (Eq false (Eq 96 N61))
+         (Eq false (Eq 60 N61))
+         (Eq false (Eq 62 N61))
+         (Eq false
+             (Eq 0 N62:(Read w8 31 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N63:(Extract w8 0 (SExt w32 N62))))
+         (Eq false (Eq 59 N63))
+         (Eq false (Eq 124 N63))
+         (Eq false (Eq 36 N63))
+         (Eq false (Eq 96 N63))
+         (Eq false (Eq 60 N63))
+         (Eq false (Eq 62 N63))
+         (Eq false
+             (Eq 0 N64:(Read w8 32 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N65:(Extract w8 0 (SExt w32 N64))))
+         (Eq false (Eq 59 N65))
+         (Eq false (Eq 124 N65))
+         (Eq false (Eq 36 N65))
+         (Eq false (Eq 96 N65))
+         (Eq false (Eq 60 N65))
+         (Eq false (Eq 62 N65))
+         (Eq false
+             (Eq 0 N66:(Read w8 33 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N67:(Extract w8 0 (SExt w32 N66))))
+         (Eq false (Eq 59 N67))
+         (Eq false (Eq 124 N67))
+         (Eq false (Eq 36 N67))
+         (Eq false (Eq 96 N67))
+         (Eq false (Eq 60 N67))
+         (Eq false (Eq 62 N67))
+         (Eq false
+             (Eq 0 N68:(Read w8 34 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N69:(Extract w8 0 (SExt w32 N68))))
+         (Eq false (Eq 59 N69))
+         (Eq false (Eq 124 N69))
+         (Eq false (Eq 36 N69))
+         (Eq false (Eq 96 N69))
+         (Eq false (Eq 60 N69))
+         (Eq false (Eq 62 N69))
+         (Eq false
+             (Eq 0 N70:(Read w8 35 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N71:(Extract w8 0 (SExt w32 N70))))
+         (Eq false (Eq 59 N71))
+         (Eq false (Eq 124 N71))
+         (Eq false (Eq 36 N71))
+         (Eq false (Eq 96 N71))
+         (Eq false (Eq 60 N71))
+         (Eq false (Eq 62 N71))
+         (Eq false
+             (Eq 0 N72:(Read w8 36 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N73:(Extract w8 0 (SExt w32 N72))))
+         (Eq false (Eq 59 N73))
+         (Eq false (Eq 124 N73))
+         (Eq false (Eq 36 N73))
+         (Eq false (Eq 96 N73))
+         (Eq false (Eq 60 N73))
+         (Eq false (Eq 62 N73))
+         (Eq false
+             (Eq 0 N74:(Read w8 37 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N75:(Extract w8 0 (SExt w32 N74))))
+         (Eq false (Eq 59 N75))
+         (Eq false (Eq 124 N75))
+         (Eq false (Eq 36 N75))
+         (Eq false (Eq 96 N75))
+         (Eq false (Eq 60 N75))
+         (Eq false (Eq 62 N75))
+         (Eq false
+             (Eq 0 N76:(Read w8 38 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N77:(Extract w8 0 (SExt w32 N76))))
+         (Eq false (Eq 59 N77))
+         (Eq false (Eq 124 N77))
+         (Eq false (Eq 36 N77))
+         (Eq false (Eq 96 N77))
+         (Eq false (Eq 60 N77))
+         (Eq false (Eq 62 N77))
+         (Eq false
+             (Eq 0 N78:(Read w8 39 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N79:(Extract w8 0 (SExt w32 N78))))
+         (Eq false (Eq 59 N79))
+         (Eq false (Eq 124 N79))
+         (Eq false (Eq 36 N79))
+         (Eq false (Eq 96 N79))
+         (Eq false (Eq 60 N79))
+         (Eq false (Eq 62 N79))
+         (Eq false
+             (Eq 0 N80:(Read w8 40 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N81:(Extract w8 0 (SExt w32 N80))))
+         (Eq false (Eq 59 N81))
+         (Eq false (Eq 124 N81))
+         (Eq false (Eq 36 N81))
+         (Eq false (Eq 96 N81))
+         (Eq false (Eq 60 N81))
+         (Eq false (Eq 62 N81))
+         (Eq false
+             (Eq 0 N82:(Read w8 41 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N83:(Extract w8 0 (SExt w32 N82))))
+         (Eq false (Eq 59 N83))
+         (Eq false (Eq 124 N83))
+         (Eq false (Eq 36 N83))
+         (Eq false (Eq 96 N83))
+         (Eq false (Eq 60 N83))
+         (Eq false (Eq 62 N83))
+         (Eq false
+             (Eq 0 N84:(Read w8 42 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N85:(Extract w8 0 (SExt w32 N84))))
+         (Eq false (Eq 59 N85))
+         (Eq false (Eq 124 N85))
+         (Eq false (Eq 36 N85))
+         (Eq false (Eq 96 N85))
+         (Eq false (Eq 60 N85))
+         (Eq false (Eq 62 N85))
+         (Eq false
+             (Eq 0 N86:(Read w8 43 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N87:(Extract w8 0 (SExt w32 N86))))
+         (Eq false (Eq 59 N87))
+         (Eq false (Eq 124 N87))
+         (Eq false (Eq 36 N87))
+         (Eq false (Eq 96 N87))
+         (Eq false (Eq 60 N87))
+         (Eq false (Eq 62 N87))
+         (Eq false
+             (Eq 0 N88:(Read w8 44 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N89:(Extract w8 0 (SExt w32 N88))))
+         (Eq false (Eq 59 N89))
+         (Eq false (Eq 124 N89))
+         (Eq false (Eq 36 N89))
+         (Eq false (Eq 96 N89))
+         (Eq false (Eq 60 N89))
+         (Eq false (Eq 62 N89))
+         (Eq false
+             (Eq 0 N90:(Read w8 45 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N91:(Extract w8 0 (SExt w32 N90))))
+         (Eq false (Eq 59 N91))
+         (Eq false (Eq 124 N91))
+         (Eq false (Eq 36 N91))
+         (Eq false (Eq 96 N91))
+         (Eq false (Eq 60 N91))
+         (Eq false (Eq 62 N91))
+         (Eq false
+             (Eq 0 N92:(Read w8 46 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N93:(Extract w8 0 (SExt w32 N92))))
+         (Eq false (Eq 59 N93))
+         (Eq false (Eq 124 N93))
+         (Eq false (Eq 36 N93))
+         (Eq false (Eq 96 N93))
+         (Eq false (Eq 60 N93))
+         (Eq false (Eq 62 N93))
+         (Eq false
+             (Eq 0 N94:(Read w8 47 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N95:(Extract w8 0 (SExt w32 N94))))
+         (Eq false (Eq 59 N95))
+         (Eq false (Eq 124 N95))
+         (Eq false (Eq 36 N95))
+         (Eq false (Eq 96 N95))
+         (Eq false (Eq 60 N95))
+         (Eq false (Eq 62 N95))
+         (Eq false
+             (Eq 0 N96:(Read w8 48 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N97:(Extract w8 0 (SExt w32 N96))))
+         (Eq false (Eq 59 N97))
+         (Eq false (Eq 124 N97))
+         (Eq false (Eq 36 N97))
+         (Eq false (Eq 96 N97))
+         (Eq false (Eq 60 N97))
+         (Eq false (Eq 62 N97))
+         (Eq false
+             (Eq 0 N98:(Read w8 49 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N99:(Extract w8 0 (SExt w32 N98))))
+         (Eq false (Eq 59 N99))
+         (Eq false (Eq 124 N99))
+         (Eq false (Eq 36 N99))
+         (Eq false (Eq 96 N99))
+         (Eq false (Eq 60 N99))
+         (Eq false (Eq 62 N99))
+         (Eq false
+             (Eq 0 N100:(Read w8 50 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N101:(Extract w8 0 (SExt w32 N100))))
+         (Eq false (Eq 59 N101))
+         (Eq false (Eq 124 N101))
+         (Eq false (Eq 36 N101))
+         (Eq false (Eq 96 N101))
+         (Eq false (Eq 60 N101))
+         (Eq false (Eq 62 N101))
+         (Eq false
+             (Eq 0 N102:(Read w8 51 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N103:(Extract w8 0 (SExt w32 N102))))
+         (Eq false (Eq 59 N103))
+         (Eq false (Eq 124 N103))
+         (Eq false (Eq 36 N103))
+         (Eq false (Eq 96 N103))
+         (Eq false (Eq 60 N103))
+         (Eq false (Eq 62 N103))
+         (Eq false
+             (Eq 0 N104:(Read w8 52 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N105:(Extract w8 0 (SExt w32 N104))))
+         (Eq false (Eq 59 N105))
+         (Eq false (Eq 124 N105))
+         (Eq false (Eq 36 N105))
+         (Eq false (Eq 96 N105))
+         (Eq false (Eq 60 N105))
+         (Eq false (Eq 62 N105))
+         (Eq false
+             (Eq 0 N106:(Read w8 53 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N107:(Extract w8 0 (SExt w32 N106))))
+         (Eq false (Eq 59 N107))
+         (Eq false (Eq 124 N107))
+         (Eq false (Eq 36 N107))
+         (Eq false (Eq 96 N107))
+         (Eq false (Eq 60 N107))
+         (Eq false (Eq 62 N107))
+         (Eq false
+             (Eq 0 N108:(Read w8 54 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N109:(Extract w8 0 (SExt w32 N108))))
+         (Eq false (Eq 59 N109))
+         (Eq false (Eq 124 N109))
+         (Eq false (Eq 36 N109))
+         (Eq false (Eq 96 N109))
+         (Eq false (Eq 60 N109))
+         (Eq false (Eq 62 N109))
+         (Eq false
+             (Eq 0 N110:(Read w8 55 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N111:(Extract w8 0 (SExt w32 N110))))
+         (Eq false (Eq 59 N111))
+         (Eq false (Eq 124 N111))
+         (Eq false (Eq 36 N111))
+         (Eq false (Eq 96 N111))
+         (Eq false (Eq 60 N111))
+         (Eq false (Eq 62 N111))
+         (Eq false
+             (Eq 0 N112:(Read w8 56 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N113:(Extract w8 0 (SExt w32 N112))))
+         (Eq false (Eq 59 N113))
+         (Eq false (Eq 124 N113))
+         (Eq false (Eq 36 N113))
+         (Eq false (Eq 96 N113))
+         (Eq false (Eq 60 N113))
+         (Eq false (Eq 62 N113))
+         (Eq false
+             (Eq 0 N114:(Read w8 57 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N115:(Extract w8 0 (SExt w32 N114))))
+         (Eq false (Eq 59 N115))
+         (Eq false (Eq 124 N115))
+         (Eq false (Eq 36 N115))
+         (Eq false (Eq 96 N115))
+         (Eq false (Eq 60 N115))
+         (Eq false (Eq 62 N115))
+         (Eq false
+             (Eq 0 N116:(Read w8 58 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N117:(Extract w8 0 (SExt w32 N116))))
+         (Eq false (Eq 59 N117))
+         (Eq false (Eq 124 N117))
+         (Eq false (Eq 36 N117))
+         (Eq false (Eq 96 N117))
+         (Eq false (Eq 60 N117))
+         (Eq false (Eq 62 N117))
+         (Eq false
+             (Eq 0 N118:(Read w8 59 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N119:(Extract w8 0 (SExt w32 N118))))
+         (Eq false (Eq 59 N119))
+         (Eq false (Eq 124 N119))
+         (Eq false (Eq 36 N119))
+         (Eq false (Eq 96 N119))
+         (Eq false (Eq 60 N119))
+         (Eq false (Eq 62 N119))
+         (Eq false
+             (Eq 0 N120:(Read w8 60 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N121:(Extract w8 0 (SExt w32 N120))))
+         (Eq false (Eq 59 N121))
+         (Eq false (Eq 124 N121))
+         (Eq false (Eq 36 N121))
+         (Eq false (Eq 96 N121))
+         (Eq false (Eq 60 N121))
+         (Eq false (Eq 62 N121))
+         (Eq false
+             (Eq 0 N122:(Read w8 61 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N123:(Extract w8 0 (SExt w32 N122))))
+         (Eq false (Eq 59 N123))
+         (Eq false (Eq 124 N123))
+         (Eq false (Eq 36 N123))
+         (Eq false (Eq 96 N123))
+         (Eq false (Eq 60 N123))
+         (Eq false (Eq 62 N123))
+         (Eq false
+             (Eq 0 N124:(Read w8 62 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N125:(Extract w8 0 (SExt w32 N124))))
+         (Eq false (Eq 59 N125))
+         (Eq false (Eq 124 N125))
+         (Eq false (Eq 36 N125))
+         (Eq false (Eq 96 N125))
+         (Eq false (Eq 60 N125))
+         (Eq false (Eq 62 N125))
+         (Eq false
+             (Eq 0 N126:(Read w8 63 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N127:(Extract w8 0 (SExt w32 N126))))
+         (Eq false (Eq 59 N127))
+         (Eq false (Eq 124 N127))
+         (Eq false (Eq 36 N127))
+         (Eq false (Eq 96 N127))
+         (Eq false (Eq 60 N127))
+         (Eq false (Eq 62 N127))
+         (Eq false
+             (Eq 0 N128:(Read w8 64 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N129:(Extract w8 0 (SExt w32 N128))))
+         (Eq false (Eq 59 N129))
+         (Eq false (Eq 124 N129))
+         (Eq false (Eq 36 N129))
+         (Eq false (Eq 96 N129))
+         (Eq false (Eq 60 N129))
+         (Eq false (Eq 62 N129))
+         (Eq false
+             (Eq 0 N130:(Read w8 65 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N131:(Extract w8 0 (SExt w32 N130))))
+         (Eq false (Eq 59 N131))
+         (Eq false (Eq 124 N131))
+         (Eq false (Eq 36 N131))
+         (Eq false (Eq 96 N131))
+         (Eq false (Eq 60 N131))
+         (Eq false (Eq 62 N131))
+         (Eq false
+             (Eq 0 N132:(Read w8 66 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N133:(Extract w8 0 (SExt w32 N132))))
+         (Eq false (Eq 59 N133))
+         (Eq false (Eq 124 N133))
+         (Eq false (Eq 36 N133))
+         (Eq false (Eq 96 N133))
+         (Eq false (Eq 60 N133))
+         (Eq false (Eq 62 N133))
+         (Eq false
+             (Eq 0 N134:(Read w8 67 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N135:(Extract w8 0 (SExt w32 N134))))
+         (Eq false (Eq 59 N135))
+         (Eq false (Eq 124 N135))
+         (Eq false (Eq 36 N135))
+         (Eq false (Eq 96 N135))
+         (Eq false (Eq 60 N135))
+         (Eq false (Eq 62 N135))
+         (Eq false
+             (Eq 0 N136:(Read w8 68 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N137:(Extract w8 0 (SExt w32 N136))))
+         (Eq false (Eq 59 N137))
+         (Eq false (Eq 124 N137))
+         (Eq false (Eq 36 N137))
+         (Eq false (Eq 96 N137))
+         (Eq false (Eq 60 N137))
+         (Eq false (Eq 62 N137))
+         (Eq false
+             (Eq 0 N138:(Read w8 69 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N139:(Extract w8 0 (SExt w32 N138))))
+         (Eq false (Eq 59 N139))
+         (Eq false (Eq 124 N139))
+         (Eq false (Eq 36 N139))
+         (Eq false (Eq 96 N139))
+         (Eq false (Eq 60 N139))
+         (Eq false (Eq 62 N139))
+         (Eq false
+             (Eq 0 N140:(Read w8 70 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N141:(Extract w8 0 (SExt w32 N140))))
+         (Eq false (Eq 59 N141))
+         (Eq false (Eq 124 N141))
+         (Eq false (Eq 36 N141))
+         (Eq false (Eq 96 N141))
+         (Eq false (Eq 60 N141))
+         (Eq false (Eq 62 N141))
+         (Eq false
+             (Eq 0 N142:(Read w8 71 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N143:(Extract w8 0 (SExt w32 N142))))
+         (Eq false (Eq 59 N143))
+         (Eq false (Eq 124 N143))
+         (Eq false (Eq 36 N143))
+         (Eq false (Eq 96 N143))
+         (Eq false (Eq 60 N143))
+         (Eq false (Eq 62 N143))
+         (Eq false
+             (Eq 0 N144:(Read w8 72 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N145:(Extract w8 0 (SExt w32 N144))))
+         (Eq false (Eq 59 N145))
+         (Eq false (Eq 124 N145))
+         (Eq false (Eq 36 N145))
+         (Eq false (Eq 96 N145))
+         (Eq false (Eq 60 N145))
+         (Eq false (Eq 62 N145))
+         (Eq false
+             (Eq 0 N146:(Read w8 73 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N147:(Extract w8 0 (SExt w32 N146))))
+         (Eq false (Eq 59 N147))
+         (Eq false (Eq 124 N147))
+         (Eq false (Eq 36 N147))
+         (Eq false (Eq 96 N147))
+         (Eq false (Eq 60 N147))
+         (Eq false (Eq 62 N147))
+         (Eq false
+             (Eq 0 N148:(Read w8 74 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N149:(Extract w8 0 (SExt w32 N148))))
+         (Eq false (Eq 59 N149))
+         (Eq false (Eq 124 N149))
+         (Eq false (Eq 36 N149))
+         (Eq false (Eq 96 N149))
+         (Eq false (Eq 60 N149))
+         (Eq false (Eq 62 N149))
+         (Eq false
+             (Eq 0 N150:(Read w8 75 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N151:(Extract w8 0 (SExt w32 N150))))
+         (Eq false (Eq 59 N151))
+         (Eq false (Eq 124 N151))
+         (Eq false (Eq 36 N151))
+         (Eq false (Eq 96 N151))
+         (Eq false (Eq 60 N151))
+         (Eq false (Eq 62 N151))
+         (Eq false
+             (Eq 0 N152:(Read w8 76 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N153:(Extract w8 0 (SExt w32 N152))))
+         (Eq false (Eq 59 N153))
+         (Eq false (Eq 124 N153))
+         (Eq false (Eq 36 N153))
+         (Eq false (Eq 96 N153))
+         (Eq false (Eq 60 N153))
+         (Eq false (Eq 62 N153))
+         (Eq false
+             (Eq 0 N154:(Read w8 77 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N155:(Extract w8 0 (SExt w32 N154))))
+         (Eq false (Eq 59 N155))
+         (Eq false (Eq 124 N155))
+         (Eq false (Eq 36 N155))
+         (Eq false (Eq 96 N155))
+         (Eq false (Eq 60 N155))
+         (Eq false (Eq 62 N155))
+         (Eq false
+             (Eq 0 N156:(Read w8 78 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N157:(Extract w8 0 (SExt w32 N156))))
+         (Eq false (Eq 59 N157))
+         (Eq false (Eq 124 N157))
+         (Eq false (Eq 36 N157))
+         (Eq false (Eq 96 N157))
+         (Eq false (Eq 60 N157))
+         (Eq false (Eq 62 N157))
+         (Eq false
+             (Eq 0 N158:(Read w8 79 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N159:(Extract w8 0 (SExt w32 N158))))
+         (Eq false (Eq 59 N159))
+         (Eq false (Eq 124 N159))
+         (Eq false (Eq 36 N159))
+         (Eq false (Eq 96 N159))
+         (Eq false (Eq 60 N159))
+         (Eq false (Eq 62 N159))
+         (Eq false
+             (Eq 0 N160:(Read w8 80 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N161:(Extract w8 0 (SExt w32 N160))))
+         (Eq false (Eq 59 N161))
+         (Eq false (Eq 124 N161))
+         (Eq false (Eq 36 N161))
+         (Eq false (Eq 96 N161))
+         (Eq false (Eq 60 N161))
+         (Eq false (Eq 62 N161))
+         (Eq false
+             (Eq 0 N162:(Read w8 81 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N163:(Extract w8 0 (SExt w32 N162))))
+         (Eq false (Eq 59 N163))
+         (Eq false (Eq 124 N163))
+         (Eq false (Eq 36 N163))
+         (Eq false (Eq 96 N163))
+         (Eq false (Eq 60 N163))
+         (Eq false (Eq 62 N163))
+         (Eq false
+             (Eq 0 N164:(Read w8 82 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N165:(Extract w8 0 (SExt w32 N164))))
+         (Eq false (Eq 59 N165))
+         (Eq false (Eq 124 N165))
+         (Eq false (Eq 36 N165))
+         (Eq false (Eq 96 N165))
+         (Eq false (Eq 60 N165))
+         (Eq false (Eq 62 N165))
+         (Eq false
+             (Eq 0 N166:(Read w8 83 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N167:(Extract w8 0 (SExt w32 N166))))
+         (Eq false (Eq 59 N167))
+         (Eq false (Eq 124 N167))
+         (Eq false (Eq 36 N167))
+         (Eq false (Eq 96 N167))
+         (Eq false (Eq 60 N167))
+         (Eq false (Eq 62 N167))
+         (Eq false
+             (Eq 0 N168:(Read w8 84 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N169:(Extract w8 0 (SExt w32 N168))))
+         (Eq false (Eq 59 N169))
+         (Eq false (Eq 124 N169))
+         (Eq false (Eq 36 N169))
+         (Eq false (Eq 96 N169))
+         (Eq false (Eq 60 N169))
+         (Eq false (Eq 62 N169))
+         (Eq false
+             (Eq 0 N170:(Read w8 85 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N171:(Extract w8 0 (SExt w32 N170))))
+         (Eq false (Eq 59 N171))
+         (Eq false (Eq 124 N171))
+         (Eq false (Eq 36 N171))
+         (Eq false (Eq 96 N171))
+         (Eq false (Eq 60 N171))
+         (Eq false (Eq 62 N171))
+         (Eq false
+             (Eq 0 N172:(Read w8 86 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N173:(Extract w8 0 (SExt w32 N172))))
+         (Eq false (Eq 59 N173))
+         (Eq false (Eq 124 N173))
+         (Eq false (Eq 36 N173))
+         (Eq false (Eq 96 N173))
+         (Eq false (Eq 60 N173))
+         (Eq false (Eq 62 N173))
+         (Eq false
+             (Eq 0 N174:(Read w8 87 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N175:(Extract w8 0 (SExt w32 N174))))
+         (Eq false (Eq 59 N175))
+         (Eq false (Eq 124 N175))
+         (Eq false (Eq 36 N175))
+         (Eq false (Eq 96 N175))
+         (Eq false (Eq 60 N175))
+         (Eq false (Eq 62 N175))
+         (Eq false
+             (Eq 0 N176:(Read w8 88 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N177:(Extract w8 0 (SExt w32 N176))))
+         (Eq false (Eq 59 N177))
+         (Eq false (Eq 124 N177))
+         (Eq false (Eq 36 N177))
+         (Eq false (Eq 96 N177))
+         (Eq false (Eq 60 N177))
+         (Eq false (Eq 62 N177))
+         (Eq false
+             (Eq 0 N178:(Read w8 89 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N179:(Extract w8 0 (SExt w32 N178))))
+         (Eq false (Eq 59 N179))
+         (Eq false (Eq 124 N179))
+         (Eq false (Eq 36 N179))
+         (Eq false (Eq 96 N179))
+         (Eq false (Eq 60 N179))
+         (Eq false (Eq 62 N179))
+         (Eq false
+             (Eq 0 N180:(Read w8 90 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N181:(Extract w8 0 (SExt w32 N180))))
+         (Eq false (Eq 59 N181))
+         (Eq false (Eq 124 N181))
+         (Eq false (Eq 36 N181))
+         (Eq false (Eq 96 N181))
+         (Eq false (Eq 60 N181))
+         (Eq false (Eq 62 N181))
+         (Eq false
+             (Eq 0 N182:(Read w8 91 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N183:(Extract w8 0 (SExt w32 N182))))
+         (Eq false (Eq 59 N183))
+         (Eq false (Eq 124 N183))
+         (Eq false (Eq 36 N183))
+         (Eq false (Eq 96 N183))
+         (Eq false (Eq 60 N183))
+         (Eq false (Eq 62 N183))
+         (Eq false
+             (Eq 0 N184:(Read w8 92 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N185:(Extract w8 0 (SExt w32 N184))))
+         (Eq false (Eq 59 N185))
+         (Eq false (Eq 124 N185))
+         (Eq false (Eq 36 N185))
+         (Eq false (Eq 96 N185))
+         (Eq false (Eq 60 N185))
+         (Eq false (Eq 62 N185))
+         (Eq false
+             (Eq 0 N186:(Read w8 93 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N187:(Extract w8 0 (SExt w32 N186))))
+         (Eq false (Eq 59 N187))
+         (Eq false (Eq 124 N187))
+         (Eq false (Eq 36 N187))
+         (Eq false (Eq 96 N187))
+         (Eq false (Eq 60 N187))
+         (Eq false (Eq 62 N187))
+         (Eq false
+             (Eq 0 N188:(Read w8 94 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N189:(Extract w8 0 (SExt w32 N188))))
+         (Eq false (Eq 59 N189))
+         (Eq false (Eq 124 N189))
+         (Eq false (Eq 36 N189))
+         (Eq false (Eq 96 N189))
+         (Eq false (Eq 60 N189))
+         (Eq false (Eq 62 N189))
+         (Eq false
+             (Eq 0 N190:(Read w8 95 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N191:(Extract w8 0 (SExt w32 N190))))
+         (Eq false (Eq 59 N191))
+         (Eq false (Eq 124 N191))
+         (Eq false (Eq 36 N191))
+         (Eq false (Eq 96 N191))
+         (Eq false (Eq 60 N191))
+         (Eq false (Eq 62 N191))
+         (Eq false
+             (Eq 0 N192:(Read w8 96 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N193:(Extract w8 0 (SExt w32 N192))))
+         (Eq false (Eq 59 N193))
+         (Eq false (Eq 124 N193))
+         (Eq false (Eq 36 N193))
+         (Eq false (Eq 96 N193))
+         (Eq false (Eq 60 N193))
+         (Eq false (Eq 62 N193))
+         (Eq false
+             (Eq 0 N194:(Read w8 97 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N195:(Extract w8 0 (SExt w32 N194))))
+         (Eq false (Eq 59 N195))
+         (Eq false (Eq 124 N195))
+         (Eq false (Eq 36 N195))
+         (Eq false (Eq 96 N195))
+         (Eq false (Eq 60 N195))
+         (Eq false (Eq 62 N195))
+         (Eq false
+             (Eq 0 N196:(Read w8 98 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N197:(Extract w8 0 (SExt w32 N196))))
+         (Eq false (Eq 59 N197))
+         (Eq false (Eq 124 N197))
+         (Eq false (Eq 36 N197))
+         (Eq false (Eq 96 N197))
+         (Eq false (Eq 60 N197))
+         (Eq false (Eq 62 N197))
+         (Eq false
+             (Eq 0 N198:(Read w8 99 command_buffer)))
+         (Eq false
+             (Eq 38
+                 N199:(Extract w8 0 (SExt w32 N198))))
+         (Eq false (Eq 59 N199))
+         (Eq false (Eq 124 N199))
+         (Eq false (Eq 36 N199))
+         (Eq false (Eq 96 N199))
+         (Eq false (Eq 60 N199))
+         (Eq false (Eq 62 N199))]
+        false)
