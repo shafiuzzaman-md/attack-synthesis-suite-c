@@ -25,7 +25,7 @@ void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int data,  char *us
         * This code does check to see if the array index is negative */
         if (data >= 0)
         {
-            klee_assert(no_buffer_overflow_occurred(data, symbolic_BUFFER_SIZE));  // Use the postcondition-oriented predicate
+            klee_assert(!buffer_overflow_occurred(data, symbolic_BUFFER_SIZE));  // Use the postcondition-oriented predicate
             user_buffer[data] = 1;
         }
         else

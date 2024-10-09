@@ -138,11 +138,15 @@ Example in Context:
 
 ### Compiling and Running
 
-`cd attack-synthesis-suite-c`
+`cd stase`
 
-`clang -o exploit example.c common.c privileged.c user_accessible.c`
+`chmod +x build_stase.sh`
 
-`./exploit`
+`./build_stase.sh`
+
+`klee --external-calls=all -libc=uclibc --posix-runtime --smtlib-human-readable  --write-test-info --write-paths --write-smt2s   --write-cov  --write-cvcs --write-kqueries   --write-sym-paths --only-output-states-covering-new --use-query-log=solver:smt2  --simplify-sym-indices stase.bc` 
+
+`python3 copy_output.py`
 
 
 ### Juliet Test Suite for C/C++

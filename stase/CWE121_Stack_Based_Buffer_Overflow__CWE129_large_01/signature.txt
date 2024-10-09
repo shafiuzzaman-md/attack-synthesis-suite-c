@@ -1,0 +1,20 @@
+Preconditions:
+array user_data[4] : w32 -> w8 = symbolic
+(query [(Sle 0
+              (ReadLSB w32 0 user_data))]
+        false)
+
+Postconditions:
+Error: ASSERTION FAIL: !buffer_overflow_occurred(data, symbolic_BUFFER_SIZE)
+File: ./../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c
+Line: 28
+assembly.ll line: 9177
+State: 1
+Stack: 
+	#000009177 in CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(symbolic, 125186563112960) at ./../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c:28
+	#100009724 in u_CWE121_CWE129_large_01_bad(symbolic) at ./../user_accessible.c:49
+	#200009945 in __klee_posix_wrapped_main() at stase_main.c:52
+	#300007178 in __user_main(1, 126081526923264, 126081526923280) at klee/runtime/POSIX/klee_init_env.c:245
+	#400000591 in __uClibc_main(126065680842752, 1, 126081526923264, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#500000756 in main(1, 126081526923264)
+

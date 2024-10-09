@@ -1,4 +1,4 @@
-#include "ECH.c"
+#include "ECH.h"
 #include "../common.c"
 #include "../user_accessible.c"
 
@@ -44,10 +44,13 @@ int is_valid_memory_access(char *base, char *data) {
 }
 
 int main() {
-    // Make user_data a symbolic value for KLEE to explore different paths
-   // int user_data;
-   // klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
-   // u_CWE121_CWE129_large_01_bad(user_data);
+
+    initialize_environment();
+
+    //CWE121
+    int user_data;
+    klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
+    u_CWE121_CWE129_large_01_bad(user_data);
 
 
     // Make user_data and input_char symbolic values for KLEE to explore different paths
@@ -94,16 +97,16 @@ int main() {
     // }
 
      // Define buffer and set symbolic values
-    char source[50]; // Allocate a buffer with known size
-    size_t read_size = 50; // Read the full buffer size as input
+    // char source[50]; // Allocate a buffer with known size
+    // size_t read_size = 50; // Read the full buffer size as input
 
-    klee_make_symbolic(source, sizeof(source), "source");
-    klee_make_symbolic(&read_size, sizeof(read_size), "read_size");
+    // klee_make_symbolic(source, sizeof(source), "source");
+    // klee_make_symbolic(&read_size, sizeof(read_size), "read_size");
 
-    char *result = CWE127_Buffer_Underread__char_alloca_cpy_01_bad(source, read_size);
-    if (result != NULL) {
-        printLine(result);
-        free(result); // Free the dynamically allocated buffer
-    }
+    // char *result = CWE127_Buffer_Underread__char_alloca_cpy_01_bad(source, read_size);
+    // if (result != NULL) {
+    //     printLine(result);
+    //     free(result); // Free the dynamically allocated buffer
+    // }
     return 0;
 }
