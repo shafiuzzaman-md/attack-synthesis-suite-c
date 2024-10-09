@@ -19,13 +19,15 @@ Template File: sources-sinks-01.tmpl.c
 #include "../../../common.h"
 
 #ifndef OMITBAD
-extern int symbolic_BUFFER_SIZE;  // Extern declaration for STASE
+extern int BUFFER_SIZE;  // Extern declaration for STASE
 void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int data,  char *user_buffer) {
      /* POTENTIAL FLAW: Attempt to write to an index of the array that is above the upper bound
         * This code does check to see if the array index is negative */
         if (data >= 0)
         {
-            klee_assert(!buffer_overflow_occurred(data, symbolic_BUFFER_SIZE));  // Use the postcondition-oriented predicate
+            klee_print_expr("data", data);
+            klee_print_expr("symbolic_BUFFER_SIZE", BUFFER_SIZE);
+            klee_assert(!buffer_overflow_occurred(data, BUFFER_SIZE));  // Use the postcondition-oriented predicate
             user_buffer[data] = 1;
         }
         else

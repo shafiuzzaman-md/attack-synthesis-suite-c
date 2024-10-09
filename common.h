@@ -7,7 +7,7 @@
 #include <stdint.h>
 
 // Buffer sizes
-#define BUFFER_SIZE 256
+//#define BUFFER_SIZE 256
 #define COMMAND_BUFFER_SIZE 128
 #define RESERVED_BUFFER_SIZE 64
 #define PROTECTED_BUFFER_SIZE 64 t

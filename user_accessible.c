@@ -2,7 +2,7 @@
 
 // Include the Juliet test suite file
 #define OMITGOOD
-#define BUFFER_SIZE 10
+//#define BUFFER_SIZE 10
 int EXECUTE = 1;
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c"
 #include "testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_add_01.c"

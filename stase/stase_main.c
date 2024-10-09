@@ -3,7 +3,7 @@
 #include "../user_accessible.c"
 
 //Symbolic buffer_size for buffer overflow detection
-int symbolic_BUFFER_SIZE; 
+int BUFFER_SIZE; 
 
 // Predicate function to check for buffer overflow
 int no_buffer_overflow_occurred(int index, int buffer_size) {
@@ -48,7 +48,9 @@ int main() {
     initialize_environment();
 
     //CWE121
+    klee_make_symbolic(&BUFFER_SIZE, sizeof(BUFFER_SIZE), "BUFFER_SIZE");
     int user_data;
+
     klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
     u_CWE121_CWE129_large_01_bad(user_data);
 
