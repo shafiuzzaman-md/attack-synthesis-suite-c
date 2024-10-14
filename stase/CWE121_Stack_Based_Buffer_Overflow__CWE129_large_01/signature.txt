@@ -9,5 +9,5 @@ user_data : int32 = symbolic
 
 Postconditions:
 KLEE: ERROR: ./../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c:30: ASSERTION FAIL: !buffer_overflow_occurred(data, BUFFER_SIZE)
-data:(ReadLSB w32 0 user_data)
-BUFFER_SIZE:(ReadLSB w32 0 BUFFER_SIZE)
+data:Read int32 user_data
+BUFFER_SIZE:Read int32 BUFFER_SIZE
