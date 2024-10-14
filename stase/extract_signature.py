@@ -20,6 +20,9 @@ def simplify_smt_expressions(text):
 source_dir = 'klee-last'
 parent_dir = os.path.abspath(os.path.join(source_dir, os.pardir))
 
+postcondition_file = 'staseOutput.txt'
+stase_output_path = os.path.join(parent_dir, postcondition_file)
+
 # List all files in the source directory
 files = os.listdir(source_dir)
 
@@ -60,9 +63,13 @@ for file in files:
                         simplified_text = simplify_smt_expressions(preconditions_text)
                         combined_file.write("Preconditions:\n")
                         combined_file.write(simplified_text + "\n")
-                if os.path.exists(assert_err_path):
-                    with open(assert_err_path, 'r') as assert_err_file:
+                # if os.path.exists(assert_err_path):
+                #     with open(assert_err_path, 'r') as assert_err_file:
+                #         combined_file.write("Postconditions:\n")
+                #         combined_file.write(assert_err_file.read() + "\n")
+                if os.path.exists(stase_output_path):
+                    with open(stase_output_path, 'r') as postcondition_file:
                         combined_file.write("Postconditions:\n")
-                        combined_file.write(assert_err_file.read() + "\n")
+                        combined_file.write(postcondition_file.read() + "\n")
 
             print(f"Files have been combined and saved successfully in {folder_name}/signature.txt")
