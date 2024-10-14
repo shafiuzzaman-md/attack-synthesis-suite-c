@@ -8,16 +8,6 @@ user_data : int32 = symbolic
         FALSE)
 
 Postconditions:
-Error: ASSERTION FAIL: !buffer_overflow_occurred(data, BUFFER_SIZE)
-File: ./../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c
-Line: 30
-assembly.ll line: 9184
-State: 1
-Stack: 
-	#000009184 in CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(symbolic, 139697087053824) at ./../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c:30
-	#100009737 in u_CWE121_CWE129_large_01_bad(symbolic) at ./../user_accessible.c:49
-	#200009963 in __klee_posix_wrapped_main() at stase_main.c:55
-	#300007181 in __user_main(1, 140660770340864, 140660770340880) at klee/runtime/POSIX/klee_init_env.c:245
-	#400000594 in __uClibc_main(140644924260352, 1, 140660770340864, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
-	#500000759 in main(1, 140660770340864)
-
+KLEE: ERROR: ./../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c:30: ASSERTION FAIL: !buffer_overflow_occurred(data, BUFFER_SIZE)
+data:(ReadLSB w32 0 user_data)
+BUFFER_SIZE:(ReadLSB w32 0 BUFFER_SIZE)

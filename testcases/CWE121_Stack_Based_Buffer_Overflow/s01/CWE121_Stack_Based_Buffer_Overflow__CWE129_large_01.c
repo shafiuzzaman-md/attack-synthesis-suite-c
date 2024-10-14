@@ -26,7 +26,7 @@ void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int data,  char *us
         if (data >= 0)
         {
             klee_print_expr("data", data);
-            klee_print_expr("symbolic_BUFFER_SIZE", BUFFER_SIZE);
+            klee_print_expr("BUFFER_SIZE", BUFFER_SIZE);
             klee_assert(!buffer_overflow_occurred(data, BUFFER_SIZE));  // Use the postcondition-oriented predicate
             user_buffer[data] = 1;
         }

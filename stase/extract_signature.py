@@ -13,7 +13,6 @@ def simplify_smt_expressions(text):
     # Replace ReadLSB with Read and adjust variable name formatting
     text = re.sub(r'\(ReadLSB w32 0 (\w+)\)', simplify_query, text)
     text = text.replace('false', 'FALSE')
-
     return text
 
 # Define the source directory
@@ -63,13 +62,20 @@ for file in files:
                         simplified_text = simplify_smt_expressions(preconditions_text)
                         combined_file.write("Preconditions:\n")
                         combined_file.write(simplified_text + "\n")
-                # if os.path.exists(assert_err_path):
-                #     with open(assert_err_path, 'r') as assert_err_file:
-                #         combined_file.write("Postconditions:\n")
-                #         combined_file.write(assert_err_file.read() + "\n")
+
                 if os.path.exists(stase_output_path):
                     with open(stase_output_path, 'r') as postcondition_file:
-                        combined_file.write("Postconditions:\n")
-                        combined_file.write(postcondition_file.read() + "\n")
+                        content = postcondition_file.readlines()
+                        for line in content:
+                            if "ASSERTION FAIL:" in line:
+                                combined_file.write("Postconditions:\n")
+                                combined_file.write(line)
+                                args = re.findall(r'\b\w+\b', line.split("ASSERTION FAIL:")[1])
+                                for arg in args:
+                                    # Ensure each arg is followed by a colon in some line
+                                    pattern = re.compile(rf"\b{arg}\b:")
+                                    for content_line in content:
+                                        if pattern.search(content_line) and content_line.strip() != line.strip():
+                                            combined_file.write(content_line)
 
             print(f"Files have been combined and saved successfully in {folder_name}/signature.txt")
