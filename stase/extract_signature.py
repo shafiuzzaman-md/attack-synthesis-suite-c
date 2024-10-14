@@ -1,6 +1,21 @@
 import os
 import re
 
+def simplify_smt_expressions(text):
+    # Simplify array definitions
+    text = re.sub(r'array (\w+)\[\d+\] : w32 -> w8 = symbolic', r'\1 : int32 = symbolic', text)
+
+    # Simplify SMT queries
+    def simplify_query(match):
+        variable_name = match.group(1)
+        return f"Read int32 {variable_name}"
+
+    # Replace ReadLSB with Read and adjust variable name formatting
+    text = re.sub(r'\(ReadLSB w32 0 (\w+)\)', simplify_query, text)
+    text = text.replace('false', 'FALSE')
+
+    return text
+
 # Define the source directory
 source_dir = 'klee-last'
 parent_dir = os.path.abspath(os.path.join(source_dir, os.pardir))
@@ -41,8 +56,10 @@ for file in files:
             with open(combined_file_path, 'w') as combined_file:
                 if os.path.exists(kquery_path):
                     with open(kquery_path, 'r') as kquery_file:
+                        preconditions_text = kquery_file.read()
+                        simplified_text = simplify_smt_expressions(preconditions_text)
                         combined_file.write("Preconditions:\n")
-                        combined_file.write(kquery_file.read() + "\n")
+                        combined_file.write(simplified_text + "\n")
                 if os.path.exists(assert_err_path):
                     with open(assert_err_path, 'r') as assert_err_file:
                         combined_file.write("Postconditions:\n")

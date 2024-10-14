@@ -146,7 +146,7 @@ Example in Context:
 
 `klee --external-calls=all -libc=uclibc --posix-runtime --smtlib-human-readable  --write-test-info --write-paths --write-smt2s   --write-cov  --write-cvcs --write-kqueries   --write-sym-paths --only-output-states-covering-new --use-query-log=solver:smt2  --simplify-sym-indices stase.bc` 
 
-`python3 copy_output.py`
+`python3 extract_signature.py`
 
 
 ### Juliet Test Suite for C/C++
