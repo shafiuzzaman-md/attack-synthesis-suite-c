@@ -49,10 +49,10 @@ int main() {
 
     //CWE121
     klee_make_symbolic(&BUFFER_SIZE, sizeof(BUFFER_SIZE), "BUFFER_SIZE");
-    int user_data;
+    int index;
 
-    klee_make_symbolic(&user_data, sizeof(user_data), "user_data");
-    u_CWE121_CWE129_large_01_bad(user_data);
+    klee_make_symbolic(&index, sizeof(index), "index");
+    u_CWE121_CWE129_large_01_bad(index);
 
 
     // Make user_data and input_char symbolic values for KLEE to explore different paths
