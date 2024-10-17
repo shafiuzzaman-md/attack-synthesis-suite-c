@@ -1,8 +1,0 @@
-array user_data[1] : w32 -> w8 = symbolic
-(query [(Slt N0:(SExt w32 (Read w8 0 user_data))
-              0)
-         (Eq false
-             (And (Sle 0
-                       N1:(SExt w32 (Extract w8 0 (Mul w32 2 N0))))
-                  (Slt N1 10)))]
-        false)

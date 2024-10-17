@@ -1,5 +1,0 @@
-; Emited by klee::Z3SolverImpl::getConstraintLog()
-(set-info :status unknown)
-(assert
- (not false))
-(check-sat)

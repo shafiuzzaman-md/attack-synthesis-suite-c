@@ -1,4 +1,0 @@
-array user_data[4] : w32 -> w8 = symbolic
-(query [(Sle 0
-              (ReadLSB w32 0 user_data))]
-        false)

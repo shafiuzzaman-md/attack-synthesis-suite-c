@@ -1,7 +1,0 @@
-array buffer_size[8] : w32 -> w8 = symbolic
-array read_size[8] : w32 -> w8 = symbolic
-(query [(Ule 0
-              (ReadLSB w64 0 buffer_size))
-         (Eq 0
-             (ReadLSB w64 0 read_size))]
-        false)
