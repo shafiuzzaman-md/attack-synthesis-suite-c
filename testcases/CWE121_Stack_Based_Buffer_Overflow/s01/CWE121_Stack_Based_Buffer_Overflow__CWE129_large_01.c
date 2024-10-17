@@ -19,7 +19,7 @@ Template File: sources-sinks-01.tmpl.c
 #include "../../../common.h"
 
 #ifndef OMITBAD
-extern int BUFFER_SIZE;  // Extern declaration for STASE
+extern int BUFFER_SIZE; 
 void CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(int data,  char *user_buffer) {
      /* POTENTIAL FLAW: Attempt to write to an index of the array that is above the upper bound
         * This code does check to see if the array index is negative */
