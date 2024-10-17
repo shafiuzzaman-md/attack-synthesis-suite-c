@@ -4,10 +4,16 @@ source_size : int32 = symbolic
 (query [(Slt 0
               N0:Read int32 source_size)
          (Eq 4
-             (Mul w64 4 (SExt w64 N0)))
+             (Mul int64 4 (SExt int64 N0)))
          (Eq 0
              Read int32 BUFFER_SIZE)]
         FALSE)
+
+
+# SExt (Sign Extension) extends a smaller integer type to a larger integer type while preserving the sign.
+# Slt is a signed less-than comparison operator.
+# Eq represents the equality operator.
+# Mul represents the multiplication operator.
 
 Postconditions:
 KLEE: ERROR: ./../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE131_loop_01.c:36: ASSERTION FAIL: !buffer_overflow_occurred(i, BUFFER_SIZE)

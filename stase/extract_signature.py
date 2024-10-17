@@ -2,8 +2,13 @@ import os
 import re
 
 def simplify_smt_expressions(text):
+    # Replace symbolic array declarations with int32 symbolic variables
     text = re.sub(r'array (\w+)\[\d+\] : w32 -> w8 = symbolic', r'\1 : int32 = symbolic', text)
+    # Replace ReadLSB expressions with simplified Read expressions
     text = re.sub(r'\(ReadLSB w32 0 (\w+)\)', r'Read int32 \1', text)
+    # Replace 'w64' with 'int64' for consistency
+    text = text.replace('w64', 'int64')
+    # Replace 'false' with 'FALSE' for consistency
     text = text.replace('false', 'FALSE')
     return text
 
@@ -14,7 +19,7 @@ stase_output_path = os.path.join(parent_dir, postcondition_file)
 
 # Check if the staseOutput.txt exists before proceeding
 if not os.path.exists(stase_output_path):
-    print(f"Error: The file {stase_output_path} does not exist.")
+    print(f"Error: The file {postcondition_file} does not exist.")
     exit(1)  # Exit the script with an error code
 
 files = os.listdir(source_dir)
@@ -27,8 +32,8 @@ for file in files:
         folder_name = None
 
         if os.path.exists(assert_err_path):
-            with open(assert_err_path, 'r') as file:
-                for line in file:
+            with open(assert_err_path, 'r') as err_file:
+                for line in err_file:
                     if line.startswith("File:"):
                         match = re.search(r'File: .*\/(.*?)\.c', line)
                         if match:
@@ -40,30 +45,52 @@ for file in files:
             os.makedirs(new_folder_path, exist_ok=True)
             combined_file_path = os.path.join(new_folder_path, "signature.txt")
 
-            with open(combined_file_path, 'w+') as combined_file:
-                if os.path.exists(kquery_path):
-                    with open(kquery_path, 'r') as kquery_file:
-                        combined_file.write("Preconditions:\n")
-                        combined_file.write(simplify_smt_expressions(kquery_file.read()) + "\n")
+            precondition_text = ''
+            if os.path.exists(kquery_path):
+                with open(kquery_path, 'r') as kquery_file:
+                    original_precondition_text = kquery_file.read()
+                    simplified_precondition_text = simplify_smt_expressions(original_precondition_text)
+                    
+                    # Prepare to collect comments for constructs
+                    comments = []
+                    # Check for constructs in the original preconditions
+                    constructs = {
+                        'SExt': "# SExt (Sign Extension) extends a smaller integer type to a larger integer type while preserving the sign.",
+                        'ZExt': "# ZExt (Zero Extension) extends a smaller integer type to a larger integer type by adding zeros to the higher-order bits.",
+                        'Slt':  "# Slt is a signed less-than comparison operator.",
+                        'Eq':   "# Eq represents the equality operator.",
+                        'Mul':  "# Mul represents the multiplication operator."
+                    }
+                    for construct, comment in constructs.items():
+                        if construct in original_precondition_text:
+                            comments.append(comment)
+                    
+                    precondition_text = "Preconditions:\n" + simplified_precondition_text + "\n"
+                    if comments:
+                        precondition_text += "\n" + "\n".join(comments) + "\n"
 
-                with open(stase_output_path, 'r') as postcondition_file:
-                    content = postcondition_file.readlines()
-                    for line in content:
-                        if "ASSERTION FAIL:" in line:
-                            combined_file.write("Postconditions:\n")
-                            combined_file.write(line)
-                            args = re.findall(r'\b\w+\b', line.split("ASSERTION FAIL:")[1])
-                            for arg in args:
-                                pattern = re.compile(rf"\b{arg}\b:")
-                                for content_line in content:
-                                    if pattern.search(content_line) and content_line.strip() != line.strip():
-                                        combined_file.write(content_line)
+            postcondition_text = ''
+            with open(stase_output_path, 'r') as postcondition_file_content:
+                content = postcondition_file_content.readlines()
+                for line in content:
+                    if "ASSERTION FAIL:" in line:
+                        postcondition_text += "Postconditions:\n"
+                        postcondition_text += line
+                        args = re.findall(r'\b\w+\b', line.split("ASSERTION FAIL:")[1])
+                        for arg in args:
+                            pattern = re.compile(rf"\b{arg}\b:")
+                            for content_line in content:
+                                if pattern.search(content_line) and content_line.strip() != line.strip():
+                                    postcondition_text += content_line
 
-                # Re-read, simplify, and overwrite the content
-                combined_file.seek(0)
-                full_text = combined_file.read()
-                combined_file.seek(0)
-                combined_file.truncate()
-                combined_file.write(simplify_smt_expressions(full_text))
+            # Simplify postconditions
+            postcondition_text = simplify_smt_expressions(postcondition_text)
+
+            # Combine preconditions and postconditions
+            full_text = precondition_text + "\n" + postcondition_text
+
+            # Write the final content to the combined file
+            with open(combined_file_path, 'w') as combined_file:
+                combined_file.write(full_text)
 
             print(f"Files have been combined and saved successfully in {folder_name}/signature.txt")
