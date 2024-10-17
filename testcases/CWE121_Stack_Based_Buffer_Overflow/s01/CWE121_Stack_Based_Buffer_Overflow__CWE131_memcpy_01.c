@@ -17,19 +17,16 @@ Template File: sources-sink-01.tmpl.c
 #include "std_testcase.h"
 
 #ifndef OMITBAD
-
-void CWE121_Stack_Based_Buffer_Overflow__CWE131_memcpy_01_bad()
+extern int BUFFER_SIZE;
+void CWE121_Stack_Based_Buffer_Overflow__CWE131_memcpy_01_bad(int * data, int data_size, int * source)
 {
-    int * data;
-    data = NULL;
-    /* FLAW: Allocate memory without using sizeof(int) */
-    data = (int *)ALLOCA(10);
-    {
-        int source[10] = {0};
-        /* POTENTIAL FLAW: Possible buffer overflow if data was not allocated correctly in the source */
-        memcpy(data, source, 10*sizeof(int));
-        printIntLine(data[0]);
-    }
+    
+    /* POTENTIAL FLAW: Possible buffer overflow if data was not allocated correctly in the source */
+    klee_print_expr("data_size", data_size);
+    klee_print_expr("BUFFER_SIZE", BUFFER_SIZE);
+    klee_assert(!buffer_overflow_occurred(data_size, BUFFER_SIZE));
+    memcpy(data, source, data_size*sizeof(int));
+
 }
 
 #endif /* OMITBAD */

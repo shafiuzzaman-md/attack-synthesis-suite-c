@@ -12,6 +12,7 @@ int EXECUTE = 1;
 #include "testcases/CWE127_Buffer_Underread/s01/CWE127_Buffer_Underread__char_alloca_cpy_01.c"
 #include "testcases/CWE416_Use_After_Free/CWE416_Use_After_Free__malloc_free_char_01.c"
 #include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE131_loop_01.c"
+#include "testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE131_memcpy_01.c"
 // Execute a specific command stored in the code segment
 void u_execute_command(int command_number) {
      if (current_mode != USER_MODE) {
@@ -50,8 +51,7 @@ void u_CWE121_CWE129_large_01_bad(int user_data) {
     CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(user_data, user_buffer);
 }
 
-void u_CWE121_CWE131_loop_01_bad(int *user_data, int data_size)
-{
+void u_CWE121_CWE131_loop_01_bad(int *user_data, int data_size) {
      // Allocate a buffer in the data segment
     char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
     if (user_buffer == NULL) {
@@ -61,6 +61,15 @@ void u_CWE121_CWE131_loop_01_bad(int *user_data, int data_size)
     CWE121_Stack_Based_Buffer_Overflow__CWE131_loop_01_bad(user_data, data_size, user_buffer);
 }
 
+void u_CWE121_CWE131_memcpy_01_bad(int *user_data, int data_size) {
+     // Allocate a buffer in the data segment
+    char *user_buffer = (char*) allocateMemorySegment(BUFFER_SIZE, DATA_SEGMENT, 1, 1, 0); // Readable, Writable
+    if (user_buffer == NULL) {
+        printf("Error: Memory allocation failed in the data segment.\n");
+        return;
+    }
+    CWE121_Stack_Based_Buffer_Overflow__CWE131_memcpy_01_bad(user_data, data_size, user_buffer);
+}
 
 void u_CWE190_char_fscanf_add_01_bad(char user_data, char input_char) {
     // Allocate a buffer in the data segment
