@@ -29,7 +29,45 @@ Regular users are confined to User Mode, where they can perform standard operati
 | **Code Segment**        | Executable program instructions     | read/execute                 | read/write/execute             | UEFI boot code, kernel code, Android system libraries |
 | **Data Segment**        | Program data (variables, buffers)   | read/write                   | read/write                     | Global variables, heap, stack memory                 |
 
+## Visualization of Memory Alignment
+```
++-------------------------------+ MAX_ADDRESS (0xFFFFFFFF)
+|       Reserved Segment        |
+| Reserved for system-critical  |
+| functions (e.g., MMIO, BIOS)  |
+| Access: --- (User), r-- (Priv)|
++-------------------------------+ RESERVED_SEGMENT_START (0x7FFFFFFF)
+|         Stack Segment         |
+| Manages function calls,        |
+| local variables               |
+| Access: rw- (User & Priv.)    |
+| Initial SP = STACK_START      |
++-------------------------------+ STACK_START (0x7FFFFFFF)
+|      Protected Segment        |
+| Stores sensitive configs      |
+| (e.g., security keys)         |
+| Access: --- (User), rw- (Priv)|
++-------------------------------+ PROTECTED_SEGMENT_START (0x60000000)
+|         Unused Memory         |
+| Dynamic space for growth      |
+| (Heap/Stack Growth Area)      |
+| Access: N/A                   |
++-------------------------------+
+|         Heap Segment          |
+| Allocates dynamic memory      |
+| Access: rw- (User & Priv.)    |
++-------------------------------+ HEAP_START
+|         Data Segment          |
+| Program global/static vars    |
+| Access: rw- (User & Priv.)    |
++-------------------------------+ DATA_SEGMENT_START
+|         Code Segment          |
+| Executable code instructions  |
+| Access: r-x (User), rwx (Priv)|
++-------------------------------+ CODE_SEGMENT_START (0x00400000)
 
+
+```
 ## Attack Surface
 The attack surface for this system is divided into two main components:
 
