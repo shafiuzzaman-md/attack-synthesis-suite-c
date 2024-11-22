@@ -32,40 +32,47 @@ Regular users are confined to User Mode, where they can perform standard operati
 ## Visualization of Memory Alignment
 ```
 +-------------------------------+ MAX_ADDRESS (0xFFFFFFFF)
-|       Reserved Segment        |
-| Reserved for system-critical  |
-| functions (e.g., MMIO, BIOS)  |
-| Access: --- (User), r-- (Priv)|
-+-------------------------------+ RESERVED_SEGMENT_START (0x7FFFFFFF)
+|         Reserved Segment      |
+| - Reserved for system-critical|
+|   functions (e.g., MMIO, BIOS)|
+| - Access: ---(User), r--(Priv)|
++-------------------------------+ RESERVED_START (MAX_ADDRESS - RESERVED_SIZE)
+|       Protected Segment       |
+| - Stores sensitive configs    |
+|   (e.g., security keys)       |
+| - Access: ---(User), rw-(Priv)|
++-------------------------------+ PROTECTED_START (RESERVED_START - PROTECTED_SIZE)
 |         Stack Segment         |
-| Manages function calls,        |
-| local variables               |
-| Access: rw- (User & Priv.)    |
-| Initial SP = STACK_START      |
-+-------------------------------+ STACK_START (0x7FFFFFFF)
-|      Protected Segment        |
-| Stores sensitive configs      |
-| (e.g., security keys)         |
-| Access: --- (User), rw- (Priv)|
-+-------------------------------+ PROTECTED_SEGMENT_START (0x60000000)
+| - Manages function calls,     |
+|   local variables             |
+| - Access: rw- (User & Priv.)  |
+| - Initial SP = STACK_START    |
+| - Grows towards lower address |
++-------------------------------+ STACK_START (STACK_END - STACK_SIZE)
 |         Unused Memory         |
-| Dynamic space for growth      |
-| (Heap/Stack Growth Area)      |
-| Access: N/A                   |
-+-------------------------------+
+| - Dynamic space for growth    |
+|   (Heap/Stack Growth Area)    |
+| - Access: N/A                 |
+| - Grows towards each other    |
++-------------------------------+ HEAP_END (STACK_START)
 |         Heap Segment          |
-| Allocates dynamic memory      |
-| Access: rw- (User & Priv.)    |
-+-------------------------------+ HEAP_START
+| - Allocates dynamic memory    |
+| - Access: rw- (User & Priv.)  |
+| - Grows towards higher address|
++-------------------------------+ HEAP_START (DATA_END)
 |         Data Segment          |
-| Program global/static vars    |
-| Access: rw- (User & Priv.)    |
-+-------------------------------+ DATA_SEGMENT_START
+| - Program global/static vars  |
+| - Access: rw- (User & Priv.)  |
++-------------------------------+ DATA_START (CODE_END)
 |         Code Segment          |
-| Executable code instructions  |
-| Access: r-x (User), rwx (Priv)|
-+-------------------------------+ CODE_SEGMENT_START (0x00400000)
-
+| - Executable code instructions|
+| - Access: r-x(User), rwx(Priv)|
++-------------------------------+ CODE_START (LOW_MEMORY_BASE)
+|         Low Memory Area       |
+| - Reserved for bootloader,    |
+|   interrupt vector table, etc.|
+| - Access: N/A                 |
++-------------------------------+ LOW_MEMORY_BASE (0x00000000)
 
 ```
 ## Attack Surface
