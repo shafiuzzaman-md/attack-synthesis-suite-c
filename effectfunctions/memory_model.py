@@ -20,6 +20,10 @@ class Permissions:
         self.w = w
         self.e = e 
 
+class UserMode(Enum):
+    USER = auto()  # User-level privilege
+    PRIVILEGED = auto()  # Privileged mode
+
 class MemoryState:
     def __init__(self, memory_size, layout):
         self.memory_size = memory_size

@@ -2,7 +2,7 @@ from memory_setup import create_memory_state
 from cwe562_effect import CWE562_ReturnOfStackVariableAddress, SegmentIdentifier as StackSegmentIdentifier
 from cwe587_effect import CWE587_AssignmentOfFixedAddressToPointer, SegmentIdentifier as CodeSegmentIdentifier
 from cwe121_effect import CWE121_StackBasedBufferOverflow
-from memory_model import Permissions
+from memory_model import Permissions, UserMode
 from config import WORD_SIZE  # Import the shared word size
 
 
@@ -63,7 +63,8 @@ def execute_chain_vulnerability(mem):
         stack_variable_address=stack_var_addr,
         control_data_offset=control_data_offset,
         input_data=input_data,
-        buffer_size=buffer_size
+        buffer_size=buffer_size,
+        user_mode=UserMode.USER  # Pass user mode explicitly
     )
     print("Buffer overflow executed and control data overwritten using leaked addresses.")
 

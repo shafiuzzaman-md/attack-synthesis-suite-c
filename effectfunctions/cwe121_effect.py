@@ -1,4 +1,4 @@
-from memory_model import MemoryState, Permissions
+from memory_model import MemoryState, Permissions, UserMode
 
 class SegmentIdentifier:
     def __init__(self, segment_name: str):
@@ -11,7 +11,8 @@ def CWE121_StackBasedBufferOverflow(
     stack_variable_address: int,
     control_data_offset: int,
     input_data: bytes,
-    buffer_size: int
+    buffer_size: int,
+    user_mode: UserMode  # Updated to use UserMode instead of a boolean
 ) -> MemoryState:
     """
     Models CWE121_StackBasedBufferOverflow.
@@ -45,13 +46,12 @@ def CWE121_StackBasedBufferOverflow(
         raise ValueError("CWE121: Overflow cannot reach control data")
 
     # Perform the overflow write
-    privileged = False  # assume user-level permissions
-    memory = memory.memory_write(stack_variable_address, input_data, privileged)
+    memory = memory.memory_write(stack_variable_address, input_data, user_mode)
 
     # Overwrite control data if offset is within bounds
     control_data_address = stack_variable_address + buffer_size + control_data_offset
     if control_data_address < stack_variable_address + len(input_data):
         control_data = input_data[buffer_size:buffer_size + control_data_offset]
-        memory = memory.memory_write(control_data_address, control_data, privileged)
+        memory = memory.memory_write(control_data_address, control_data, user_mode)
 
     return memory
