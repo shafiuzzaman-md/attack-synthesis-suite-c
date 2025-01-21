@@ -1,4 +1,4 @@
-from memory_model import MemoryState
+from memorymodel.memory_model import MemoryState
 
 def create_memory_state(word_size: int):
     if word_size == 32:

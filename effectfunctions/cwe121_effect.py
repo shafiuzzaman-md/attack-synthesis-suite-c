@@ -1,4 +1,4 @@
-from memory_model import MemoryState, Permissions, UserMode
+from memorymodel.memory_model import MemoryState, Permissions, UserMode
 
 class SegmentIdentifier:
     def __init__(self, segment_name: str):
@@ -12,7 +12,7 @@ def CWE121_StackBasedBufferOverflow(
     control_data_offset: int,
     input_data: bytes,
     buffer_size: int,
-    user_mode: UserMode  # Updated to use UserMode instead of a boolean
+    user_mode: UserMode
 ) -> MemoryState:
     """
     Models CWE121_StackBasedBufferOverflow.

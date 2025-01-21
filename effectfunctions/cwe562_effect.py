@@ -1,4 +1,4 @@
-from memory_model import MemoryState, Permissions
+from memorymodel.memory_model import MemoryState, Permissions
 
 
 class SegmentIdentifier:
@@ -7,7 +7,6 @@ class SegmentIdentifier:
 
 
 def CWE562_ReturnOfStackVariableAddress(
-    memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
     stack_variable_address: int

@@ -1,9 +1,20 @@
+import sys
+import os
+
+# Add the project root directory to sys.path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(project_root)
+
+# Import the required modules
 from memorymodel.memory_setup import create_memory_state
-from cwe562_effect import CWE562_ReturnOfStackVariableAddress, SegmentIdentifier as StackSegmentIdentifier
-from cwe587_effect import CWE587_AssignmentOfFixedAddressToPointer, SegmentIdentifier as CodeSegmentIdentifier
-from cwe121_effect import CWE121_StackBasedBufferOverflow
 from memorymodel.memory_model import Permissions, UserMode
-from memorymodel.config import WORD_SIZE  # Import the shared word size
+from memorymodel.config import WORD_SIZE
+from effectfunctions.cwe562_effect import CWE562_ReturnOfStackVariableAddress, SegmentIdentifier as StackSegmentIdentifier
+from effectfunctions.cwe587_effect import CWE587_AssignmentOfFixedAddressToPointer, SegmentIdentifier as CodeSegmentIdentifier
+from effectfunctions.cwe121_effect import CWE121_StackBasedBufferOverflow
+
+
+
 
 def execute_chain_vulnerability(mem):
     """
@@ -18,7 +29,6 @@ def execute_chain_vulnerability(mem):
     """
     # STEP 1: CWE 562 - Leak a stack address
     leaked_stack_addr = CWE562_ReturnOfStackVariableAddress(
-        memory=mem,
         memory_segment=StackSegmentIdentifier("Stack Segment"),
         required_permissions= Permissions(r=1, w=0, e=0),
         stack_variable_address= mem.layout["STACK_START"] + 0x100  # Arbitrary stack variable address

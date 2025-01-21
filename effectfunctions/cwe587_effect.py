@@ -1,5 +1,5 @@
-from memory_model import MemoryState, Permissions
-from config import WORD_SIZE  # Import the shared word size
+from memorymodel.memory_model import MemoryState, Permissions
+from memorymodel.config import WORD_SIZE  # Import the shared word size
 
 class SegmentIdentifier:
     def __init__(self, segment_name: str):
@@ -8,7 +8,6 @@ class SegmentIdentifier:
 
 def CWE587_AssignmentOfFixedAddressToPointer(
     memory: MemoryState,
-    memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
     pointer_variable_address: int,
     fixed_address: int
@@ -25,7 +24,7 @@ def CWE587_AssignmentOfFixedAddressToPointer(
     # Write the fixed address into the pointer variable
     memory = memory.memory_write(
         target_address=pointer_variable_address,
-        data=fixed_address.to_bytes(WORD_SIZE, 'little'),  # Assuming 32-bit address
+        data=fixed_address.to_bytes(WORD_SIZE, 'little'), 
         privileged=False
     )
 
