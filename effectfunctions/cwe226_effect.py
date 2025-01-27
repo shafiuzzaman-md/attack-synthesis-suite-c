@@ -31,7 +31,7 @@ def CWE226_SensitiveInformationUnclearedBeforeRelease(
     :param required_permissions: Permissions needed (must have both read and write).
     :param stack_variable_address: The address in the stack where the data is stored.
     :param sensitive_data: The sensitive information to be stored.
-    :param user_mode: The privilege mode (User or Kernel) of the caller.
+    :param user_mode: Whether the caller is in USER or PRIVILEGED mode.
     :return: Updated MemoryState reflecting the write, release, and read.
     """
 
