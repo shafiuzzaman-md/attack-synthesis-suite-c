@@ -21,15 +21,19 @@ class Permissions:
         self.e = e 
 
 class UserMode(Enum):
-    USER = auto()  # User-level privilege
-    PRIVILEGED = auto()  # Privileged mode
+    USER = auto()       # User-level privilege
+    PRIVILEGED = auto() # Privileged mode
 
 class MemoryState:
     def __init__(self, memory_size, layout):
         self.memory_size = memory_size
         self.memory_bytes = bytearray(memory_size)  # All zeros by default
-        self.layout = layout # Keep a reference to the layout (segment boundaries)
-        self.undefined_addresses = set() # Track freed memory, initially, no addresses are freed / undefined
+        self.layout = layout
+
+        # undefined_addresses: addresses that have been explicitly freed
+        # retained_addresses: addresses that are logically "not in use" but not zeroed
+        self.undefined_addresses = set()
+        self.retained_addresses = set()  
 
     def identify_segment(self, address: int) -> SegmentType:
         L = self.layout
@@ -53,8 +57,12 @@ class MemoryState:
             return SegmentType.LOW_MEMORY
         else:
             return SegmentType.INVALID
-        
+
     def get_permissions(self, seg: SegmentType, privileged: bool) -> Permissions:
+        """
+        Returns a Permissions object depending on the segment type
+        and whether the caller is privileged or not.
+        """
         p = Permissions()
         if seg == SegmentType.RESERVED:
             # Reserved: ---(User), r--(Priv)
@@ -86,34 +94,36 @@ class MemoryState:
             else:
                 p.r = 1
                 p.e = 1
-        # LOW_MEMORY, UNUSED, INVALID have no access.
+        # LOW_MEMORY, UNUSED, INVALID => no access
         return p
 
-    
     def memory_read(self, target_address: int, length: int, privileged: bool):
         data = bytearray(length)
         for i in range(length):
             addr = target_address + i
             seg = self.identify_segment(addr)
             perms = self.get_permissions(seg, privileged)
+            # Check read permission
             if perms.r == 0:
                 raise PermissionError("Permission denied (read)")
             data[i] = self.memory_bytes[addr]
         return bytes(data)
-    
+
     def memory_write(self, target_address: int, data: bytes, privileged: bool):
         length = len(data)
         for i in range(length):
             addr = target_address + i
             seg = self.identify_segment(addr)
             perms = self.get_permissions(seg, privileged)
+            # Check write permission
             if perms.w == 0:
                 raise PermissionError("Permission denied (write)")
 
-            # If the address was previously marked undefined, writing to it
-            # effectively re-defines it:
+            # If address was undefined, writing re-defines it
             if addr in self.undefined_addresses:
                 self.undefined_addresses.remove(addr)
+            if addr in self.retained_addresses:
+                self.retained_addresses.remove(addr)
 
             self.memory_bytes[addr] = data[i]
         return self
@@ -122,10 +132,12 @@ class MemoryState:
         """
         Basic 'alloc' that zeroes out the allocated region.
         """
-        self.memory_bytes[allocation_address:allocation_address + allocation_size] = b'\x00' * allocation_size
-        # If previously undefined, now it's defined
-        for addr in range(allocation_address, allocation_address + allocation_size):
+        end_addr = allocation_address + allocation_size
+        self.memory_bytes[allocation_address:end_addr] = b'\x00' * allocation_size
+        # Re-define addresses (clear them from undefined or retained)
+        for addr in range(allocation_address, end_addr):
             self.undefined_addresses.discard(addr)
+            self.retained_addresses.discard(addr)
         return self
 
     def memory_free(self, allocation_address: int, allocation_size: int):
@@ -135,26 +147,30 @@ class MemoryState:
         for addr in range(allocation_address, allocation_address + allocation_size):
             self.undefined_addresses.add(addr)
         return self
-    
+
     def memory_stack_release(self, stack_address: int, release_size: int):
         """
-        Marks a stack region as 'released' or undefined. This simulates the function
-        returning and the local variables going out of scope. If not cleared, 
-        the data remains physically in memory but is logically "freed."
-
-        :param stack_address: The stack address at which to release
-        :param release_size: Number of bytes to mark undefined
+        Marks a region in the stack segment as undefined (like returning from a function).
         """
         for offset in range(release_size):
             addr = stack_address + offset
             segment_type = self.identify_segment(addr)
-
             if segment_type != SegmentType.STACK:
                 raise ValueError(
                     f"memory_stack_release: Address {addr} not in stack segment "
                     f"(detected '{segment_type.name}')"
                 )
-            # Mark the address as released/undefined
             self.undefined_addresses.add(addr)
+        return self
 
+    def memory_retain(self, start_address: int, size: int):
+        """
+        Marks a region as 'retained' — meaning logically 'released' or 'out of use',
+        but the bytes remain intact. This simulates failing to clear sensitive data
+        upon free/release. The data remains physically readable.
+        """
+        for addr in range(start_address, start_address + size):
+            # If previously undefined, skip. We only 'retain' memory that was valid.
+            if addr not in self.undefined_addresses:
+                self.retained_addresses.add(addr)
         return self

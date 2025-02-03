@@ -8,56 +8,49 @@ def CWE226_SensitiveInformationUnclearedBeforeRelease(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
-    stack_variable_address: int,
+    variable_address: int,
     sensitive_data: bytes,
     user_mode: UserMode
-) -> MemoryState:
+) -> bytes:
     """
-    Models a vulnerable scenario for CWE-226: Sensitive Information Uncleared
-  
+    Models CWE-226: Sensitive Information Uncleared Before Release
+
     Steps:
-    1. Write sensitive_data (e.g., password) to stack_variable_address.
-    2. Use memory_stack_release to simulate going "out of scope" without clearing.
-    3. Perform a read from the same memory region to show the data is still present
-       even though logically "released."
+      1. Write 'sensitive_data' to 'variable_address'.
+      2. Call 'memory_retain' to mark that the data is no longer needed, but
+         physically remains (un-cleared).
+      3. Read back from the same address to demonstrate that the data was never
+         cleared and remains accessible.
 
     Constraints:
-    - memory_segment.segment_name = "Stack Segment"
-    - required_permissions at least rw- (r=1, w=1)
+    - required_permissions must have r=1 and w=1 (read and write).
     - len(sensitive_data) > 0
 
-    :param memory: The current state of the memory.
-    :param memory_segment: Identifies which segment we're operating on (should be "Stack Segment").
-    :param required_permissions: Permissions needed (must have both read and write).
-    :param stack_variable_address: The address in the stack where the data is stored.
+    :param memory: Current memory state.
+    :param memory_segment: Identifier for the memory segment (Heap, Stack, Data, etc.).
+    :param required_permissions: Permissions needed (must have r=1, w=1).
+    :param variable_address: The address where the sensitive data is stored.
     :param sensitive_data: The sensitive information to be stored.
-    :param user_mode: Whether the caller is in USER or PRIVILEGED mode.
-    :return: Updated MemoryState reflecting the write, release, and read.
+    :param user_mode: Whether the caller is in user or privileged mode.
+    :return: The raw bytes read back (showing the data was retained).
     """
 
-    # 1. Ensure this is the correct segment
-    if memory_segment.segment_name != "Stack Segment":
-        raise ValueError("CWE226: Operation not on stack segment")
-
-    # 2. Check for read/write permissions
+    # 1. Check read & write permissions
     if required_permissions.r != 1 or required_permissions.w != 1:
-        raise PermissionError("CWE226: Required rw- permissions not met")
+        raise PermissionError("CWE226: Required read-write permissions not met")
 
-    # 3. Write the sensitive data to the stack
+    # 2. If there's no data, there's no vulnerability to demonstrate
     if len(sensitive_data) == 0:
-        return memory  # No data => no vulnerability triggered
+        return b''
 
-    # Write password (or other sensitive info) to the stack
-    memory = memory.memory_write(stack_variable_address, sensitive_data, user_mode)
+    # 3. Write the sensitive data to the designated address
+    memory = memory.memory_write(variable_address, sensitive_data, user_mode)
 
-    # 4. Simulate "releasing" this stack region WITHOUT clearing it
-    #    (In a real function, the local buffer goes out of scope, but remains in memory.)
-    memory = memory.memory_stack_release(stack_variable_address, len(sensitive_data))
+    # 4. 'Retain' the memory region, simulating that this region is now 'done'
+    #    but no clearing action is performed (the data remains physically).
+    memory = memory.memory_retain(variable_address, len(sensitive_data))
 
-    # 5. Demonstrate the data remains physically in memory by reading from the same area
-    exposed_data = memory.memory_read(stack_variable_address, len(sensitive_data), user_mode)
+    # 5. Read back from the same address to show the sensitive data persists
+    exposed_data = memory.memory_read(variable_address, len(sensitive_data), user_mode)
 
-    # Optional: For debugging or logging, one might print or record the exposed data:
-    # print(f"[VULNERABILITY] Sensitive data still in memory (released): {exposed_data}")
-
-    return memory
+    return exposed_data
