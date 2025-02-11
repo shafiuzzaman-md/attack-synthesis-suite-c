@@ -19,7 +19,7 @@ def CWE121_StackBasedBufferOverflow(
 
     Constraints:
     - memory_segment.segment_name = "Stack Segment"
-    - STACK_START ≤ stack_variable_address < STACK_END
+    - STACK_START ≤ stack_variable_address < STACK_END 
     - required_permissions at least rw- (r=1, w=1)
     - (len(input_data) - buffer_size) ≥ control_data_offset
     - len(input_data) ≥ buffer_size
