@@ -1,36 +1,53 @@
 #!/bin/bash
-# Source .bashrc to ensure all path and other environmental variables are initialized
-source ~/.bashrc
 
-# Manually ensure KLEE's path is set in case sourcing .bashrc doesn't work
-export PATH=$PATH:/usr/local/bin  # Change this to KLEE's actual path
+# Stop the execution if any command fails
+set -e
 
-# Define the Clang and LLVM tools version
-CLANG="clang-14"
-LLVM_LINK="llvm-link-14"
-KLEE="klee"
 
-# Source files
-SRC_MAIN="stase_main.c"
-SRC_PREDICATES="vulnerability_predicates.c"
-SRC_ECH="ECH.c"
+# Use the full path to the KLEE executable
+KLEE="/home/shafi/klee_build/bin/klee"
 
-# Output bitcode files
-BC_MAIN="stase_main.bc"
-BC_PREDICATES="vulnerability_predicates.bc"
-BC_ECH="ECH.bc"
-BC_COMBINED="stase.bc"
+# Define an array of source files
+sources=("stase_main.c")
 
-# Compilation step for each source file
-echo "Compiling source files to LLVM bitcode..."
-$CLANG -emit-llvm -c -g -O0 -Xclang -disable-O0-optnone $SRC_MAIN -o $BC_MAIN
-$CLANG -emit-llvm -c -g -O0 -Xclang -disable-O0-optnone $SRC_PREDICATES -o $BC_PREDICATES
-$CLANG -emit-llvm -c -g -O0 -Xclang -disable-O0-optnone $SRC_ECH -o $BC_ECH
+# Define an array of output file names corresponding to the source files
+outputd=("CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad.txt")
 
-# Linking step to combine bitcode files
-echo "Linking bitcode files..."
-$LLVM_LINK $BC_MAIN $BC_PREDICATES $BC_ECH -o $BC_COMBINED
+# Ensure that both arrays have the same length
+if [ ${#sources[@]} -ne ${#outputd[@]} ]; then
+    echo "Error: sources and outputd arrays have different lengths."
+    exit 1
+fi
 
-# Running KLEE on the combined bitcode
-# echo "Running KLEE on the combined bitcode..."
-# $KLEE --external-calls=all -libc=uclibc --posix-runtime --smtlib-human-readable  --write-test-info --write-paths --write-smt2s   --write-cov  --write-cvcs --write-kqueries   --write-sym-paths --only-output-states-covering-new --use-query-log=solver:smt2  --simplify-sym-indices $BC_COMBINED
+# Loop over each source file using indices
+for i in "${!sources[@]}"; do
+    src="${sources[$i]}"
+    output_file_name="${outputd[$i]}"
+    echo "Processing $src"
+
+    # Define filenames
+    base_name="${src%.c}"
+    bc_file="${base_name}.bc"
+    klee_output_file="${base_name}_output.txt"
+
+    # Step 1: Compile the C file into LLVM bitcode
+    clang-14 -emit-llvm -c -g -O0 -Xclang -disable-O0-optnone "./${src}" -o "${bc_file}"
+    echo "Compiled ${src} to ${bc_file}"
+
+    # Step 2: Run KLEE on the LLVM bitcode
+    "$KLEE" --external-calls=all -libc=uclibc --posix-runtime --smtlib-human-readable \
+        --write-test-info --write-paths --write-smt2s --write-cov --write-cvcs \
+        --write-kqueries --write-sym-paths --only-output-states-covering-new \
+        --use-query-log=solver:smt2 --simplify-sym-indices --max-time=5 "$bc_file" > "$klee_output_file" 2>&1
+    echo "Ran KLEE on ${bc_file}, output redirected to ${klee_output_file}"
+
+    # Step 3: Run the Python script to extract the signature
+    # Pass both the source file path and the desired output file name
+    python3 extract_signature.py "${src}" "${output_file_name}"
+    echo "Extracted signature for ${src} and saved to ${output_file_name}"
+
+    echo "Finished processing $src"
+    echo "----------------------------------------"
+done
+
+echo "All source files have been processed."

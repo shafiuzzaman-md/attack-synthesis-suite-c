@@ -4,62 +4,67 @@
 
 
 
-void test_CWE121_CWE129_large() {
+// void test_CWE121_CWE129_large() {
 
-    int index;
-    klee_make_symbolic(&index, sizeof(index), "index");
-    u_CWE121_CWE129_large_01_bad(index);
-}
+//     int index;
+//     klee_make_symbolic(&index, sizeof(index), "index");
+//     u_CWE121_CWE129_large_01_bad(index);
+// }
 
-void test_CWE121_CWE131_loop() {
+// void test_CWE121_CWE131_loop() {
 
-    int source_size;  // Define the size of the source array
-    klee_make_symbolic(&source_size, sizeof(int), "source_size");
-    klee_assume(source_size > 0);
-    int *source = (int *)malloc(source_size * sizeof(int));
-    if (source == NULL) {
-        printf("Error: Memory allocation failed.\n");
-        exit(1);
-    }
+//     int source_size;  // Define the size of the source array
+//     klee_make_symbolic(&source_size, sizeof(int), "source_size");
+//     klee_assume(source_size > 0);
+//     int *source = (int *)malloc(source_size * sizeof(int));
+//     if (source == NULL) {
+//         printf("Error: Memory allocation failed.\n");
+//         exit(1);
+//     }
 
-    klee_make_symbolic(source, source_size * sizeof(int), "source");
-    u_CWE121_CWE131_loop_01_bad(source, source_size);
-    free(source);
-}
+//     klee_make_symbolic(source, source_size * sizeof(int), "source");
+//     u_CWE121_CWE131_loop_01_bad(source, source_size);
+//     free(source);
+// }
 
-void test_CWE121_CWE131_memcpy() {
+// void test_CWE121_CWE131_memcpy() {
 
-    int source_size;  // Define the size of the source array
-    klee_make_symbolic(&source_size, sizeof(int), "source_size");
-    klee_assume(source_size > 0);
-    int *source = (int *)malloc(source_size * sizeof(int));
-    if (source == NULL) {
-        printf("Error: Memory allocation failed.\n");
-        exit(1);
-    }
+//     int source_size;  // Define the size of the source array
+//     klee_make_symbolic(&source_size, sizeof(int), "source_size");
+//     klee_assume(source_size > 0);
+//     int *source = (int *)malloc(source_size * sizeof(int));
+//     if (source == NULL) {
+//         printf("Error: Memory allocation failed.\n");
+//         exit(1);
+//     }
 
-    klee_make_symbolic(source, source_size * sizeof(int), "source");
-    u_CWE121_CWE131_memcpy_01_bad(source, source_size);
-    free(source);
+//     klee_make_symbolic(source, source_size * sizeof(int), "source");
+//     u_CWE121_CWE131_memcpy_01_bad(source, source_size);
+//     free(source);
+// }
+
+void verify_CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01() {
+    CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad();
 }
 
 #define RUN_TEST_CWE121_CWE129_LARGE 0
 #define RUN_TEST_CWE121_CWE131_LOOP 0
-#define RUN_TEST_CWE121_CWE131_MEMCPY 1
+#define RUN_TEST_CWE121_CWE131_MEMCPY 0
 
 int main() {
 
-    initialize_environment();
+   // initialize_environment();
 
-    if (RUN_TEST_CWE121_CWE129_LARGE) {
-        test_CWE121_CWE129_large();
-    }
-    if (RUN_TEST_CWE121_CWE131_LOOP) {
-        test_CWE121_CWE131_loop();
-    }
-    if (RUN_TEST_CWE121_CWE131_MEMCPY) {
-        test_CWE121_CWE131_memcpy();
-    }
+    // if (RUN_TEST_CWE121_CWE129_LARGE) {
+    //     test_CWE121_CWE129_large();
+    // }
+    // if (RUN_TEST_CWE121_CWE131_LOOP) {
+    //     test_CWE121_CWE131_loop();
+    // }
+    // if (RUN_TEST_CWE121_CWE131_MEMCPY) {
+    //     test_CWE121_CWE131_memcpy();
+    // }
+    verify_CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01();
 
     return 0;
 }

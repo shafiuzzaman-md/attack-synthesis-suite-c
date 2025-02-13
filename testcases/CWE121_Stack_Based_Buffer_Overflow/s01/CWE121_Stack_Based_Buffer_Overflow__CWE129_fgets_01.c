@@ -16,7 +16,7 @@ Template File: sources-sinks-01.tmpl.c
  * */
 
 #include "std_testcase.h"
-#include "../../stase/klee/klee.h"  // Include KLEE headers
+
 #define CHAR_ARRAY_SIZE (3 * sizeof(data) + 2)
 
 #ifndef OMITBAD
@@ -26,21 +26,19 @@ void CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad()
     int data;
     /* Initialize data */
     data = -1;
-    // {
-    //     char inputBuffer[CHAR_ARRAY_SIZE] = "";
-    //     /* POTENTIAL FLAW: Read data from the console using fgets() */
-    //     if (fgets(inputBuffer, CHAR_ARRAY_SIZE, stdin) != NULL)
-    //     {
-    //         /* Convert to int */
-    //         data = atoi(inputBuffer);
-    //     }
-    //     else
-    //     {
-    //         printLine("fgets() failed.");
-    //     }
-    // }
-    /* Use KLEE to make `data` symbolic */
-    klee_make_symbolic(&data, sizeof(data), "data");
+    {
+      //  char inputBuffer[CHAR_ARRAY_SIZE] = "";
+        /* POTENTIAL FLAW: Read data from the console using fgets() */
+        klee_make_symbolic(&data, sizeof(data), "data"); //if (fgets(inputBuffer, CHAR_ARRAY_SIZE, stdin) != NULL)
+       // {
+       //     /* Convert to int */
+       //     data = atoi(inputBuffer);
+       // }
+       // else
+        //{
+      //      printLine("fgets() failed.");
+       // }
+    }
     {
         int i;
         int buffer[10] = { 0 };
@@ -48,6 +46,7 @@ void CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad()
         * This code does check to see if the array index is negative */
         if (data >= 0)
         {
+            klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check");
             buffer[data] = 1;
             /* Print the array values */
             for(i = 0; i < 10; i++)
@@ -148,23 +147,23 @@ void CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_good()
    analysis tools. It is not used when compiling all the testcases as one
    application, which is how source code analysis tools are tested. */
 
-//#ifdef INCLUDEMAIN
+#ifdef INCLUDEMAIN
 
 int main(int argc, char * argv[])
 {
     /* seed randomness */
     srand( (unsigned)time(NULL) );
-//#ifndef OMITGOOD
+#ifndef OMITGOOD
     printLine("Calling good()...");
     CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_good();
     printLine("Finished good()");
-//#endif /* OMITGOOD */
-//#ifndef OMITBAD
+#endif /* OMITGOOD */
+#ifndef OMITBAD
     printLine("Calling bad()...");
     CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad();
     printLine("Finished bad()");
-//#endif /* OMITBAD */
+#endif /* OMITBAD */
     return 0;
 }
 
-//#endif
+#endif
