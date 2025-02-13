@@ -5,7 +5,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE121_StackBasedBufferOverflow(
+def CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
