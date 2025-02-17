@@ -19,8 +19,9 @@ KLEE="/home/shafi/klee_build/bin/klee"
 # Define an array of source files to process
 #######################################################
 SOURCES=(
+  "../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_connect_socket_01.c"
   "../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01.c"
-  # Add more test case paths as needed
+  "../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01.c"
 )
 
 #######################################################
@@ -59,7 +60,7 @@ for ORIGINAL_SRC in "${SOURCES[@]}"; do
     # Step 1: Instrument the source file
     #######################################################
     echo "[STEP] Instrumenting code"
-    python3 instrument_preserve_lines.py "$ORIGINAL_SRC" "$INSTRUMENTED_SRC"
+    python3 instrument.py "$ORIGINAL_SRC" "$INSTRUMENTED_SRC"
     echo "[DONE] Instrumentation"
 
     #######################################################
