@@ -29,18 +29,19 @@ if len(sys.argv) < 3:
         print("Usage: python3 extract_signature.py <source_file_path> <output_file_name>")
         exit(1)
 
-source_filename = sys.argv[1]
+postcondition_file = sys.argv[1]
 output_file_name = sys.argv[2]
-base_name = os.path.splitext(os.path.basename(source_filename))[0]
+#base_name = os.path.splitext(os.path.basename(source_filename))[0]
 
-source_dir = 'klee-last'
-parent_dir = os.path.abspath(os.path.join(source_dir, os.pardir))
-postcondition_file = f'{base_name}_output.txt'
+source_dir = 'klee_output/klee-last'
+parent_dir = os.path.abspath(os.path.join('klee-last', os.pardir))
+
+#postcondition_file = f'{base_name}.txt'
 stase_output_path = os.path.join(parent_dir, postcondition_file)
 
 # Define the output base directory 'stase_output' outside of parent_dir
-output_base_dir = os.path.abspath(os.path.join(parent_dir, os.pardir, 'stase_output'))
-
+output_base_dir = os.path.abspath(os.path.join(parent_dir, os.pardir))
+#print(output_base_dir)
 # Create 'stase_output' directory if it doesn't exist
 os.makedirs(output_base_dir, exist_ok=True)
 
@@ -94,6 +95,7 @@ for file in files:
                 # Create the new folder inside 'stase_output' directory
                 #new_folder_path = os.path.join(output_base_dir, combined_folder_name)
                 #os.makedirs(new_folder_path, exist_ok=True)
+                print(output_file_name)
                 combined_file_path = os.path.join(output_base_dir, output_file_name)
             else:
                 print(f"Warning: Assertion name not found for base '{base_folder}' in {postcondition_file}. Skipping folder creation.")
