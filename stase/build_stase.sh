@@ -31,7 +31,7 @@ DRIVERS_DIR="drivers"
 KLEE_OUTPUT_DIR="klee_output"
 SIGNATURE_DIR="stase_output"
 
-mkdir -p "$INSTRUMENTED_DIR" "$DRIVERS_DIR" "$KLEE_OUTPUT_DIR" "$SIGNATURE_DIR"
+mkdir -p "$INSTRUMENTED_DIR" "$DRIVERS_DIR" "$KLEE_OUTPUT_DIR"
 
 #######################################################
 # Process each source file
