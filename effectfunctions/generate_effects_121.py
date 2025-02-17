@@ -4,48 +4,45 @@ import os
 import re
 
 
-# Hardcoded input file paths (absolute or relative paths to STASE output .txt files)
 INPUT_FILES = [
     "../stase_output/CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01.txt",
-    "../stase_output/CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01.txt"
+    "../stase_output/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.txt",
 ]
 
 
 def parse_stase_output(file_path: str):
     """
-    Parse a single STASE output file to extract:
-    - The base C filename (e.g., CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01)
-    - Simple lower/upper integer constraints for 'data'
+    Parse STASE output file to extract:
+    - base C filename
+    - min_val (for `data >= min_val`)
+    - max_val (for `data < max_val`)
     """
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # 1. Extract the base filename from the "KLEE: ERROR:" line
     match_file = re.search(r'instrumented_code/([^/\s]+)\.c:', content)
     if not match_file:
         raise ValueError(f"Could not extract filename from {file_path}")
-
     base_name = match_file.group(1)
 
-    # 2. Extract simple constraints from "Preconditions" and "Postconditions"
+    # Empty preconditions: no constraints, trigger unconditionally
+    if re.search(r'Preconditions:\s*\(query\s*\[\]\s*FALSE\)', content):
+        return base_name, None, None
+
     min_val = None
     max_val = None
 
-    # Search for "data >= 0"
-    if re.search(r'data\s*>=\s*0', content):
+    if re.search(r'Sle 0.*data', content):
         min_val = 0
 
-    # Search for "data < 10" or equivalent
-    if re.search(r'data\s*<\s*(?:10|\(int\)\(sizeof\(buffer\))', content):
-        max_val = 10
+    max_match = re.search(r'Slt .*data.*?(\d+)', content)
+    if max_match:
+        max_val = int(max_match.group(1))
 
     return base_name, min_val, max_val
 
 
 def generate_effect_code(base_name: str, min_val, max_val):
-    """
-    Generate the Python code for the instantiated CWE121 effect function.
-    """
     function_name = f"{base_name}_bad"
 
     code = f"""from memorymodel.memory_model import MemoryState, Permissions, UserMode
@@ -68,7 +65,7 @@ def {function_name}(
     Instantiated effect function for {base_name}.c
     \"\"\"
 
-    # 1. Memory constraints
+    # Memory constraints
     if memory_segment.segment_name != "Stack Segment":
         raise ValueError("CWE121: Not in stack segment")
 
@@ -76,30 +73,32 @@ def {function_name}(
         raise PermissionError("CWE121: Required rw- permissions not met")
 """
 
-    # Insert STASE-based constraints
-    if min_val is not None:
-        code += f"""
-    # data >= {min_val}
+    # Add STASE constraints block if there are any
+    if min_val is not None or max_val is not None:
+        code += """
+    # STASE constraints"""
+        if min_val is not None:
+            code += f"""
     if data < {min_val}:
-        return memory
-"""
-    if max_val is not None:
-        code += f"""
-    # data < {max_val}
+        return memory"""
+        if max_val is not None:
+            code += f"""
     if data < {max_val}:
-        return memory
-"""
+        return memory"""
 
-    # Overflow logic
-    code += r"""
-    # Check overflow reachability
-    if (data - 10) < control_data_offset:
+    # Add overflow check with max_val as buffer size if available, or default 10 otherwise
+    buffer_size_for_effect = max_val if max_val is not None else 10
+
+    code += f"""
+
+    # STASE+Memory Model constraints
+    if (data - {buffer_size_for_effect}) < control_data_offset:
         raise ValueError("CWE121: Overflow cannot reach control data")
 
-    control_data_address = stack_variable_address + 10 + control_data_offset
+    control_data_address = stack_variable_address + {buffer_size_for_effect} + control_data_offset
 
     if control_data_address < (stack_variable_address + data):
-        element_size = WORD_SIZE // 8
+        element_size = WORD_SIZE // 8  
         value_bytes = (1).to_bytes(element_size, byteorder='little', signed=True)
         memory = memory.memory_write(stack_variable_address, value_bytes, user_mode)
 
@@ -110,9 +109,6 @@ def {function_name}(
 
 
 def process_stase_file(input_path: str):
-    """
-    Process a single STASE output file and generate the corresponding effect file.
-    """
     base_name, min_val, max_val = parse_stase_output(input_path)
     effect_code = generate_effect_code(base_name, min_val, max_val)
 
