@@ -46,8 +46,7 @@ void CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad()
         * This code does check to see if the array index is negative */
         if (data >= 0)
         {
-            klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check");
-            buffer[data] = 1;
+            klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check");//  buffer[data] = 1;
             /* Print the array values */
             for(i = 0; i < 10; i++)
             {
@@ -81,7 +80,7 @@ static void goodG2B()
         * This code does check to see if the array index is negative */
         if (data >= 0)
         {
-            buffer[data] = 1;
+            klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check"); //buffer[data] = 1;
             /* Print the array values */
             for(i = 0; i < 10; i++)
             {
@@ -102,17 +101,17 @@ static void goodB2G()
     /* Initialize data */
     data = -1;
     {
-        char inputBuffer[CHAR_ARRAY_SIZE] = "";
-        /* POTENTIAL FLAW: Read data from the console using fgets() */
-        if (fgets(inputBuffer, CHAR_ARRAY_SIZE, stdin) != NULL)
-        {
-            /* Convert to int */
-            data = atoi(inputBuffer);
-        }
-        else
-        {
-            printLine("fgets() failed.");
-        }
+        // char inputBuffer[CHAR_ARRAY_SIZE] = "";
+        // /* POTENTIAL FLAW: Read data from the console using fgets() */
+        klee_make_symbolic(&data, sizeof(data), "data"); // if (fgets(inputBuffer, CHAR_ARRAY_SIZE, stdin) != NULL)
+        // {
+        //     /* Convert to int */
+        //     data = atoi(inputBuffer);
+        // }
+        // else
+        // {
+        //     printLine("fgets() failed.");
+        // }
     }
     {
         int i;
@@ -120,7 +119,7 @@ static void goodB2G()
         /* FIX: Properly validate the array index and prevent a buffer overflow */
         if (data >= 0 && data < (10))
         {
-            buffer[data] = 1;
+            klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check"); //buffer[data] = 1;
             /* Print the array values */
             for(i = 0; i < 10; i++)
             {

@@ -1,6 +1,6 @@
 #include "ECH.h"
 #include "../common.c"
-#include "../user_accessible.c"
+#include "../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01.c"
 
 
 
@@ -44,7 +44,8 @@
 // }
 
 void verify_CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01() {
-    CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad();
+    //CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad();
+    CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_good();
 }
 
 #define RUN_TEST_CWE121_CWE129_LARGE 0
