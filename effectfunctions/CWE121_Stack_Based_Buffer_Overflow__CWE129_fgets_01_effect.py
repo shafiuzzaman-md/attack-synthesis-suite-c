@@ -5,16 +5,20 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01(
+def CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
     stack_variable_address: int,
     control_data_offset: int,
+    buffer_size: int, 
     data: int,
     user_mode: UserMode
 ) -> MemoryState:
-  
+    """
+    Instantiated effect function for CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01.c
+    """
+
     # Memory constraints
     if memory_segment.segment_name != "Stack Segment":
         raise ValueError("CWE121: Not in stack segment")
@@ -23,15 +27,14 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01(
         raise PermissionError("CWE121: Required rw- permissions not met")
 
     # STASE constraints
-    if data < 0:
-        return memory
     if data < 10:
         return memory
-    
+
     # STASE+Memory Model constraints
-    if (data - 10) < control_data_offset:
+    if (data - buffer_size) < control_data_offset:
         raise ValueError("CWE121: Overflow cannot reach control data")
-    control_data_address = stack_variable_address + 10 + control_data_offset
+
+    control_data_address = stack_variable_address + buffer_size + control_data_offset
 
     if control_data_address < (stack_variable_address + data):
         element_size = WORD_SIZE // 8  

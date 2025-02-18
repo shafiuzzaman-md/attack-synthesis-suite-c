@@ -5,7 +5,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01_bad(
+def CWE121_Stack_Based_Buffer_Overflow__CWE129_rand_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
@@ -16,7 +16,7 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01_bad(
     user_mode: UserMode
 ) -> MemoryState:
     """
-    Instantiated effect function for CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01.c
+    Instantiated effect function for CWE121_Stack_Based_Buffer_Overflow__CWE129_rand_01.c
     """
 
     # Memory constraints

@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
-import os
 import re
 
 
 INPUT_FILES = [
     "../stase_output/CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01.txt",
+    "../stase_output/CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01.txt",
     "../stase_output/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.txt",
+    "../stase_output/CWE121_Stack_Based_Buffer_Overflow__CWE129_rand_01.txt",
 ]
 
 
@@ -14,7 +15,7 @@ def parse_stase_output(file_path: str):
     """
     Parse STASE output file to extract:
     - base C filename
-    - min_val (for `data >= min_val`)
+    - min_vals (list of lower bounds `data >= min_val`)
     - max_val (for `data < max_val`)
     """
     with open(file_path, "r", encoding="utf-8") as f:
@@ -27,23 +28,45 @@ def parse_stase_output(file_path: str):
 
     # Empty preconditions: no constraints, trigger unconditionally
     if re.search(r'Preconditions:\s*\(query\s*\[\]\s*FALSE\)', content):
-        return base_name, None, None
+        return base_name, [], None
 
-    min_val = None
+    min_vals = []
     max_val = None
 
-    if re.search(r'Sle 0.*data', content):
-        min_val = 0
+    # Sle 0 X -> data >= 0 (handles Read int32 data cases)
+    if re.search(r'Sle 0 .*?data', content):
+        min_vals.append(0)
 
-    max_match = re.search(r'Slt .*data.*?(\d+)', content)
+    # Handle Eq FALSE (Slt X 10) -> data >= 10
+    negated_max_match = re.search(r'Eq FALSE \(Slt [^)]+ (\d+)\)', content)
+    if negated_max_match:
+        negated_min_val = int(negated_max_match.group(1))
+        min_vals.append(negated_min_val)
+
+    # Regular Slt data X -> data < X (some STASE outputs use this)
+    max_match = re.search(r'Slt .*?data.*?(\d+)', content)
     if max_match:
         max_val = int(max_match.group(1))
 
-    return base_name, min_val, max_val
+    # Remove duplicates and sort min_vals for better readability
+    min_vals = sorted(set(min_vals))
+    #print(max_val)
+    return base_name, min_vals, max_val
 
 
-def generate_effect_code(base_name: str, min_val, max_val):
+def generate_effect_code(base_name: str, min_vals, max_val):
     function_name = f"{base_name}_bad"
+    print(max_val)
+    # If max_val is available, use it as a hardcoded value in the overflow check
+    if max_val is not None:
+        buffer_size_param = ""
+        buffer_size_value = str(max_val)
+    else:
+        buffer_size_param = "buffer_size: int, "
+        buffer_size_value = "buffer_size"
+    #print(buffer_size_param)
+    # Ensure signature is clean if buffer_size_param is empty
+    buffer_size_signature_part = buffer_size_param if buffer_size_param else ""
 
     code = f"""from memorymodel.memory_model import MemoryState, Permissions, UserMode
 from memorymodel.config import WORD_SIZE
@@ -58,6 +81,7 @@ def {function_name}(
     required_permissions: Permissions,
     stack_variable_address: int,
     control_data_offset: int,
+    {buffer_size_signature_part}
     data: int,
     user_mode: UserMode
 ) -> MemoryState:
@@ -74,28 +98,26 @@ def {function_name}(
 """
 
     # Add STASE constraints block if there are any
-    if min_val is not None or max_val is not None:
+    if min_vals or max_val is not None:
         code += """
     # STASE constraints"""
-        if min_val is not None:
+        for min_val in min_vals:
             code += f"""
     if data < {min_val}:
         return memory"""
+
         if max_val is not None:
             code += f"""
-    if data < {max_val}:
+    if data >= {max_val}:
         return memory"""
-
-    # Add overflow check with max_val as buffer size if available, or default 10 otherwise
-    buffer_size_for_effect = max_val if max_val is not None else 10
 
     code += f"""
 
     # STASE+Memory Model constraints
-    if (data - {buffer_size_for_effect}) < control_data_offset:
+    if (data - {buffer_size_value}) < control_data_offset:
         raise ValueError("CWE121: Overflow cannot reach control data")
 
-    control_data_address = stack_variable_address + {buffer_size_for_effect} + control_data_offset
+    control_data_address = stack_variable_address + {buffer_size_value} + control_data_offset
 
     if control_data_address < (stack_variable_address + data):
         element_size = WORD_SIZE // 8  
@@ -109,8 +131,8 @@ def {function_name}(
 
 
 def process_stase_file(input_path: str):
-    base_name, min_val, max_val = parse_stase_output(input_path)
-    effect_code = generate_effect_code(base_name, min_val, max_val)
+    base_name, min_vals, max_val = parse_stase_output(input_path)
+    effect_code = generate_effect_code(base_name, min_vals, max_val)
 
     output_file_path = f"{base_name}_effect.py"
     with open(output_file_path, "w", encoding="utf-8") as f:
