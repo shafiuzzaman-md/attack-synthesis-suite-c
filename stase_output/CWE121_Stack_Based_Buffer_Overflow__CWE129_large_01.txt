@@ -1,0 +1,6 @@
+Preconditions:
+(query [] FALSE)
+
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01.c:36: ASSERTION FAIL: data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check"

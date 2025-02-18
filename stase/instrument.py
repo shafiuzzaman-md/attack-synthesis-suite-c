@@ -11,8 +11,10 @@ def transform_line(line):
       1) If line has 'fgets(...)', => replace with 'klee_make_symbolic(&data,...)'
       2) If line has 'recv(', => replace with 'klee_make_symbolic(&data,...)'
       3) If line has 'fscanf(stdin, "%d", &data)', => replace with 'klee_make_symbolic(&data,...)'
-      4) If line has 'buffer[data] =', => replace with a 'klee_assert(...)' line
+      4) If line has 'buffer[data] =', => replace with 'klee_assert(...)' line
       5) If line has 'printLine(' or 'printIntLine(', => comment it out
+      6) If line has 'data = RAND32();', => replace with 'klee_make_symbolic(&data,...)'
+      7) If line has 'data = (int *)ALLOCA(...)', => replace with 'klee_make_symbolic(&data,...)'
 
     Returns a single output line (with trailing newline).
     """
@@ -30,22 +32,33 @@ def transform_line(line):
         return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
 
     # 3) Check for fscanf(stdin, "%d", &data)
-    #    We'll do a loose match that sees 'fscanf(' and 'stdin'.
-    #    If you want a stricter check, use a more precise regex.
-    #    e.g.: if re.search(r'\bfscanf\s*\(\s*stdin\s*,\s*"[^"]*"\s*,\s*&data\)', stripped):
     if 'fscanf(' in stripped and 'stdin' in stripped:
         return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
 
     # 4) If line mentions 'buffer[data] ='
     if 'buffer[data] =' in stripped:
-        return f'    klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check"); // replaced inline: {stripped}\n'
+        return (
+            '    klee_assert('
+            'data >= 0 && '
+            'data < (int)(sizeof(buffer) / sizeof(buffer[0])) && '
+            '"Stack based buffer overflow check"); '
+            f'// replaced inline: {stripped}\n'
+        )
 
     # 5) If line has 'printLine(' or 'printIntLine(', comment it out
     if 'printLine(' in stripped or 'printIntLine(' in stripped:
-        # keep original indentation, just comment out
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else ''
         return f'{indentation}// {stripped}\n'
+
+    # 6) If line has 'data = RAND32();', => symbolic
+    if re.search(r'\bdata\s*=\s*RAND32\s*\(\)\s*;', stripped):
+        return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
+
+    # 7) If line has 'data = (int *)ALLOCA(...)', => symbolic pointer
+    #    For simplicity, check substring 'data = (int *)ALLOCA('
+    if 'data = (int *)ALLOCA(' in stripped:
+        return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
 
     # Otherwise, preserve the line exactly
     return original_line + '\n'

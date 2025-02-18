@@ -1,0 +1,13 @@
+Preconditions:
+data : int32 = symbolic
+(query [(Sle 0
+              N0:Read int32 data)
+         (Eq FALSE (Slt N0 10))]
+        FALSE)
+
+
+# Slt is a signed less-than comparison operator.
+# Eq represents the equality operator.
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE121_Stack_Based_Buffer_Overflow__CWE129_rand_01.c:36: ASSERTION FAIL: data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check"

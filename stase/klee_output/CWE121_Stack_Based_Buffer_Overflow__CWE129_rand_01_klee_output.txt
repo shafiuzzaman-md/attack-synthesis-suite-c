@@ -1,0 +1,21 @@
+KLEE: NOTE: Using POSIX model: /home/shafi/klee_build/runtime/lib/libkleeRuntimePOSIX64_Debug+Asserts.bca
+KLEE: NOTE: Using klee-uclibc : /home/shafi/klee_build/runtime/lib/klee-uclibc.bca
+KLEE: output directory is "/home/shafi/Research/attack-synthesis-suite-c/stase/klee_output/klee-out-82"
+KLEE: Using Z3 solver backend
+KLEE: Logging queries that reach solver in .smt2 format to /home/shafi/Research/attack-synthesis-suite-c/stase/klee_output/klee-out-82/solver-queries.smt2
+
+KLEE: Deterministic allocator: Using quarantine queue size 8
+KLEE: Deterministic allocator: globals (start-address=0x7486e3c00000 size=10 GiB)
+KLEE: Deterministic allocator: constants (start-address=0x748463c00000 size=10 GiB)
+KLEE: Deterministic allocator: heap (start-address=0x738463c00000 size=1024 GiB)
+KLEE: Deterministic allocator: stack (start-address=0x736463c00000 size=128 GiB)
+KLEE: WARNING ONCE: calling external: syscall(16, 0, 21505, 126920104607744) at klee/runtime/POSIX/fd.c:997 10
+KLEE: WARNING ONCE: Alignment of memory from call "malloc" is not modelled. Using alignment of 8.
+KLEE: WARNING ONCE: calling __klee_posix_wrapped_main with extra arguments.
+KLEE: ERROR: drivers/../instrumented_code/CWE121_Stack_Based_Buffer_Overflow__CWE129_rand_01.c:36: ASSERTION FAIL: data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack based buffer overflow check"
+KLEE: NOTE: now ignoring this error at this location
+
+KLEE: done: total instructions = 17864
+KLEE: done: completed paths = 4
+KLEE: done: partially completed paths = 1
+KLEE: done: generated tests = 4
