@@ -6,19 +6,15 @@ class SegmentIdentifier:
         self.segment_name = segment_name
 
 
-def CWE587_Assignment_of_Fixed_Address_to_Pointer__basic_12_bad(
+def CWE587_Assignment_of_Fixed_Address_to_Pointer__basic_02_bad(
     memory: MemoryState,
     required_permissions: Permissions,
     pointer_variable_address: int,
-    fixed_address: int,
-    static_const_true: bool  # Reflecting the control flow constant
+    fixed_address: int
 ) -> int:
   
     if required_permissions.r != 1 or required_permissions.w != 1:
         raise PermissionError("CWE587: Read-write permission required")
-    
-    if not static_const_true:
-        return pointer_variable_address  # Return as-is to indicate no effect
 
     memory = memory.memory_write(
         target_address=pointer_variable_address,

@@ -6,7 +6,7 @@ class SegmentIdentifier:
         self.segment_name = segment_name
 
 
-def CWE587_Assignment_of_Fixed_Address_to_Pointer__basic_12_bad(
+def CWE587_Assignment_of_Fixed_Address_to_Pointer__basic_04_bad(
     memory: MemoryState,
     required_permissions: Permissions,
     pointer_variable_address: int,
