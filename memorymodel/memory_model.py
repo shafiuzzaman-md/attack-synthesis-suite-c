@@ -174,3 +174,8 @@ class MemoryState:
             if addr not in self.undefined_addresses:
                 self.retained_addresses.add(addr)
         return self
+    
+    def get_stack_top(self) -> int:
+        if self.stack_top is None:
+            raise ValueError("Stack is empty or not initialized")
+        return self.stack_top

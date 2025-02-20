@@ -1,4 +1,4 @@
-from memorymodel.memory_model import Permissions
+from memorymodel.memory_model import MemoryState, Permissions
 
 
 class SegmentIdentifier:
@@ -7,21 +7,17 @@ class SegmentIdentifier:
 
 
 def CWE562_Return_of_Stack_Variable_Address__return_buf_01_bad(
+    memory: MemoryState,
     memory_segment: SegmentIdentifier,
-    required_permissions: Permissions,
-    stack_variable_address: int
+    required_permissions: Permissions
 ) -> int:
-    """
-    Models CWE 562: Return of Stack Variable Address.
-
-    Returns the leaked stack variable address if constraints are met.
-    """
-    # Check constraints
+  
     if memory_segment.segment_name != "Stack Segment":
-        raise ValueError("CWE562: Not in stack segment")
+        raise ValueError("CWE562: Not in 'Stack Segment'")
 
     if required_permissions.r != 1:
         raise PermissionError("CWE562: Read permission required")
 
-    # Leak the stack address
-    return stack_variable_address
+    leaked_address = memory.get_stack_top()
+
+    return leaked_address
