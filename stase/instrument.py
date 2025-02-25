@@ -3,6 +3,7 @@
 import re
 import sys
 
+
 def transform_line(line):
     """
     Replaces certain patterns inline, preserving line numbers by returning exactly one output line
@@ -11,10 +12,10 @@ def transform_line(line):
       1) If line has 'fgets(...)', => replace with 'klee_make_symbolic(&data,...)'
       2) If line has 'recv(', => replace with 'klee_make_symbolic(&data,...)'
       3) If line has 'fscanf(stdin, "%d", &data)', => replace with 'klee_make_symbolic(&data,...)'
-      4) If line has 'buffer[data] =', => replace with 'klee_assert(...)' line
-      5) If line has 'printLine(' or 'printIntLine(', => comment it out
-      6) If line has 'data = RAND32();', => replace with 'klee_make_symbolic(&data,...)'
-      7) If line has 'data = (int *)ALLOCA(...)', => replace with 'klee_make_symbolic(&data,...)'
+      4) If line has 'data = RAND32();', => replace with 'klee_make_symbolic(&data,...)'
+      5) If line has 'buffer[data] =', => replace with 'klee_assert(...)' line
+      6) If line has 'printLine(' or 'printIntLine(', => comment it out
+      7) If line has 'data[i] = source[i];', => insert 'klee_assert()' before it.
 
     Returns a single output line (with trailing newline).
     """
@@ -35,7 +36,11 @@ def transform_line(line):
     if 'fscanf(' in stripped and 'stdin' in stripped:
         return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
 
-    # 4) If line mentions 'buffer[data] ='
+    # 4) If line has 'data = RAND32();', make data symbolic
+    if re.search(r'\bdata\s*=\s*RAND32\s*\(\)\s*;', stripped):
+        return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
+
+    # 5) If line mentions 'buffer[data] ='
     if 'buffer[data] =' in stripped:
         return (
             '    klee_assert('
@@ -45,20 +50,20 @@ def transform_line(line):
             f'// replaced inline: {stripped}\n'
         )
 
-    # 5) If line has 'printLine(' or 'printIntLine(', comment it out
+    # 6) If line has 'printLine(' or 'printIntLine(', comment it out
     if 'printLine(' in stripped or 'printIntLine(' in stripped:
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else ''
         return f'{indentation}// {stripped}\n'
 
-    # 6) If line has 'data = RAND32();', => symbolic
-    if re.search(r'\bdata\s*=\s*RAND32\s*\(\)\s*;', stripped):
-        return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
-
-    # 7) If line has 'data = (int *)ALLOCA(...)', => symbolic pointer
-    #    For simplicity, check substring 'data = (int *)ALLOCA('
-    if 'data = (int *)ALLOCA(' in stripped:
-        return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
+    # 7) Insert correct klee_assert() before 'data[i] = source[i];'
+    if re.search(r'\bdata\s*\[\s*i\s*\]\s*=\s*source\s*\[\s*i\s*\]\s*;', stripped):
+        indent_match = re.match(r'^(\s*)', original_line)
+        indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
+        return (
+            f'{indentation}klee_assert(i >= 0 && i < (sizeof(data) / sizeof(int)) && "Stack buffer overflow check"); // Correct assertion\n'
+            f'{original_line}\n'
+        )
 
     # Otherwise, preserve the line exactly
     return original_line + '\n'
@@ -73,7 +78,13 @@ def instrument_code(input_file, output_file):
     with open(input_file, "r") as f:
         lines = f.readlines()
 
-    instrumented_lines = [transform_line(line) for line in lines]
+    instrumented_lines = []
+    prev_line = None  # Keep track of previous line for context
+
+    for line in lines:
+        new_line = transform_line(line)
+        instrumented_lines.append(new_line)
+        prev_line = line  # Update previous line for next iteration
 
     with open(output_file, "w") as f:
         f.writelines(instrumented_lines)
@@ -87,7 +98,7 @@ def main():
       python3 instrument.py <input_file.c> <output_file.c>
     """
     if len(sys.argv) != 3:
-        print("Usage: python instrument.py <input_file.c> <output_file.c>")
+        print("Usage: python3 instrument.py <input_file.c> <output_file.c>")
         sys.exit(1)
 
     input_file = sys.argv[1]
