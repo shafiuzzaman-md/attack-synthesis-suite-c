@@ -16,12 +16,11 @@ def transform_line(line):
       5) If line has 'buffer[data] =', => replace with 'klee_assert(...)' line
       6) If line has 'printLine(' or 'printIntLine(', => comment it out
       7) If line has 'data[i] = source[i];', => insert 'klee_assert()' before it.
-      8) If line has 'memcpy(data, source, 10*sizeof(int));', => insert 'klee_assert()' before it.
+      8) If line has 'memcpy(...)', => insert 'klee_assert()' before it to check for heap-based buffer overflow.
 
     Returns a single output line (with trailing newline).
     """
 
-    # Original line minus the trailing newline
     original_line = line.rstrip('\n')
     stripped = original_line.strip()
 
@@ -66,12 +65,12 @@ def transform_line(line):
             f'{original_line}\n'
         )
 
-    # 8) Insert klee_assert() before 'memcpy(data, source, 10*sizeof(int));'
-    if re.search(r'\bmemcpy\s*\(\s*data\s*,\s*source\s*,\s*10\s*\*\s*sizeof\(int\)\s*\)\s*;', stripped):
+    # 8) Insert klee_assert() before 'memcpy(...)' to check heap-based buffer overflow
+    if re.search(r'\bmemcpy\s*\(\s*.*,\s*.*,\s*sizeof\s*\(.*\)\s*\)', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
         return (
-            f'{indentation}klee_assert((sizeof(data) / sizeof(int)) >= 10 && "Stack buffer overflow check before memcpy"); // Added assertion\n'
+            f'{indentation}klee_assert(sizeof(*structCharVoid) <= sizeof(structCharVoid->charFirst) && "Heap buffer overflow risk!"); // Prevent heap overflow\n'
             f'{original_line}\n'
         )
 
@@ -88,13 +87,7 @@ def instrument_code(input_file, output_file):
     with open(input_file, "r") as f:
         lines = f.readlines()
 
-    instrumented_lines = []
-    prev_line = None  # Keep track of previous line for context
-
-    for line in lines:
-        new_line = transform_line(line)
-        instrumented_lines.append(new_line)
-        prev_line = line  # Update previous line for next iteration
+    instrumented_lines = [transform_line(line) for line in lines]
 
     with open(output_file, "w") as f:
         f.writelines(instrumented_lines)
