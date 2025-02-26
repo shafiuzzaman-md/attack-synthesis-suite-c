@@ -16,7 +16,7 @@ def transform_line(line):
       5) If line has 'buffer[data] =', => replace with 'klee_assert(...)' line
       6) If line has 'printLine(' or 'printIntLine(', => comment it out
       7) If line has 'data[i] = source[i];', => insert 'klee_assert()' before it.
-      8) If line has 'memcpy(...)', => insert 'klee_assert()' before it to check for heap-based buffer overflow.
+      8) If line has 'memcpy(...)' or 'memmove(...)', => insert 'klee_assert()' before it to check for heap-based buffer overflow.
 
     Returns a single output line (with trailing newline).
     """
@@ -65,8 +65,8 @@ def transform_line(line):
             f'{original_line}\n'
         )
 
-    # 8) Insert klee_assert() before 'memcpy(...)' to check heap-based buffer overflow
-    if re.search(r'\bmemcpy\s*\(\s*.*,\s*.*,\s*sizeof\s*\(.*\)\s*\)', stripped):
+    # 8) Insert klee_assert() before 'memcpy(...)' or 'memmove(...)' to check heap-based buffer overflow
+    if re.search(r'\b(memcpy|memmove)\s*\(\s*.*,\s*.*,\s*sizeof\s*\(.*\)\s*\)', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
         return (
