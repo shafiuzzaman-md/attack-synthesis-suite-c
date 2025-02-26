@@ -31,7 +31,8 @@ SOURCES=(
      #     "../testcases/CWE121_Stack_Based_Buffer_Overflow/s01/CWE121_Stack_Based_Buffer_Overflow__CWE135_01.c"
      #"../testcases/CWE122_Heap_Based_Buffer_Overflow/s01/CWE122_Heap_Based_Buffer_Overflow__char_type_overrun_memcpy_01.c"
     # "../testcases/CWE122_Heap_Based_Buffer_Overflow/s01/CWE122_Heap_Based_Buffer_Overflow__char_type_overrun_memmove_01.c"
-    "../testcases/CWE122_Heap_Based_Buffer_Overflow/s05/CWE122_Heap_Based_Buffer_Overflow__CWE131_loop_01.c"
+    #"../testcases/CWE122_Heap_Based_Buffer_Overflow/s05/CWE122_Heap_Based_Buffer_Overflow__CWE131_loop_01.c"
+    "../testcases/CWE122_Heap_Based_Buffer_Overflow/s05/CWE122_Heap_Based_Buffer_Overflow__CWE131_memcpy_01.c"
 )
 
 #######################################################
@@ -148,8 +149,15 @@ EOF
     python3 extract_signature.py "$KLEE_OUTPUT_FILE" "$SIGNATURE_FILE"
     echo "[DONE] Signature extracted to $SIGNATURE_FILE"
 
+    #######################################################
+    # Step 7: Call generate_effects.py with signature files
+    #######################################################
+    echo "[INFO] Generating effect functions..."
+    EFFECT_SCRIPT_PATH="$(realpath ../effectfunctions/scripts/generate_effects.py)"
+    python3 "$EFFECT_SCRIPT_PATH" "$SIGNATURE_FILE"
+    echo "[DONE] ${SIGNATURE_FILES[@]} Effect functions generated."
     echo "[INFO] Finished processing $ORIGINAL_SRC"
     echo "----------------------------------------"
 done
 
-echo "[INFO] All source files have been processed."
+echo "[INFO] All processing completed."

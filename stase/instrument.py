@@ -17,6 +17,7 @@ def transform_line(line):
       6) If line has 'printLine(' or 'printIntLine(', => comment it out
       7) If line has 'data[i] = source[i];', => insert 'klee_assert()' before it.
       8) If line has 'memcpy(...)' or 'memmove(...)', => insert 'klee_assert()' before it to check for heap-based buffer overflow.
+      9) Detect incorrect 'malloc()' allocation and ensure proper heap allocation before use.
 
     Returns a single output line (with trailing newline).
     """
@@ -66,11 +67,20 @@ def transform_line(line):
         )
 
     # 8) Insert klee_assert() before 'memcpy(...)' or 'memmove(...)' to check heap-based buffer overflow
-    if re.search(r'\b(memcpy|memmove)\s*\(\s*.*,\s*.*,\s*sizeof\s*\(.*\)\s*\)', stripped):
+    if re.search(r'\b(memcpy|memmove)\s*\(\s*.*,\s*.*,\s*.*\s*\)', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
         return (
-            f'{indentation}klee_assert(sizeof(*structCharVoid) <= sizeof(structCharVoid->charFirst) && "Heap buffer overflow risk!"); // Prevent heap overflow\n'
+            f'{indentation}klee_assert(sizeof(int) * 10 <= malloc_size(data) && "Heap buffer overflow risk!"); // Prevent heap overflow\n'
+            f'{original_line}\n'
+        )
+
+    # 9) Detect incorrect 'malloc()' allocation without sizeof(int)
+    if re.search(r'\bdata\s*=\s*\(\s*int\s*\*\s*\)\s*malloc\s*\(\s*\d+\s*\)\s*;', stripped) and not re.search(r'sizeof\s*\(\s*int\s*\)', stripped):
+        indent_match = re.match(r'^(\s*)', original_line)
+        indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
+        return (
+            f'{indentation}klee_assert(0 && "Heap buffer overflow risk: malloc() without sizeof(int)!"); // Prevent incorrect allocation\n'
             f'{original_line}\n'
         )
 

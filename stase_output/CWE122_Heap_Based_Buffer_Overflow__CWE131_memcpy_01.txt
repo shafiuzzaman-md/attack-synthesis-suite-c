@@ -1,0 +1,6 @@
+Preconditions:
+(query [] FALSE)
+
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE122_Heap_Based_Buffer_Overflow__CWE131_memcpy_01.c:26: ASSERTION FAIL: 0 && "Heap buffer overflow risk: malloc() without sizeof(int)!"

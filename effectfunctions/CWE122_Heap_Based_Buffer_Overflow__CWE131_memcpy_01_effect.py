@@ -1,10 +1,11 @@
+
 from memorymodel.memory_model import MemoryState, Permissions, UserMode
 
 class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE122_Heap_Based_Buffer_Overflow__char_type_overrun_memcpy_01_bad(
+def CWE122_Heap_Based_Buffer_Overflow__CWE131_memcpy_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
