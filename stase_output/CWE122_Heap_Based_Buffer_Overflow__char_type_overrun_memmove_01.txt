@@ -1,0 +1,6 @@
+Preconditions:
+(query [] FALSE)
+
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE122_Heap_Based_Buffer_Overflow__char_type_overrun_memmove_01.c:42: ASSERTION FAIL: sizeof(*structCharVoid) <= sizeof(structCharVoid->charFirst) && "Heap buffer overflow risk!"
