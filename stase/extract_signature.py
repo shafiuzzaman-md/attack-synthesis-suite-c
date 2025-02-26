@@ -74,15 +74,22 @@ for file in files:
 
             # Extract the assertion name from the postcondition file
             assertion_name = None
+
             with open(stase_output_path, 'r') as post_file:
                 for post_line in post_file:
                     if "ASSERTION FAIL:" in post_line:
-                        # Example line:
-                        # KLEE: ERROR: ./instrumented_code/SmmLegacy.c:58: ASSERTION FAIL: !StackIsExecutable
-                        post_match = re.search(rf'{re.escape(base_folder)}\.c:\d+: ASSERTION FAIL: !?(\w+)', post_line)
+                        print(f"[DEBUG] Found assertion line: {post_line.strip()}")  # Debugging
+                        
+                        # Improved regex: Capture entire assertion expression
+                        post_match = re.search(rf'{re.escape(base_folder)}\.c:\d+: ASSERTION FAIL:\s*(.+)', post_line)
+                        
                         if post_match:
-                            assertion_name = post_match.group(1)
-                            break  # Assuming one assertion per .assert.err file
+                            assertion_name = post_match.group(1).strip()
+                            print(f"[INFO] Extracted assertion: {assertion_name}")  # Debugging
+                            break  # Stop after the first assertion found
+
+            # Debug output to verify captured assertion
+            print(f"[FINAL DEBUG] Captured Assertion: {assertion_name}")
 
             if assertion_name:
                 # Sanitize the assertion name

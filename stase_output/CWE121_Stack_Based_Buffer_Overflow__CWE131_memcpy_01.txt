@@ -1,0 +1,6 @@
+Preconditions:
+(query [] FALSE)
+
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE121_Stack_Based_Buffer_Overflow__CWE131_memcpy_01.c:30: ASSERTION FAIL: (sizeof(data) / sizeof(int)) >= 10 && "Stack buffer overflow check before memcpy"

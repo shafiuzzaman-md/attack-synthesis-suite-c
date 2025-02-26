@@ -23,10 +23,11 @@ Template File: sources-sink-01.tmpl.c
      int * data;
      data = NULL;
      /* FLAW: Allocate memory without using sizeof(int) */
-    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: data = (int *)ALLOCA(10);
+     data = (int *)ALLOCA(10);
      {
          int source[10] = {0};
          /* POTENTIAL FLAW: Possible buffer overflow if data was not allocated correctly in the source */
+         klee_assert((sizeof(data) / sizeof(int)) >= 10 && "Stack buffer overflow check before memcpy"); // Added assertion
          memcpy(data, source, 10*sizeof(int));
          // printIntLine(data[0]);
      }
@@ -42,10 +43,11 @@ Template File: sources-sink-01.tmpl.c
      int * data;
      data = NULL;
      /* FIX: Allocate memory using sizeof(int) */
-    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: data = (int *)ALLOCA(10*sizeof(int));
+     data = (int *)ALLOCA(10*sizeof(int));
      {
          int source[10] = {0};
          /* POTENTIAL FLAW: Possible buffer overflow if data was not allocated correctly in the source */
+         klee_assert((sizeof(data) / sizeof(int)) >= 10 && "Stack buffer overflow check before memcpy"); // Added assertion
          memcpy(data, source, 10*sizeof(int));
          // printIntLine(data[0]);
      }
