@@ -16,7 +16,6 @@ def CWE587_Assignment_of_Fixed_Address_to_Pointer__basic_03_bad(
     if required_permissions.r != 1 or required_permissions.w != 1:
         raise PermissionError("CWE587: Read-write permission required")
         
-
     memory = memory.memory_write(
         target_address=pointer_variable_address,
         data=fixed_address.to_bytes(WORD_SIZE, 'little'), 
