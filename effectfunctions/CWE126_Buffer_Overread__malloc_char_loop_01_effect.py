@@ -5,7 +5,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE126_BufferOverread(
+def CWE126_Buffer_Overread__malloc_char_loop_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,

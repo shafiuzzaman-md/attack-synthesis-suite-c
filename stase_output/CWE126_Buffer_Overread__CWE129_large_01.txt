@@ -1,0 +1,6 @@
+Preconditions:
+(query [] FALSE)
+
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE126_Buffer_Overread__CWE129_large_01.c:35: ASSERTION FAIL: data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Buffer overread check before access"

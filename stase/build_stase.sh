@@ -33,7 +33,17 @@ SOURCES=(
     # "../testcases/CWE122_Heap_Based_Buffer_Overflow/s01/CWE122_Heap_Based_Buffer_Overflow__char_type_overrun_memmove_01.c"
     #"../testcases/CWE122_Heap_Based_Buffer_Overflow/s05/CWE122_Heap_Based_Buffer_Overflow__CWE131_loop_01.c"
     #"../testcases/CWE122_Heap_Based_Buffer_Overflow/s05/CWE122_Heap_Based_Buffer_Overflow__CWE131_memcpy_01.c"
-    "../testcases/CWE126_Buffer_Overread/s01/CWE126_Buffer_Overread__CWE129_fgets_01.c"
+    #"../testcases/CWE126_Buffer_Overread/s01/CWE126_Buffer_Overread__CWE129_fgets_01.c"
+    #"../testcases/CWE126_Buffer_Overread/s01/CWE126_Buffer_Overread__CWE129_fscanf_01.c"
+    #"../testcases/CWE126_Buffer_Overread/s01/CWE126_Buffer_Overread__CWE129_large_01.c"
+    #"../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__CWE170_wchar_t_strncpy_01.c"
+    #"../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_char_loop_01.c"
+   # "../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_char_loop_01.c"
+   #"../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_char_memcpy_01.c"
+   # "../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_char_memmove_01.c"
+   # "../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_wchar_t_loop_01.c"
+   # "../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_wchar_t_memcpy_01.c"
+   # "../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_wchar_t_memmove_01.c"
 )
 
 #######################################################

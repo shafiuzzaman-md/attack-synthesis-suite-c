@@ -1,3 +1,4 @@
+
 from memorymodel.memory_model import MemoryState, Permissions, UserMode
 from memorymodel.config import WORD_SIZE
 
@@ -5,7 +6,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE126_BufferOverread(
+def CWE126_Buffer_Overread__CWE129_fscanf_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
@@ -18,6 +19,10 @@ def CWE126_BufferOverread(
         return memory
 
     if required_permissions.r != 1:
+        return memory
+
+    # STASE constraints
+    if data < 10:
         return memory
 
     element_size_bytes = WORD_SIZE // 8  

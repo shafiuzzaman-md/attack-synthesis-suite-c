@@ -21,6 +21,7 @@ if len(sys.argv) != 2:
 input_file = sys.argv[1]
 base_name = os.path.splitext(os.path.basename(input_file))[0]
 source_file = template_file1 if "CWE121" in base_name else template_file2
+source_file = template_file3 if "CWE126" in base_name else template_file3
 
 destination_file = os.path.join(EFFECTS_DIR, f"{base_name}_effect.py")
 
