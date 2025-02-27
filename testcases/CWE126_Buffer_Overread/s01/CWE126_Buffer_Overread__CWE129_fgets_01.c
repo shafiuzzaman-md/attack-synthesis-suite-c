@@ -26,7 +26,6 @@ void CWE126_Buffer_Overread__CWE129_fgets_01_bad()
     int data;
     /* Initialize data */
     data = -1;
-    {
         char inputBuffer[CHAR_ARRAY_SIZE] = "";
         /* POTENTIAL FLAW: Read data from the console using fgets() */
         if (fgets(inputBuffer, CHAR_ARRAY_SIZE, stdin) != NULL)
@@ -34,11 +33,10 @@ void CWE126_Buffer_Overread__CWE129_fgets_01_bad()
             /* Convert to int */
             data = atoi(inputBuffer);
         }
-        else
-        {
-            printLine("fgets() failed.");
-        }
-    }
+        // else
+        // {
+        //     printLine("fgets() failed.");
+        // }
     {
         int buffer[10] = { 0 };
         /* POTENTIAL FLAW: Attempt to access an index of the array that is above the upper bound
@@ -96,10 +94,10 @@ static void goodB2G()
             /* Convert to int */
             data = atoi(inputBuffer);
         }
-        else
-        {
-            printLine("fgets() failed.");
-        }
+        // else
+        // {
+        //     printLine("fgets() failed.");
+        // }
     }
     {
         int buffer[10] = { 0 };

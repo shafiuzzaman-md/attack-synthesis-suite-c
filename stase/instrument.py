@@ -3,7 +3,6 @@
 import re
 import sys
 
-
 def transform_line(line):
     """
     Replaces certain patterns inline, preserving line numbers by returning exactly one output line
@@ -13,11 +12,12 @@ def transform_line(line):
       2) If line has 'recv(', => replace with 'klee_make_symbolic(&data,...)'
       3) If line has 'fscanf(stdin, "%d", &data)', => replace with 'klee_make_symbolic(&data,...)'
       4) If line has 'data = RAND32();', => replace with 'klee_make_symbolic(&data,...)'
-      5) If line has 'buffer[data] =', => replace with 'klee_assert(...)' line
-      6) If line has 'printLine(' or 'printIntLine(', => comment it out
-      7) If line has 'data[i] = source[i];', => insert 'klee_assert()' before it.
-      8) If line has 'memcpy(...)' or 'memmove(...)', => insert 'klee_assert()' before it to check for heap-based buffer overflow.
-      9) Detect incorrect 'malloc()' allocation and ensure proper heap allocation before use.
+      5) If line has 'buffer[data] =', => replace with 'klee_assert(...)' line (for stack buffer overflow)
+      6) If line has 'buffer[data]', => insert 'klee_assert()' **before** it to check for buffer overread.
+      7) If line has 'printLine(' or 'printIntLine(', => comment it out
+      8) If line has 'data[i] = source[i];', => insert 'klee_assert()' before it.
+      9) If line has 'memcpy(...)' or 'memmove(...)', => insert 'klee_assert()' before it to check for heap-based buffer overflow.
+     10) Detect incorrect 'malloc()' allocation and ensure proper heap allocation before use.
 
     Returns a single output line (with trailing newline).
     """
@@ -25,23 +25,23 @@ def transform_line(line):
     original_line = line.rstrip('\n')
     stripped = original_line.strip()
 
-    # 1) Regex to match 'fgets(..., ..., stdin)'
+    # 1) Regex to match 'fgets(..., ..., stdin)' → replace with klee_make_symbolic()
     if re.search(r'\bfgets\s*\(', stripped):
         return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
 
-    # 2) Check if line mentions 'recv('
+    # 2) Replace 'recv(' with klee_make_symbolic()
     if 'recv(' in stripped:
         return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
 
-    # 3) Check for fscanf(stdin, "%d", &data)
+    # 3) Replace 'fscanf(stdin, "%d", &data)' with klee_make_symbolic()
     if 'fscanf(' in stripped and 'stdin' in stripped:
         return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
 
-    # 4) If line has 'data = RAND32();', make data symbolic
+    # 4) Replace 'data = RAND32();' with klee_make_symbolic()
     if re.search(r'\bdata\s*=\s*RAND32\s*\(\)\s*;', stripped):
         return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced inline: {stripped}\n'
 
-    # 5) If line mentions 'buffer[data] ='
+    # 5) Insert klee_assert() before buffer[data] = ... (stack-based buffer overflow check)
     if 'buffer[data] =' in stripped:
         return (
             '    klee_assert('
@@ -51,13 +51,22 @@ def transform_line(line):
             f'// replaced inline: {stripped}\n'
         )
 
-    # 6) If line has 'printLine(' or 'printIntLine(', comment it out
+    # 6) Insert klee_assert() before **any** `buffer[data]` (to check for buffer overread)
+    if re.search(r'buffer\s*\[\s*data\s*\]', stripped):
+        indent_match = re.match(r'^(\s*)', original_line)
+        indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
+        return (
+            f'{indentation}klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Buffer overread check before access");\n'
+            f'{original_line}\n'
+        )
+
+    # 7) If line has 'printLine(' or 'printIntLine(', comment it out
     if 'printLine(' in stripped or 'printIntLine(' in stripped:
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else ''
         return f'{indentation}// {stripped}\n'
 
-    # 7) Insert correct klee_assert() before 'data[i] = source[i];'
+    # 8) Insert klee_assert() before 'data[i] = source[i];'
     if re.search(r'\bdata\s*\[\s*i\s*\]\s*=\s*source\s*\[\s*i\s*\]\s*;', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
@@ -66,7 +75,7 @@ def transform_line(line):
             f'{original_line}\n'
         )
 
-    # 8) Insert klee_assert() before 'memcpy(...)' or 'memmove(...)' to check heap-based buffer overflow
+    # 9) Insert klee_assert() before 'memcpy(...)' or 'memmove(...)' to check heap-based buffer overflow
     if re.search(r'\b(memcpy|memmove)\s*\(\s*.*,\s*.*,\s*.*\s*\)', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
@@ -75,7 +84,7 @@ def transform_line(line):
             f'{original_line}\n'
         )
 
-    # 9) Detect incorrect 'malloc()' allocation without sizeof(int)
+    # 10) Detect incorrect 'malloc()' allocation without sizeof(int)
     if re.search(r'\bdata\s*=\s*\(\s*int\s*\*\s*\)\s*malloc\s*\(\s*\d+\s*\)\s*;', stripped) and not re.search(r'sizeof\s*\(\s*int\s*\)', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '  # Preserve indentation
@@ -90,8 +99,8 @@ def transform_line(line):
 
 def instrument_code(input_file, output_file):
     """
-    Reads the input_file line by line, transforms each line with transform_line,
-    and writes the instrumented lines to output_file (preserving line counts).
+    Reads the input_file line by line, applies transform_line to each line,
+    and writes the transformed lines to output_file, preserving line numbers.
     """
 
     with open(input_file, "r") as f:
