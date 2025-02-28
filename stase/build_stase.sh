@@ -44,6 +44,7 @@ SOURCES=(
    # "../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_wchar_t_loop_01.c"
    # "../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_wchar_t_memcpy_01.c"
    # "../testcases/CWE126_Buffer_Overread/s02/CWE126_Buffer_Overread__malloc_wchar_t_memmove_01.c"
+   "../testcases/CWE127_Buffer_Underread/s01/CWE127_Buffer_Underread__CWE839_fgets_01.c"
 )
 
 #######################################################

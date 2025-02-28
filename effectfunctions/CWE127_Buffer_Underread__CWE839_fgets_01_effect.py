@@ -5,7 +5,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE127_BufferUnderread(
+def CWE127_Buffer_Underread__CWE839_fgets_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
@@ -18,6 +18,10 @@ def CWE127_BufferUnderread(
         return 0
 
     buffer_base_address = memory.layout[memory_segment.segment_name] 
+   
+     # STASE constraints
+    if data < 10:
+        return 0
 
     element_size_bytes = WORD_SIZE // 8  
     target_address = buffer_base_address + (data * element_size_bytes)

@@ -12,6 +12,7 @@ EFFECTS_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 template_file1 = os.path.join(TEMPLATES_DIR, "cwe121_effect.py")
 template_file2 = os.path.join(TEMPLATES_DIR, "cwe122_effect.py")
 template_file3 = os.path.join(TEMPLATES_DIR, "cwe126_effect.py")
+template_file4 = os.path.join(TEMPLATES_DIR, "cwe127_effect.py")
 # Ensure a file is passed as an argument
 if len(sys.argv) != 2:
     print("Usage: python generate_effects.py <signature_file>")
