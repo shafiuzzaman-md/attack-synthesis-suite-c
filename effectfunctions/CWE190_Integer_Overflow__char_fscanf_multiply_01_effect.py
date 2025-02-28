@@ -5,7 +5,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE190_Integer_Overflow__char_fscanf_add_02_bad(
+def CWE190_Integer_Overflow__char_fscanf_multiply_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
@@ -21,7 +21,8 @@ def CWE190_Integer_Overflow__char_fscanf_add_02_bad(
         return memory  # Ensure required permissions
 
     # STASE Constraints 
-    
+    if data <= 63:
+        return memory
 
     # Integer Overflow Simulation
     result = (data + 1) & 0xFF  # Simulate char behavior (8-bit wraparound)

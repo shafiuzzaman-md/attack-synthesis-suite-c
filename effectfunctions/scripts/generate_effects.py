@@ -13,6 +13,7 @@ template_file1 = os.path.join(TEMPLATES_DIR, "cwe121_effect.py")
 template_file2 = os.path.join(TEMPLATES_DIR, "cwe122_effect.py")
 template_file3 = os.path.join(TEMPLATES_DIR, "cwe126_effect.py")
 template_file4 = os.path.join(TEMPLATES_DIR, "cwe127_effect.py")
+template_file5 = os.path.join(TEMPLATES_DIR, "cwe190_effect.py")
 # Ensure a file is passed as an argument
 if len(sys.argv) != 2:
     print("Usage: python generate_effects.py <signature_file>")
@@ -23,6 +24,7 @@ input_file = sys.argv[1]
 base_name = os.path.splitext(os.path.basename(input_file))[0]
 source_file = template_file1 if "CWE121" in base_name else template_file2
 source_file = template_file3 if "CWE126" in base_name else template_file3
+source_file = template_file5 if "CWE126" in base_name else template_file5
 
 destination_file = os.path.join(EFFECTS_DIR, f"{base_name}_effect.py")
 

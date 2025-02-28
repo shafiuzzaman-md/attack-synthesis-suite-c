@@ -1,56 +1,39 @@
 from memorymodel.memory_model import MemoryState, Permissions, UserMode
+from memorymodel.config import WORD_SIZE
 
 class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE226_SensitiveInformationUnclearedBeforeRelease(
+def CWE226_Sensitive_InformationUnclearedBeforeRelease_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
-    variable_address: int,
-    sensitive_data: bytes,
+    stack_variable_address: int,
+    data: bytes,
     user_mode: UserMode
 ) -> bytes:
-    """
-    Models CWE-226: Sensitive Information Uncleared Before Release
+  
+    # Memory constraints:
+    if memory_segment.segment_name not in memory.layout:
+        return b''  # If segment is not present, return empty bytes
 
-    Steps:
-      1. Write 'sensitive_data' to 'variable_address'.
-      2. Call 'memory_retain' to mark that the data is no longer needed, but
-         physically remains (un-cleared).
-      3. Read back from the same address to demonstrate that the data was never
-         cleared and remains accessible.
-
-    Constraints:
-    - required_permissions must have r=1 and w=1 (read and write).
-    - len(sensitive_data) > 0
-
-    :param memory: Current memory state.
-    :param memory_segment: Identifier for the memory segment (Heap, Stack, Data, etc.).
-    :param required_permissions: Permissions needed (must have r=1, w=1).
-    :param variable_address: The address where the sensitive data is stored.
-    :param sensitive_data: The sensitive information to be stored.
-    :param user_mode: Whether the caller is in user or privileged mode.
-    :return: The raw bytes read back (showing the data was retained).
-    """
-
-    # 1. Check read & write permissions
     if required_permissions.r != 1 or required_permissions.w != 1:
-        raise PermissionError("CWE226: Required read-write permissions not met")
+        return b''  # Missing required permissions
 
-    # 2. If there's no data, there's no vulnerability to demonstrate
-    if len(sensitive_data) == 0:
-        return b''
+    if len(data) == 0:
+        return b''  # No sensitive data to store or leak
 
-    # 3. Write the sensitive data to the designated address
-    memory = memory.memory_write(variable_address, sensitive_data, user_mode)
+    # Step 1: Write the sensitive password into memory (simulating storage on the stack)
+    memory = memory.memory_write(stack_variable_address, data, user_mode)
 
-    # 4. 'Retain' the memory region, simulating that this region is now 'done'
-    #    but no clearing action is performed (the data remains physically).
-    memory = memory.memory_retain(variable_address, len(sensitive_data))
+    # Step 2: Simulate using the password (authentication operation)
+    # We assume some function consumes the password, but it remains in memory
 
-    # 5. Read back from the same address to show the sensitive data persists
-    exposed_data = memory.memory_read(variable_address, len(sensitive_data), user_mode)
+    # Step 3: Failure to clear sensitive data (this is the vulnerability)
+    memory = memory.memory_retain(stack_variable_address, len(data))  # Prevents automatic clearing
 
-    return exposed_data
+    # Step 4: Read the leaked sensitive data
+    exposed_data = memory.memory_read(stack_variable_address, len(data), user_mode)
+
+    return exposed_data  # Return the sensitive data that should have been cleared

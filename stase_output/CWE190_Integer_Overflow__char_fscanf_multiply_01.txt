@@ -1,0 +1,14 @@
+Preconditions:
+data : int32 = symbolic
+(query [(Slt 0
+              N0:(SExt w32 (Read w8 0 data)))
+         (Eq FALSE (Sle N0 63))]
+        FALSE)
+
+
+# SExt (Sign Extension) extends a smaller integer type to a larger integer type while preserving the sign.
+# Slt is a signed less-than comparison operator.
+# Eq represents the equality operator.
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE190_Integer_Overflow__char_fscanf_multiply_01.c:31: ASSERTION FAIL: data <= CHAR_MAX / 2 && "Integer overflow check before multiplication"

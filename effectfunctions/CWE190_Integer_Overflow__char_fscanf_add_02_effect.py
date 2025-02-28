@@ -18,10 +18,11 @@ def CWE190_Integer_Overflow__char_fscanf_add_02_bad(
         return memory  # Prevent invalid memory accesses
 
     if required_permissions.r != 1 or required_permissions.w != 1:
-        return memory  # Ensure required permissions
+        return memory # Ensure required permissions
 
     # STASE Constraints 
-    
+    if data < 127:
+        return memory
 
     # Integer Overflow Simulation
     result = (data + 1) & 0xFF  # Simulate char behavior (8-bit wraparound)
