@@ -14,16 +14,13 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01_bad(
     data: int,
     user_mode: UserMode
 ) -> MemoryState:
-    """
-    Instantiated effect function for CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01.c
-    """
 
     # Memory constraints
     if memory_segment.segment_name != "Stack Segment":
-        raise ValueError("CWE121: Not in stack segment")
+        return memory
 
     if required_permissions.r != 1 or required_permissions.w != 1:
-        raise PermissionError("CWE121: Required rw- permissions not met")
+        return memory
 
     # STASE constraints
     if data < 10:
@@ -31,7 +28,7 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE129_fscanf_01_bad(
 
     # STASE+Memory Model constraints
     if (data - 10) < control_data_offset:
-        raise ValueError("CWE121: Overflow cannot reach control data")
+        return memory
 
     control_data_address = stack_variable_address + 10 + control_data_offset
 

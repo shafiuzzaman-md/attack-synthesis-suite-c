@@ -17,16 +17,16 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE131_loop_01_bad(
 
     # Memory constraints
     if memory_segment.segment_name != "Stack Segment":
-        raise ValueError("CWE121: Not in stack segment")
+        return memory
 
     if required_permissions.r != 1 or required_permissions.w != 1:
-        raise PermissionError("CWE121: Required rw- permissions not met")
+        return memory
 
     # No STASE constraints because preconditions are null
 
     # STASE+Memory Model constraints
     if data < (stack_variable_address + control_data_offset):
-        raise ValueError("CWE121: Overflow cannot reach control data")
+        return memory
 
     control_data_address = stack_variable_address + control_data_offset
 
