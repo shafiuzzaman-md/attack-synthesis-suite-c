@@ -14,89 +14,83 @@ Template File: sources-sink-01.tmpl.c
  *
  * */
 
-#include "../../../testcasesupport/std_testcase.h"
+ #include "std_testcase.h"
 
-#include <wchar.h>
-
-#ifndef OMITBAD
-
-// Function that simulates buffer underread using a supplied buffer and input size
-char* CWE127_Buffer_Underread__char_alloca_cpy_01_bad(char *buffer_to_read, size_t size_to_read) {
-    /* FLAW: Set data pointer to before the allocated memory buffer */
-    char *data = buffer_to_read - 8;
-
-    char *dest = (char*)malloc(100 * 2 * sizeof(char)); // Allocate memory dynamically
-    if (dest == NULL) {
-        printLine("ERROR: Memory allocation failed.");
-        return NULL;
-    }
-
-    memset(dest, 'C', 100 * 2 - 1); // fill with 'C's
-    dest[100 * 2 - 1] = '\0'; // null terminate
-
-    // Assert to ensure that the data pointer does not point before the buffer
-    klee_assert(is_valid_memory_access(buffer_to_read, data)); // Verify using predicate
-
-    /* POTENTIAL FLAW: Possibly copy from a memory location located before the source buffer */
-    strcpy(dest, data);
-    printLine(dest);
-    
-    return dest; // Return the dynamically allocated buffer
-}
-
-#endif /* OMITBAD */
-
-#ifndef OMITGOOD
-
-/* goodG2B uses the GoodSource with the BadSink */
-static void goodG2B()
-{
-    char * data;
-    char * dataBuffer = (char *)ALLOCA(100*sizeof(char));
-    memset(dataBuffer, 'A', 100-1);
-    dataBuffer[100-1] = '\0';
-    /* FIX: Set data pointer to the allocated memory buffer */
-    data = dataBuffer;
-    {
-        char dest[100*2];
-        memset(dest, 'C', 100*2-1); /* fill with 'C's */
-        dest[100*2-1] = '\0'; /* null terminate */
-        /* POTENTIAL FLAW: Possibly copy from a memory location located before the source buffer */
-        strcpy(dest, data);
-        printLine(dest);
-    }
-}
-
-void CWE127_Buffer_Underread__char_alloca_cpy_01_good()
-{
-    goodG2B();
-}
-
-#endif /* OMITGOOD */
-
-/* Below is the main(). It is only used when building this testcase on
- * its own for testing or for building a binary to use in testing binary
- * analysis tools. It is not used when compiling all the testcases as one
- * application, which is how source code analysis tools are tested.
- */
-
-#ifdef INCLUDEMAIN
-
-int main(int argc, char * argv[])
-{
-    /* seed randomness */
-    srand( (unsigned)time(NULL) );
-#ifndef OMITGOOD
-    printLine("Calling good()...");
-    CWE127_Buffer_Underread__char_alloca_cpy_01_good();
-    printLine("Finished good()");
-#endif /* OMITGOOD */
-#ifndef OMITBAD
-    printLine("Calling bad()...");
-    CWE127_Buffer_Underread__char_alloca_cpy_01_bad();
-    printLine("Finished bad()");
-#endif /* OMITBAD */
-    return 0;
-}
-
-#endif
+ #include <wchar.h>
+ 
+ #ifndef OMITBAD
+ 
+ void CWE127_Buffer_Underread__char_alloca_cpy_01_bad()
+ {
+     char * data;
+     char * dataBuffer = (char *)ALLOCA(100*sizeof(char));
+     memset(dataBuffer, 'A', 100-1);
+     dataBuffer[100-1] = '\0';
+     /* FLAW: Set data pointer to before the allocated memory buffer */
+     data = dataBuffer - 8;
+     {
+         char dest[100*2];
+         memset(dest, 'C', 100*2-1); /* fill with 'C's */
+         dest[100*2-1] = '\0'; /* null terminate */
+         /* POTENTIAL FLAW: Possibly copy from a memory location located before the source buffer */
+         strcpy(dest, data);
+         printLine(dest);
+     }
+ }
+ 
+ #endif /* OMITBAD */
+ 
+ #ifndef OMITGOOD
+ 
+ /* goodG2B uses the GoodSource with the BadSink */
+ static void goodG2B()
+ {
+     char * data;
+     char * dataBuffer = (char *)ALLOCA(100*sizeof(char));
+     memset(dataBuffer, 'A', 100-1);
+     dataBuffer[100-1] = '\0';
+     /* FIX: Set data pointer to the allocated memory buffer */
+     data = dataBuffer;
+     {
+         char dest[100*2];
+         memset(dest, 'C', 100*2-1); /* fill with 'C's */
+         dest[100*2-1] = '\0'; /* null terminate */
+         /* POTENTIAL FLAW: Possibly copy from a memory location located before the source buffer */
+         strcpy(dest, data);
+         printLine(dest);
+     }
+ }
+ 
+ void CWE127_Buffer_Underread__char_alloca_cpy_01_good()
+ {
+     goodG2B();
+ }
+ 
+ #endif /* OMITGOOD */
+ 
+ /* Below is the main(). It is only used when building this testcase on
+  * its own for testing or for building a binary to use in testing binary
+  * analysis tools. It is not used when compiling all the testcases as one
+  * application, which is how source code analysis tools are tested.
+  */
+ 
+ #ifdef INCLUDEMAIN
+ 
+ int main(int argc, char * argv[])
+ {
+     /* seed randomness */
+     srand( (unsigned)time(NULL) );
+ #ifndef OMITGOOD
+     printLine("Calling good()...");
+     CWE127_Buffer_Underread__char_alloca_cpy_01_good();
+     printLine("Finished good()");
+ #endif /* OMITGOOD */
+ #ifndef OMITBAD
+     printLine("Calling bad()...");
+     CWE127_Buffer_Underread__char_alloca_cpy_01_bad();
+     printLine("Finished bad()");
+ #endif /* OMITBAD */
+     return 0;
+ }
+ 
+ #endif

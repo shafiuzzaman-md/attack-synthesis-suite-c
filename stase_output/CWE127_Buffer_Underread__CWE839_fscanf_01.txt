@@ -1,0 +1,13 @@
+Preconditions:
+data : int32 = symbolic
+(query [(Slt N0:Read int32 data
+              10)
+         (Eq FALSE (Sle 0 N0))]
+        FALSE)
+
+
+# Slt is a signed less-than comparison operator.
+# Eq represents the equality operator.
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE127_Buffer_Underread__CWE839_fscanf_01.c:35: ASSERTION FAIL: data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Buffer overread check before access"

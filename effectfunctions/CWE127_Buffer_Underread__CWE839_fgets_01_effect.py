@@ -20,7 +20,7 @@ def CWE127_Buffer_Underread__CWE839_fgets_01_bad(
     buffer_base_address = memory.layout[memory_segment.segment_name] 
    
      # STASE constraints
-    if data < 10:
+    if data >= 0:
         return 0
 
     element_size_bytes = WORD_SIZE // 8  
