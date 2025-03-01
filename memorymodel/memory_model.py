@@ -29,11 +29,11 @@ class MemoryState:
         self.memory_size = memory_size
         self.memory_bytes = bytearray(memory_size)  # All zeros by default
         self.layout = layout
+        self.heap_pointer = layout["HEAP_START"]  # Track heap allocation start
 
-        # undefined_addresses: addresses that have been explicitly freed
-        # retained_addresses: addresses that are logically "not in use" but not zeroed
+        # Undefined and retained memory tracking
         self.undefined_addresses = set()
-        self.retained_addresses = set()  
+        self.retained_addresses = set()
 
     def identify_segment(self, address: int) -> SegmentType:
         L = self.layout
@@ -65,28 +65,22 @@ class MemoryState:
         """
         p = Permissions()
         if seg == SegmentType.RESERVED:
-            # Reserved: ---(User), r--(Priv)
             if privileged:
                 p.r = 1
         elif seg == SegmentType.PROTECTED:
-            # Protected: ---(User), rw-(Priv)
             if privileged:
                 p.r = 1
                 p.w = 1
         elif seg == SegmentType.STACK:
-            # Stack: rw-(User & Priv.)
             p.r = 1
             p.w = 1
         elif seg == SegmentType.HEAP:
-            # Heap: rw-(User & Priv.)
             p.r = 1
             p.w = 1
         elif seg == SegmentType.DATA:
-            # Data: rw-(User & Priv.)
             p.r = 1
             p.w = 1
         elif seg == SegmentType.CODE:
-            # Code: r-x(User), rwx(Priv)
             if privileged:
                 p.r = 1
                 p.w = 1
@@ -94,7 +88,6 @@ class MemoryState:
             else:
                 p.r = 1
                 p.e = 1
-        # LOW_MEMORY, UNUSED, INVALID => no access
         return p
 
     def memory_read(self, target_address: int, length: int, privileged: bool):
@@ -103,7 +96,6 @@ class MemoryState:
             addr = target_address + i
             seg = self.identify_segment(addr)
             perms = self.get_permissions(seg, privileged)
-            # Check read permission
             if perms.r == 0:
                 raise PermissionError("Permission denied (read)")
             data[i] = self.memory_bytes[addr]
@@ -115,11 +107,9 @@ class MemoryState:
             addr = target_address + i
             seg = self.identify_segment(addr)
             perms = self.get_permissions(seg, privileged)
-            # Check write permission
             if perms.w == 0:
                 raise PermissionError("Permission denied (write)")
 
-            # If address was undefined, writing re-defines it
             if addr in self.undefined_addresses:
                 self.undefined_addresses.remove(addr)
             if addr in self.retained_addresses:
@@ -130,11 +120,10 @@ class MemoryState:
 
     def memory_alloc(self, allocation_address: int, allocation_size: int):
         """
-        Basic 'alloc' that zeroes out the allocated region.
+        Basic 'alloc' that zeroes out the allocated region at a specific address.
         """
         end_addr = allocation_address + allocation_size
         self.memory_bytes[allocation_address:end_addr] = b'\x00' * allocation_size
-        # Re-define addresses (clear them from undefined or retained)
         for addr in range(allocation_address, end_addr):
             self.undefined_addresses.discard(addr)
             self.retained_addresses.discard(addr)
@@ -147,6 +136,42 @@ class MemoryState:
         for addr in range(allocation_address, allocation_address + allocation_size):
             self.undefined_addresses.add(addr)
         return self
+
+    def heap_alloc(self, allocation_size: int):
+        """
+        Dynamically allocates 'allocation_size' bytes on the heap.
+        Returns (allocated_address, updated_memory_state) or (None, self) if allocation fails.
+        """
+        if allocation_size <= 0:
+            return None, self  # Zero or negative allocation is invalid
+
+        allocation_address = self.heap_pointer
+        end_addr = allocation_address + allocation_size
+
+        if end_addr > self.layout["HEAP_END"]:
+            return None, self  # Out of heap memory
+
+        self.memory_bytes[allocation_address:end_addr] = b'\x00' * allocation_size
+
+        self.heap_pointer = end_addr  # Move heap forward
+
+        for addr in range(allocation_address, end_addr):
+            self.undefined_addresses.discard(addr)
+            self.retained_addresses.discard(addr)
+
+        return self
+
+    def heap_free(self, allocation_address: int, allocation_size: int):
+        """
+        Frees a previously allocated heap region.
+        """
+        if allocation_address < self.layout["HEAP_START"] or allocation_address + allocation_size > self.layout["HEAP_END"]:
+            return self  # Ignore invalid frees
+
+        for addr in range(allocation_address, allocation_address + allocation_size):
+            self.undefined_addresses.add(addr)  # Mark freed addresses
+
+        return self  # Return updated memory state
 
     def memory_stack_release(self, stack_address: int, release_size: int):
         """
@@ -170,11 +195,10 @@ class MemoryState:
         upon free/release. The data remains physically readable.
         """
         for addr in range(start_address, start_address + size):
-            # If previously undefined, skip. We only 'retain' memory that was valid.
             if addr not in self.undefined_addresses:
                 self.retained_addresses.add(addr)
         return self
-    
+
     def get_stack_top(self) -> int:
         if self.stack_top is None:
             raise ValueError("Stack is empty or not initialized")
