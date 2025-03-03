@@ -69,11 +69,15 @@ SOURCES=(
 #"../testcases/CWE194_Unexpected_Sign_Extension/s01/CWE194_Unexpected_Sign_Extension__fgets_malloc_01.c"
 #"../testcases/CWE194_Unexpected_Sign_Extension/s01/CWE194_Unexpected_Sign_Extension__fscanf_memcpy_01.c"
 #"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_malloc_01.c"
-"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_memcpy_01.c"
-"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_memmove_01.c"
-"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_strncpy_01.c"
-"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_strncpy_01.c"
-"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__rand_strncpy_01.c"
+#"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_memcpy_01.c"
+#"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_memmove_01.c"
+#"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_strncpy_01.c"
+#"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_strncpy_01.c"
+#"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__rand_strncpy_01.c"
+#"../testcases/CWE122_Heap_Based_Buffer_Overflow/s07/CWE122_Heap_Based_Buffer_Overflow__c_CWE193_char_memmove_01.c"
+#"../testcases/CWE122_Heap_Based_Buffer_Overflow/s08/CWE122_Heap_Based_Buffer_Overflow__c_CWE805_char_snprintf_01.c"
+#"../testcases/CWE122_Heap_Based_Buffer_Overflow/s08/CWE122_Heap_Based_Buffer_Overflow__c_CWE805_char_snprintf_01.c"
+"../testcases/CWE122_Heap_Based_Buffer_Overflow/s10/CWE122_Heap_Based_Buffer_Overflow__c_CWE806_wchar_t_memmove_01.c"
 )
 
 #######################################################
