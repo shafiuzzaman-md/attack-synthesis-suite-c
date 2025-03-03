@@ -4,7 +4,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE194_Unexpected_Sign_Extension(
+def CWE194_Unexpected_Sign_Extension__negative_memmove_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,

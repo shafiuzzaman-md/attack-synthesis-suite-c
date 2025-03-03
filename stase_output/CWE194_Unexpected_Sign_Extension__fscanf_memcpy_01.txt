@@ -1,0 +1,14 @@
+Preconditions:
+data : int32 = symbolic
+(query [(Slt N0:(SExt w32 (ReadLSB w16 0 data))
+              100)
+         (Eq FALSE (Sle 0 N0))]
+        FALSE)
+
+
+# SExt (Sign Extension) extends a smaller integer type to a larger integer type while preserving the sign.
+# Slt is a signed less-than comparison operator.
+# Eq represents the equality operator.
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE194_Unexpected_Sign_Extension__fscanf_memcpy_01.c:37: ASSERTION FAIL: data >= 0 && "Unexpected sign extension: data must be non-negative before memcpy"

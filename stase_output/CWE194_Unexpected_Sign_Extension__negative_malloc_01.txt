@@ -1,0 +1,6 @@
+Preconditions:
+(query [] FALSE)
+
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE194_Unexpected_Sign_Extension__negative_malloc_01.c:33: ASSERTION FAIL: data >= 0 && "Sign extension issue: data should be non-negative before malloc()"

@@ -10,12 +10,11 @@ def transform_line(line):
       2) fgets(...) -> klee_make_symbolic(...)
       3) recv(...) -> klee_make_symbolic(...)
       4) data = RAND32(); -> klee_make_symbolic(...)
-      5) Insert klee_assert() before buffer[data] = ... (stack buffer overflow check)
-      6) Insert klee_assert() before **any** buffer[data] (buffer overread check)
-      7) Insert klee_assert() before integer arithmetic operations (integer overflow check)
-      8) Comment out printLine(), printIntLine(), printHexCharLine()
-      9) Insert klee_assert() before memcpy(), memmove() (heap buffer overflow check)
-     10) Detect incorrect malloc() allocation without sizeof(int)
+      5) Insert klee_assert() before malloc(data) to prevent sign extension issues
+      6) Insert klee_assert() before memset(dataBuffer, 'A', data-1) to check buffer overflow
+      7) Insert klee_assert() before dataBuffer[data-1] to prevent out-of-bounds access
+      8) Insert klee_assert() before memcpy(dest, source, data) to prevent sign extension issues
+      9) Insert klee_assert() before dest[data] to prevent buffer overflow
     """
 
     original_line = line.rstrip('\n')
@@ -37,56 +36,52 @@ def transform_line(line):
     if re.search(r'\bdata\s*=\s*RAND32\s*\(\)\s*;', stripped):
         return f'    klee_make_symbolic(&data, sizeof(data), "data"); // replaced RAND32\n'
 
-    # 5) Insert klee_assert() before buffer[data] = ... (stack buffer overflow check)
-    if re.search(r'buffer\s*\[\s*data\s*\]\s*=', stripped):
+    # 5) Insert klee_assert() before malloc(data) to check for sign extension issues
+    if re.search(r'\bmalloc\s*\(\s*data\s*\)', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '
         return (
-            f'{indentation}klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Stack buffer overflow check");\n'
+            f'{indentation}klee_assert(data >= 0 && "Sign extension issue: data should be non-negative before malloc()");\n'
             f'{original_line}\n'
         )
 
-    # 6) Insert klee_assert() before **any** buffer[data] (buffer overread check)
-    if re.search(r'buffer\s*\[\s*data\s*\]', stripped) and '=' not in stripped:
+    # 6) Insert klee_assert() before memset(dataBuffer, 'A', data-1) to check buffer overflow
+    if re.search(r'\bmemset\s*\(\s*dataBuffer\s*,\s*\'A\'\s*,\s*data-1\s*\)', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '
         return (
-            f'{indentation}klee_assert(data >= 0 && data < (int)(sizeof(buffer) / sizeof(buffer[0])) && "Buffer overread check before access");\n'
+            f'{indentation}klee_assert(data > 0 && data < 100 && "Heap buffer overflow check before memset()");\n'
             f'{original_line}\n'
         )
 
-    # 7) Insert klee_assert() before multiplication operations (integer overflow check)
-    if re.search(r'\bchar\s+\w+\s*=\s*data\s*\*\s*\d+\s*;', stripped):
-        indent_match = re.match(r'^(\s*)', original_line)
-        indentation = indent_match.group(1) if indent_match else '    '
-        multiplier = re.search(r'data\s*\*\s*(\d+)', stripped).group(1)
-        return (
-            f'{indentation}klee_assert(data <= CHAR_MAX / {multiplier} && "Integer overflow check before multiplication"); // Prevent overflow\n'
-            f'{original_line}\n'
-        )
-
-    # 8) Comment out printLine(), printIntLine(), printHexCharLine()
-    if re.search(r'\b(printLine|printIntLine|printHexCharLine)\s*\(', stripped):
-        return f'    // {stripped}\n'
-
-    # 9) Insert klee_assert() before memcpy(), memmove() (heap buffer overflow check)
-    if re.search(r'\b(memcpy|memmove)\s*\(\s*.*,\s*.*,\s*.*\s*\)', stripped):
+    # 7) Insert klee_assert() before dataBuffer[data-1] to prevent out-of-bounds access
+    if re.search(r'dataBuffer\s*\[\s*data-1\s*\]', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '
         return (
-            f'{indentation}klee_assert(sizeof(int) * 10 <= malloc_size(data) && "Heap buffer overflow check!"); // Prevent heap overflow\n'
+            f'{indentation}klee_assert(data-1 >= 0 && data-1 < 100 && "Heap buffer overflow check before accessing dataBuffer[data-1]");\n'
             f'{original_line}\n'
         )
 
-    # 10) Detect incorrect malloc() allocation without sizeof(int)
-    if re.search(r'\bdata\s*=\s*\(\s*int\s*\*\s*\)\s*malloc\s*\(\s*\d+\s*\)\s*;', stripped) and not re.search(r'sizeof\s*\(\s*int\s*\)', stripped):
+    # 8) Insert klee_assert() before memcpy(dest, source, data) to prevent sign extension issues
+    if re.search(r'\bmemcpy\s*\(\s*dest\s*,\s*source\s*,\s*data\s*\)', stripped):
         indent_match = re.match(r'^(\s*)', original_line)
         indentation = indent_match.group(1) if indent_match else '    '
         return (
-            f'{indentation}klee_assert(0 && "Heap buffer overflow risk: malloc() without sizeof(int)!"); // Prevent incorrect allocation\n'
+            f'{indentation}klee_assert(data >= 0 && "Unexpected sign extension: data must be non-negative before memcpy");\n'
             f'{original_line}\n'
         )
 
+    # 9) Insert klee_assert() before dest[data] to prevent buffer overflow
+    if re.search(r'dest\s*\[\s*data\s*\]', stripped):
+        indent_match = re.match(r'^(\s*)', original_line)
+        indentation = indent_match.group(1) if indent_match else '    '
+        return (
+            f'{indentation}klee_assert(data < sizeof(dest) && "Buffer overflow risk: data must be within destination buffer size");\n'
+            f'{original_line}\n'
+        )
+
+    # Otherwise, preserve the line exactly
     return original_line + '\n'
 
 

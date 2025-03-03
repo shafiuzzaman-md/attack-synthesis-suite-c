@@ -34,10 +34,10 @@ void CWE194_Unexpected_Sign_Extension__fgets_malloc_01_bad()
             /* Convert to short */
             data = (short)atoi(inputBuffer);
         }
-        else
-        {
-            printLine("fgets() failed.");
-        }
+        // else
+        // {
+        //     printLine("fgets() failed.");
+        // }
     }
     /* Assume we want to allocate a relatively small buffer */
     if (data < 100)

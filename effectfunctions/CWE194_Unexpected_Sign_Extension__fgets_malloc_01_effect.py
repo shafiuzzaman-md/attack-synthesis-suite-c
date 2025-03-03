@@ -4,7 +4,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE194_Unexpected_Sign_Extension(
+def CWE194_Unexpected_Sign_Extension__fgets_malloc_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
@@ -17,8 +17,8 @@ def CWE194_Unexpected_Sign_Extension(
     if required_permissions.r != 1 or required_permissions.w != 1:
         return memory  
     # STASE Constraints: Inserted dynamically based on extracted preconditions
-
-    
+    if data ==0:
+        return memory
     # Vulnerable operation: sign extension during heap allocation
     alloc_size = data
     memory = memory.heap_alloc(alloc_size)

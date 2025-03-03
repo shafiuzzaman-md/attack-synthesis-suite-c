@@ -1,0 +1,13 @@
+Preconditions:
+data_2 : int32 = symbolic
+(query [(Eq 0
+             (ReadLSB w16 0 data_2))]
+        FALSE)
+
+
+# Eq represents the equality operator.
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE194_Unexpected_Sign_Extension__fgets_malloc_01.c:47: ASSERTION FAIL: data >= 0 && "Sign extension issue: data should be non-negative before malloc()"
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE194_Unexpected_Sign_Extension__fgets_malloc_01.c:51: ASSERTION FAIL: data > 0 && data < 100 && "Heap buffer overflow check before memset()"

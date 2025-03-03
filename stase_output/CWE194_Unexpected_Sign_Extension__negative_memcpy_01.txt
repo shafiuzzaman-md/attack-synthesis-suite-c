@@ -1,0 +1,6 @@
+Preconditions:
+(query [] FALSE)
+
+
+Postconditions:
+KLEE: ERROR: drivers/../instrumented_code/CWE194_Unexpected_Sign_Extension__negative_memcpy_01.c:37: ASSERTION FAIL: data >= 0 && "Unexpected sign extension: data must be non-negative before memcpy"

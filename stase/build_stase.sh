@@ -60,13 +60,20 @@ SOURCES=(
 #"../testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_add_02.c"
 #"../testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_multiply_01.c"
 #"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__CWE839_fgets_01.c"
-"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__CWE839_fscanf_01.c"
-"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_alloca_cpy_01.c"
-"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_alloca_loop_01.c"
-"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_memcpy_01.c"
-"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_memmove_01.c"
-"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_ncpy_01.c"
-
+#"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__CWE839_fscanf_01.c"
+#"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_alloca_cpy_01.c"
+#"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_alloca_loop_01.c"
+#"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_memcpy_01.c"
+#"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_memmove_01.c"
+#"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_ncpy_01.c"
+#"../testcases/CWE194_Unexpected_Sign_Extension/s01/CWE194_Unexpected_Sign_Extension__fgets_malloc_01.c"
+#"../testcases/CWE194_Unexpected_Sign_Extension/s01/CWE194_Unexpected_Sign_Extension__fscanf_memcpy_01.c"
+#"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_malloc_01.c"
+"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_memcpy_01.c"
+"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_memmove_01.c"
+"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_strncpy_01.c"
+"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__negative_strncpy_01.c"
+"../testcases/CWE194_Unexpected_Sign_Extension/s02/CWE194_Unexpected_Sign_Extension__rand_strncpy_01.c"
 )
 
 #######################################################
