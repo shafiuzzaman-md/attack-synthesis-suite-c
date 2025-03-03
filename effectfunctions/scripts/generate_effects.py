@@ -1,19 +1,15 @@
-import shutil
 import os
 import re
 import sys
 
 # Get the absolute path of the script
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMPLATES_DIR = os.path.join(SCRIPT_DIR, "../templates")
+TEMPLATES_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "templates"))
 EFFECTS_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 
-# Define template source files
-template_file1 = os.path.join(TEMPLATES_DIR, "cwe121_effect.py")
-template_file2 = os.path.join(TEMPLATES_DIR, "cwe122_effect.py")
-template_file3 = os.path.join(TEMPLATES_DIR, "cwe126_effect.py")
-template_file4 = os.path.join(TEMPLATES_DIR, "cwe127_effect.py")
-template_file5 = os.path.join(TEMPLATES_DIR, "cwe190_effect.py")
+# Define available templates
+TEMPLATE_PREFIXES = [f.split("_")[0].upper() for f in os.listdir(TEMPLATES_DIR) if f.endswith("_effect.py")]
+
 # Ensure a file is passed as an argument
 if len(sys.argv) != 2:
     print("Usage: python generate_effects.py <signature_file>")
@@ -22,9 +18,17 @@ if len(sys.argv) != 2:
 # Read the input file
 input_file = sys.argv[1]
 base_name = os.path.splitext(os.path.basename(input_file))[0]
-source_file = template_file1 if "CWE121" in base_name else template_file2
-source_file = template_file3 if "CWE126" in base_name else template_file3
-source_file = template_file5 if "CWE126" in base_name else template_file5
+
+# Determine the correct template file dynamically
+source_file = None
+for prefix in TEMPLATE_PREFIXES:
+    if prefix in base_name:
+        source_file = os.path.join(TEMPLATES_DIR, f"{prefix.lower()}_effect.py")
+        break
+
+if source_file is None:
+    print(f"[ERROR] No matching template found for {base_name}")
+    sys.exit(1)
 
 destination_file = os.path.join(EFFECTS_DIR, f"{base_name}_effect.py")
 

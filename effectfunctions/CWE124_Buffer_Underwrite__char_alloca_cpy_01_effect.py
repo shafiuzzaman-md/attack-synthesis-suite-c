@@ -5,7 +5,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE124_BufferUnderwrite(
+def CWE124_Buffer_Underwrite__char_alloca_cpy_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
@@ -30,7 +30,7 @@ def CWE124_BufferUnderwrite(
     target_address = buffer_base_address - (data * element_size_bytes)  # Buffer underwrite!
 
     # Simulate writing to the underflowed buffer location
-    corruption_value = (1).to_bytes(element_size_bytes, byteorder="little", signed=True)  # Mimics `buffer[data] = 1;`
+    corruption_value = (ord('C')).to_bytes(1, byteorder="little", signed=False) * 100  # Mimic the loop copy
     memory = memory.memory_write(target_address, corruption_value, user_mode)
 
     # Return the updated memory state

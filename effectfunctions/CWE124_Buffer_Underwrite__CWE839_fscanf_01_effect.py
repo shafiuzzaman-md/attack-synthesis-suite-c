@@ -5,7 +5,7 @@ class SegmentIdentifier:
     def __init__(self, segment_name: str):
         self.segment_name = segment_name
 
-def CWE124_BufferUnderwrite(
+def CWE124_Buffer_Underwrite__CWE839_fscanf_01_bad(
     memory: MemoryState,
     memory_segment: SegmentIdentifier,
     required_permissions: Permissions,
@@ -21,6 +21,8 @@ def CWE124_BufferUnderwrite(
         return memory  # Ensure read-write permissions
 
     # STASE Constraints: Inserted dynamically based on extracted preconditions
+    if data >= 0:
+        return 0
     
     # Get buffer base address dynamically
     buffer_base_address = memory.layout[memory_segment.segment_name]

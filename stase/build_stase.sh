@@ -58,7 +58,15 @@ SOURCES=(
 #    "../testcases/CWE127_Buffer_Underread/s01/CWE127_Buffer_Underread__char_declare_ncpy_01.c"
 #"../testcases/CWE226_Sensitive_Information_Uncleared_Before_Release/CWE226_Sensitive_Information_Uncleared_Before_Release__w32_char_alloca_01.c"
 #"../testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_add_02.c"
-"../testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_multiply_01.c"
+#"../testcases/CWE190_Integer_Overflow/s01/CWE190_Integer_Overflow__char_fscanf_multiply_01.c"
+#"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__CWE839_fgets_01.c"
+"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__CWE839_fscanf_01.c"
+"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_alloca_cpy_01.c"
+"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_alloca_loop_01.c"
+"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_memcpy_01.c"
+"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_memmove_01.c"
+"../testcases/CWE124_Buffer_Underwrite/s01/CWE124_Buffer_Underwrite__char_declare_ncpy_01.c"
+
 )
 
 #######################################################

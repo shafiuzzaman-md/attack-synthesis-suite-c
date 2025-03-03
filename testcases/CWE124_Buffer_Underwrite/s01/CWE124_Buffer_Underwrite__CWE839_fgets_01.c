@@ -34,10 +34,10 @@ void CWE124_Buffer_Underwrite__CWE839_fgets_01_bad()
             /* Convert to int */
             data = atoi(inputBuffer);
         }
-        else
-        {
-            printLine("fgets() failed.");
-        }
+        // else
+        // {
+        //     printLine("fgets() failed.");
+        // }
     }
     {
         int i;
@@ -108,10 +108,10 @@ static void goodB2G()
             /* Convert to int */
             data = atoi(inputBuffer);
         }
-        else
-        {
-            printLine("fgets() failed.");
-        }
+        // else
+        // {
+        //     printLine("fgets() failed.");
+        // }
     }
     {
         int i;
