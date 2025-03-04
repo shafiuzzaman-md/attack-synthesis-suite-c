@@ -30,9 +30,9 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE131_memmove_01_bad(
 
     control_data_address = stack_variable_address + control_data_offset
 
-    if control_data_address < data:
-        element_size = WORD_SIZE // 8
-        value_bytes = (1).to_bytes(element_size, byteorder='little', signed=True)
-        memory = memory.memory_write(stack_variable_address, value_bytes, user_mode)
+     # Perform the overflow write
+    control_data_address = stack_variable_address + control_data_offset
+    if control_data_address < stack_variable_address + len(data):
+         memory = memory.memory_write(stack_variable_address, data, user_mode)
 
     return memory
