@@ -127,25 +127,25 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
                             |
                             v
 +-----------------------------------------------------------+
-| Step 1: Return of Stack Variable Address (CWE-562)        |
-| Operation: CWE-562 Memory Operation                       |
-| Action: leaked_addr = memory.get_stack_top()              |
+| Step 1: Stack Address Leak (CWE-562)                      |
+| Operation: leaked_addr = memory.get_stack_top() [read]    |
 | Output: leaked_stack_variable_address                     |
 +---------------------------+-------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 | Step 2: Stack-Based Buffer Overflow (CWE-121)             |
-| Operation: CWE-121 Memory Operation                       |
-| Action: memory_write(leaked_stack_variable_address, data) |
+| Operation: memory_write(leaked_stack_variable_address,    |
+|                          data, user_mode) [Overflow]      |
 | Output: Corrupted return address/control metadata         |
 +---------------------------+-------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
-| Step 3: Control Flow Hijacking (memory_write)             |
-| Operation: Memory Operation Enabled by CWE-121            |
-| Action: memory_write(control_data_address, attacker_value)|
+| Step 3: Control Flow Hijacking (memory_write)                           |
+| Operation: memory_write(control_data_address,             |
+|                          attacker_value, user_mode)       |
+| [Normal memory write enabled by overflow]                 |
 | Output: Execution redirected to attacker-controlled code  |
 +---------------------------+-------------------------------+
                             |
