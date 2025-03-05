@@ -251,11 +251,51 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
 |                         Outcome                           |
 |        Attacker achieves arbitrary memory modification    |
 +-----------------------------------------------------------+
-
-
 ```
 
+### Chain 4: Heap Buffer Overflow (CWE-122) → Assignment of Fixed Address to Pointer (CWE-587) → Arbitrary Code Execution
+```
++-----------------------------------------------------------+
+|                       Initial State                       |
+| User-mode execution in Heap Segment                       |
+| Permissions = (read=1, write=1, execute=0)                |
+| Attack Goal: Redirect execution to attacker-controlled    |
+| memory by corrupting function pointers.                   |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 1: Heap Buffer Overflow (CWE-122)                    |
+| Operation: memory_write(heap_buffer, attacker_data,       |
+|                          user_mode)                       |
+|        [Overflowing heap buffer to corrupt memory]        |
+| Output: Corrupted adjacent pointer variable               |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 2: Assignment of Fixed Address to Pointer (CWE-587)  |
+| Operation: memory_write(pointer_variable_address,         |
+|                          attacker_controlled_address)     |
+|        [Overwriting pointer with an attacker-controlled   |
+|         address]                                          |
+| Output: Pointer now points to attacker-controlled memory  |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 3: Arbitrary Code Execution                          |
+| Operation: memory_execute(pointer_variable_address)       |
+| Output: Attacker gains execution control                  |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+|                         Outcome                           |
+|       Attacker executes arbitrary instructions            |
++-----------------------------------------------------------+
 
+```
 
 ### Chain 1: Buffer Overflow in Data Segment to Modify Protected Segment
 Steps:
