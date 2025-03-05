@@ -296,6 +296,47 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
 +-----------------------------------------------------------+
 
 ```
+### Chain 5: Integer Overflow (CWE-190) → Heap Buffer Overflow (CWE-122) → Arbitrary Memory Write
+```
++-----------------------------------------------------------+
+|                       Initial State                       |
+| User-mode execution in Heap Segment                       |
+| Permissions = (read=1, write=1, execute=0)                |
+| Attack Goal: Arbitrary memory modification                |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 1: Integer Overflow (CWE-190)                        |
+| Operation:                                                |
+| memory_write(buffer_base_address, data_bytes, user_mode)  |
+|        [Integer overflow allows unintended write]         |
+| Output: Overflown buffer size leads to memory corruption  |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 2: Heap Buffer Overflow (CWE-122)                    |
+| Operation: memory_write(heap_buffer, attacker_data)       |
+|        [Heap buffer is overflowed beyond allocated size]  |
+| Output: Corrupted heap metadata and adjacent memory       |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 3: Arbitrary Memory Write                            |
+| Operation: memory_write(corrupted_heap_address,           |
+|                          attacker_value, user_mode)       |
+| Output: Overwrites critical memory regions                |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+|                         Outcome                           |
+|       Attacker achieves arbitrary memory modification     |
++-----------------------------------------------------------+
+
+```
 
 ### Chain 1: Buffer Overflow in Data Segment to Modify Protected Segment
 Steps:
