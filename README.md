@@ -169,7 +169,7 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
                             v
 +-----------------------------------------------------------+
 | Step 1: Buffer Overread (CWE-126)                         |
-| Action: memory_data = memory_read(target_address,         |
+| Operation: memory_data = memory_read(target_address,      |
 |      element_size_bytes, user_mode) [Out-of-bounds read]  |
 | Output: leaked_stack_variable_address                     |
 +---------------------------+-------------------------------+
@@ -177,7 +177,7 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
                             v
 +-----------------------------------------------------------+
 | Step 2: Stack Buffer Overflow (CWE-121)                   |
-| Action: memory_write(leaked_stack_variable_address, data, |
+| Operation:memory_write(leaked_stack_variable_address,data,|
 |                      user_mode) [Overflow]                |
 | Output: Overwritten control_data_address                  |
 +---------------------------+-------------------------------+
@@ -185,8 +185,8 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
                             v
 +-----------------------------------------------------------+
 | Step 3: Control Flow Hijacking (memory_write)             |
-| Action: memory_write(control_data_address, attacker_value,|
-|                       user_mode)                          |
+| Operation:memory_write(control_data_address,              |
+|                  attacker_value, user_mode)               |
 | Output: Execution redirected to attacker-controlled code  |
 +---------------------------+-------------------------------+
                             |
@@ -198,11 +198,62 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
 
 ```
 
+### Chain 3: Return of Stack Variable Address (CWE-562) → Buffer Underread (CWE-127) → Unexpected_Sign_Extension (CWE-194) → Arbitrary Memory Write
+
+```
++-----------------------------------------------------------+
+|                       Initial State                       |
+| User-mode execution in Heap Segment                       |
+| Permissions = (read=1, write=1, execute=0)                |
+| Attack Goal: Arbitrary memory allocation and modification |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 1: Stack Address Leak (CWE-562)                      |
+| Operation: leaked_addr = memory.get_stack_top()           |
+|        [Leak buffer base address from stack]              |
+| Output: leaked_buffer_base_address                        |
++---------------------------+-------------------------------+
+                            |
+                            | 
+                            v
++-----------------------------------------------------------+
+| Step 2: Buffer Underread (CWE-127)                        |
+| Operation:target_address = buffer_base_address+(data*size)| 
+|  memory_read(leaked_stack_variable_address,               |
+|                        size, user_mode)                   |
+| [Read before buffer base, obtaining signed integer]       | 
+| Output: Incorrect signed integer value                    |
++---------------------------+-------------------------------+
+                            |
+                            | 
+                            v
++-----------------------------------------------------------+
+| Step 3: Unexpected Sign Extension (CWE-194)               |
+| Operation: heap_alloc(sign-extended incorrect value)      |
+|         memory.heap_alloc(alloc_size=data)                |
+| [Incorrect allocation size due to sign extension]         |
+| Output: Allocated memory region of unexpected size        |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 4: Arbitrary Memory Write                            |
+| Operation: memory_write(corrupted_heap_address,           |
+|                          attacker_value, user_mode)       |
+|    [Overwrites critical heap metadata or control data]    |
+| Output: Arbitrary memory corruption in heap segment       |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+|                         Outcome                           |
+|        Attacker achieves arbitrary memory modification    |
++-----------------------------------------------------------+
 
 
-
-
-
+```
 
 
 
