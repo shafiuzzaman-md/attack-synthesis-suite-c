@@ -137,12 +137,12 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
 | Step 2: Stack-Based Buffer Overflow (CWE-121)             |
 | Operation: memory_write(leaked_stack_variable_address,    |
 |                          data, user_mode) [Overflow]      |
-| Output: Corrupted return address/control metadata         |
+| Output: Overwritten control_data_address                  |
 +---------------------------+-------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
-| Step 3: Control Flow Hijacking (memory_write)                           |
+| Step 3: Control Flow Hijacking (memory_write)             |
 | Operation: memory_write(control_data_address,             |
 |                          attacker_value, user_mode)       |
 | [Normal memory write enabled by overflow]                 |
@@ -155,6 +155,56 @@ ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little E
 |          Attacker-controlled code execution               |
 +-----------------------------------------------------------+
 ```
+### Chain 2: Buffer Overread (CWE-126) → Stack-Based Buffer Overflow (CWE-121) → Control Flow Hijacking
+
+```
++-----------------------------------------------------------+
+|                       Initial State                       |
+| User-mode execution in Stack Segment                      |
+| Permissions = (read=1, write=1, execute=0)                |
+|                                                           |
+| Attack Goal: Overwrite return address to hijack execution |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 1: Buffer Overread (CWE-126)                         |
+| Action: memory_data = memory_read(target_address,         |
+|      element_size_bytes, user_mode) [Out-of-bounds read]  |
+| Output: leaked_stack_variable_address                     |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 2: Stack Buffer Overflow (CWE-121)                   |
+| Action: memory_write(leaked_stack_variable_address, data, |
+|                      user_mode) [Overflow]                |
+| Output: Overwritten control_data_address                  |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 3: Control Flow Hijacking (memory_write)             |
+| Action: memory_write(control_data_address, attacker_value,|
+|                       user_mode)                          |
+| Output: Execution redirected to attacker-controlled code  |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+|                          Outcome                          |
+|          Attacker-controlled code execution               |
++-----------------------------------------------------------+
+
+```
+
+
+
+
+
+
+
+
 
 ### Chain 1: Buffer Overflow in Data Segment to Modify Protected Segment
 Steps:
