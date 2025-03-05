@@ -113,6 +113,49 @@ Eq <expression1> <expression2>: Equality expression.
 ReadLSB <type> <offset> <array_name>: Reads the value from the array in Little Endian format.
 ```
 ## Example Chains
+### Chain 1: Return of Stack Variable Address (CWE-562) → Stack-Based Buffer Overflow (CWE-121) → Control Flow Hijacking
+```
++-----------------------------------------------------------+
+|                       Initial State                       |
+| User-mode execution in Stack Segment                      |
+| Permissions = (read=1, write=1, execute=0)                |
+|                                                           |
+| Attack Goal:                                              |
+| Overwrite return address at known stack location          |
+| to hijack control flow.                                   |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 1: Return of Stack Variable Address (CWE-562)        |
+| Operation: CWE-562 Memory Operation                       |
+| Action: leaked_addr = memory.get_stack_top()              |
+| Output: leaked_stack_variable_address                     |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 2: Stack-Based Buffer Overflow (CWE-121)             |
+| Operation: CWE-121 Memory Operation                       |
+| Action: memory_write(leaked_stack_variable_address, data) |
+| Output: Corrupted return address/control metadata         |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+| Step 3: Control Flow Hijacking (memory_write)             |
+| Operation: Memory Operation Enabled by CWE-121            |
+| Action: memory_write(control_data_address, attacker_value)|
+| Output: Execution redirected to attacker-controlled code  |
++---------------------------+-------------------------------+
+                            |
+                            v
++-----------------------------------------------------------+
+|                          Outcome                          |
+|          Attacker-controlled code execution               |
++-----------------------------------------------------------+
+```
+
 ### Chain 1: Buffer Overflow in Data Segment to Modify Protected Segment
 Steps:
 
