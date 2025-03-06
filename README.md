@@ -19,7 +19,7 @@ Regular users are confined to User Mode, where they can perform standard operati
 - testcases/: Directory containing the Juliet test suite.
 
 - example.c: Contains the main function to demonstrate an example of the vulnerability chaining process. 
-<!---
+
 ## Memory Model and Access Control
 
 | **Segment Type**        | **Purpose**                         | **User Mode**                | **Privileged Mode**            | **Example (UEFI/Kernel/Android)**                    |
@@ -28,7 +28,7 @@ Regular users are confined to User Mode, where they can perform standard operati
 | **Protected Segment**   | Sensitive data and configurations   | No access                    | read/write                     | UEFI variables, kernel security keys, Android keystore|
 | **Code Segment**        | Executable program instructions     | read/execute                 | read/write/execute             | UEFI boot code, kernel code, Android system libraries |
 | **Data Segment**        | Program data (variables, buffers)   | read/write                   | read/write                     | Global variables, heap, stack memory                 |
--->
+
 ## Visualization of Memory Alignment
 ```
 +-------------------------------+ MAX_ADDRESS (0xFFFFFFFF)
