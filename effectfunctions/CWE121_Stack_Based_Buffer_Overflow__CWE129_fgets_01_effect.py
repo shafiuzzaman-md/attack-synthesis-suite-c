@@ -15,7 +15,7 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad(
     user_mode: UserMode
 ) -> MemoryState:
 
-    # Memory constraints
+   # Memory constraints
     if memory_segment.segment_name != "Stack Segment":
         return memory
 
@@ -23,7 +23,13 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE129_fgets_01_bad(
         return memory
 
     # STASE constraints
-    
+    if data < 10:
+        return memory
+
+    # STASE+Memory Model constraints
+    if (data - 10) < control_data_offset:
+        return memory
+       
     # Perform the overflow write
     element_size_bytes = WORD_SIZE // 8 
     control_data_address = stack_variable_address + (10 * element_size_bytes) + (control_data_offset * element_size_bytes)

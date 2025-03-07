@@ -28,12 +28,12 @@ def CWE121_StackBasedBufferOverflow(
         return memory
 
     # Check if overflow can reach control data
-    if (len(input_data) - buffer_size) < control_data_offset:
+    if (len(data) - buffer_size) < control_data_offset:
         raise ValueError("CWE121: Overflow cannot reach control data")
 
     # Perform the overflow write
     control_data_address = stack_variable_address + buffer_size + control_data_offset
-    if control_data_address < stack_variable_address + len(input_data):
-         memory = memory.memory_write(stack_variable_address, input_data, user_mode)
+    if control_data_address < stack_variable_address + len(data):
+         memory = memory.memory_write(stack_variable_address, data, user_mode)
 
     return memory
