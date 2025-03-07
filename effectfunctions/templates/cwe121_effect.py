@@ -10,7 +10,7 @@ def CWE121_StackBasedBufferOverflow(
     required_permissions: Permissions,
     stack_variable_address: int,
     control_data_offset: int,
-    input_data: bytes,
+    data: bytes,
     buffer_size: int,
     user_mode: UserMode
 ) -> MemoryState:
@@ -24,8 +24,7 @@ def CWE121_StackBasedBufferOverflow(
         raise PermissionError("CWE121: Required rw- permissions not met")
 
     # Check triggering conditions
-    if len(input_data) < buffer_size:
-        # Not large enough to overflow
+    if len(data) < buffer_size:
         return memory
 
     # Check if overflow can reach control data
