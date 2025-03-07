@@ -28,11 +28,11 @@ def CWE121_Stack_Based_Buffer_Overflow__CWE129_large_01_bad(
     if data < (stack_variable_address + control_data_offset):
         return memory
 
-    control_data_address = stack_variable_address + control_data_offset
-
-     # Perform the overflow write
-    control_data_address = stack_variable_address + control_data_offset
-    if control_data_address < stack_variable_address + len(data):
-         memory = memory.memory_write(stack_variable_address, data, user_mode)
+    # Perform the overflow write
+    element_size_bytes = WORD_SIZE // 8 
+    control_data_address = stack_variable_address + (10 * element_size_bytes) + (control_data_offset * element_size_bytes)
+    if control_data_address < stack_variable_address + (data * element_size_bytes):
+         data_bytes = data.to_bytes(element_size_bytes, byteorder="little", signed=True)
+         memory = memory.memory_write(control_data_address, data_bytes, user_mode)
 
     return memory
