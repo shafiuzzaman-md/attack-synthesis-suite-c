@@ -4,6 +4,27 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="liH6a_YM0VnjGRVHXFBx-1" target="liH6a_YM0VnjGRVHXFBx-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-1" value="Attacker Goal" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="112" y="292.5" width="125" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-2" value="&lt;div&gt;&amp;nbsp;Initialize Sub-Goals Set&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;{REXEC(L,H), CWRITE(L,H,AD), TRIGGER(PI)}&lt;/span&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="399" y="280" width="278" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-5" value="Vulnerability Database&lt;div&gt;(Precondition, Postcondition)&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="322" y="128" width="158" height="59" as="geometry" />
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-6" value="(Example: REXEC(L,H) ∧ CWRITE(L,H,AD) ∧ TRIGGER(PI))" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="7" y="322" width="346" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-7" value="Chaining Loop&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="727" y="138" width="338" height="338" as="geometry" />
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-8" value="Select next sub-goal&amp;nbsp;&amp;nbsp;&lt;div&gt;Query database: Match vulnerabilities&amp;nbsp;whose Postcondition satisfies sub-goal&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Validate feasibility via SMT&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="783" y="191" width="234" height="234" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
