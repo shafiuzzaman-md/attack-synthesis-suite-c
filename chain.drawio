@@ -14,16 +14,37 @@
           <mxGeometry x="399" y="280" width="278" height="53" as="geometry" />
         </mxCell>
         <mxCell id="liH6a_YM0VnjGRVHXFBx-5" value="Vulnerability Database&lt;div&gt;(Precondition, Postcondition)&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="322" y="128" width="158" height="59" as="geometry" />
+          <mxGeometry x="408" y="145" width="158" height="59" as="geometry" />
         </mxCell>
         <mxCell id="liH6a_YM0VnjGRVHXFBx-6" value="(Example: REXEC(L,H) ∧ CWRITE(L,H,AD) ∧ TRIGGER(PI))" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="7" y="322" width="346" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="liH6a_YM0VnjGRVHXFBx-7" value="Chaining Loop&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="727" y="138" width="338" height="338" as="geometry" />
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-7" value="Chaining Loop&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp;&amp;nbsp;Repeat until all sub-goals resolved&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="731" y="138" width="338" height="338" as="geometry" />
         </mxCell>
-        <mxCell id="liH6a_YM0VnjGRVHXFBx-8" value="Select next sub-goal&amp;nbsp;&amp;nbsp;&lt;div&gt;Query database: Match vulnerabilities&amp;nbsp;whose Postcondition satisfies sub-goal&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Validate feasibility via SMT&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="783" y="191" width="234" height="234" as="geometry" />
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-8" value="&amp;nbsp;- Select next sub-goal&amp;nbsp;&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;div&gt;&amp;nbsp;- Query database: Match vulnerabilities&amp;nbsp;whose Postcondition satisfies sub-goal&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp;- Validate feasibility via SMT&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp;- Append selected vulnerability to&amp;nbsp;ExploitChain&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp;- Add Precondition as new sub-goals&amp;nbsp;(unless attacker-controlled directly)&lt;/div&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;align=left;" vertex="1" parent="1">
+          <mxGeometry x="792" y="189.5" width="234" height="234" as="geometry" />
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-11" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="677" y="309" as="sourcePoint" />
+            <mxPoint x="727" y="309" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-12" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="729" y="174" as="sourcePoint" />
+            <mxPoint x="572" y="174" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-13" value="Chain Verification&amp;nbsp; &amp;nbsp;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Merge all chain constraints&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;div&gt;-&amp;nbsp;Final SMT Solver feasibility check&amp;nbsp;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="379" y="403" width="242" height="83" as="geometry" />
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-14" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="727" y="439" as="sourcePoint" />
+            <mxPoint x="624" y="439" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
