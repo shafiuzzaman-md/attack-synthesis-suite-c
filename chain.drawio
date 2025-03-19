@@ -31,12 +31,6 @@
             <mxPoint x="727" y="309" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="liH6a_YM0VnjGRVHXFBx-12" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="729" y="174" as="sourcePoint" />
-            <mxPoint x="572" y="174" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="liH6a_YM0VnjGRVHXFBx-13" value="Chain Verification&amp;nbsp; &amp;nbsp;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Merge all chain constraints&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;div&gt;-&amp;nbsp;Final SMT Solver feasibility check&amp;nbsp;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="379" y="403" width="242" height="83" as="geometry" />
         </mxCell>
@@ -44,6 +38,18 @@
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="727" y="439" as="sourcePoint" />
             <mxPoint x="624" y="439" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-15" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="523" y="463" as="sourcePoint" />
+            <mxPoint x="573" y="413" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-16" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="570" y="173" as="sourcePoint" />
+            <mxPoint x="731" y="171" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
