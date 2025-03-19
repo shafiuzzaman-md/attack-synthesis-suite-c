@@ -13,7 +13,7 @@
         <mxCell id="liH6a_YM0VnjGRVHXFBx-2" value="&lt;div&gt;&amp;nbsp;Initialize Sub-Goals Set&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;{REXEC(L,H), CWRITE(L,H,AD), TRIGGER(PI)}&lt;/span&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="399" y="280" width="278" height="53" as="geometry" />
         </mxCell>
-        <mxCell id="liH6a_YM0VnjGRVHXFBx-5" value="Vulnerability Database&lt;div&gt;(Precondition, Postcondition)&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="liH6a_YM0VnjGRVHXFBx-5" value="Vulnerability Database&lt;div&gt;(Vulnerability Signatures)&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="408" y="145" width="158" height="59" as="geometry" />
         </mxCell>
         <mxCell id="liH6a_YM0VnjGRVHXFBx-6" value="(Example: REXEC(L,H) ∧ CWRITE(L,H,AD) ∧ TRIGGER(PI))" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
